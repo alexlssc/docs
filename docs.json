@@ -8,16 +8,6 @@
     "dark": "#15803D"
   },
   "favicon": "/favicon.svg",
-    "fonts": {
-      "body": {
-        "family": "Outfit",
-        "source": "/font/Outfit-Regular.ttf"
-      },
-      "heading": {
-        "family": "Outfit",
-        "source": "/font/Outfit-Bold.ttf"
-      }
-    },
   "navigation": {
     "tabs": [
       {
@@ -47,27 +37,14 @@
       {
         "tab": "API Reference",
         "openapi" : "partoo_open_ai.json"
+      },
+      {
+        "tab": "Changelog",
+        "pages": [
+          "changelog"
+        ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/partoo_logo_light.svg",
@@ -77,7 +54,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:api@partoo.fr"
       }
     ],
     "primary": {

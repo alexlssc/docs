@@ -1,0 +1,244 @@
+---
+title: 'Changelog'
+description: 'Find all our different releases'
+---
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased - 2025-07-15]
+
+### Added
+
+-   **Features System**: Introduced a new features system replacing products for more fine-grained control.
+    -   `org_features` field added to Organization object to list features accessible via subscribed plans.
+    -   `features` field added to Organization object listing all available features from org and business-specific plans.
+    -   `features` field added to Business object (excluding `/v2/business/search`) listing accessible features.
+    -   `features__in` and `features__notin` query parameters for searching businesses by features.
+    -   `sidebar_pages` field added to User object, replacing `sidebar_products` for granular page access control.
+
+### Changed
+
+-   **User Feature Transition**: During the deprecation period of `sidebar_products`:
+    -   Updating `sidebar_products` with `presence_management` grants `diffusion` and `presence_analytics` features.
+    -   Updating `sidebar_products` with any value grants `posts` and `bulk_modification` features if available to the organization.
+    -   Users with `presence_management` in `sidebar_products` might only have one of `diffusion` or `presence_analytics`.
+-   **Feature Mapping**: Defined correspondence between old products and new features for the transition period (see table in original notes).
+
+### Deprecated
+
+-   **Review Analytics V1 API Endpoints**: The following endpoints are deprecated and replaced by `GET /v2/review_analytics/metrics`:
+    -   `GET /v2/reviews/stats` (Use `metrics=average_rating,rating_distribution,reply_time,reviews_count`. Properties `treated`, `not_treated`, `answer_time` are removed).
+    -   `GET /v2/reviews/quantitative-evolution` (Use `metrics=reviews_count&dimensions={day|week|month|year}`).
+    -   `GET /v2/reviews/qualitative-evolution` (Use `metrics=reviews_count,average_rating&dimensions={day|week|month|year}`).
+-   **Organization Fields**:
+    -   `has_google_post`
+    -   `display_google_post`
+-   **User Field**:
+    -   `sidebar_products` (replaced by `sidebar_pages`).
+
+## [2025-02-14]
+
+### Added
+
+-   **Webhook Configuration API**: Customers with webhook access can now configure webhooks via the API, in addition to the website settings.
+
+## [2025-01-15]
+
+### Changed
+
+-   **Content-Type Validation**: Enforced `Content-Type` validation on all POST, PATCH, and PUT requests. Default expected is `application/json` unless specified otherwise.
+
+### Removed
+
+-   **GmbServices `category_gmb_id`**: Removed usage of `category_gmb_id`. Use `category_gmb_name` instead for GmbServices endpoints.
+-   **Presence Analytics Endpoints**: Removed deprecated Presence analytics endpoints (`GET /v2/presence_analytics`, `GET /v2/presence_analytics/export`). Use Profile metrics and Profile keywords endpoints instead.
+
+## [2024-10-15]
+
+### Added
+
+-   **Store Code Identification**: Allow using business code (`/c-{code}`) instead of business ID (`/{business_id}`) in path parameters for users within the same organization on various `/business/{business_id}/...` endpoints. Affects:
+    -   `/business/{business_id}`
+    -   `/business/{business_id}/subscription`
+    -   `/business/{business_id}/additional_data`
+    -   `/business/{business_id}/attributes`
+    -   `/business/{business_id}/more_hours`
+    -   `/business/{business_id}/services`
+    -   `/business/{business_id}/services/{service_id}`
+    -   `/business/{business_id}/structured_services`
+    -   `/business/{business_id}/free_form_services`
+    -   `/business/{business_id}/food_menus`
+    -   `/business/{business_id}/place_action_links`
+    -   `/business/{business_id}/business_fields`
+    -   `/publisher_errors/{business_id}`
+
+### Deprecated
+
+-   **REPEATABLE_URL Attribute**: `REPEATABLE_URL` attributes are no longer supported due to a Google API update. Use Place Action Links (`/business/{business_id}/place_action_links`) instead. Affected endpoints:
+    -   `GET /v2/business/{business_id}/attributes`
+    -   `POST /v2/business/{business_id}/attributes`
+
+## [2024-07-15]
+
+### Changed
+
+-   **Business Address Nullability**: Address-related fields (`address`, `address_full`, `address2`, `zipcode`, `city`, `long`, `lat`) in the Business object can now be `null`. Affects:
+    -   `GET /v2/business/search`
+    -   `GET /v2/business/{business_id}`
+-   **Custom Field Parameter Rename**: Renamed `forced_update` query parameter to `force` in `PUT /v2/custom_field/{custom_field_id}` endpoint.
+
+### Deprecated
+
+-   **DELETE Endpoint Body Parameters**: Body parameters moved to query parameters (removal target: 2025-01-15).
+    -   `DELETE /v2/org/{org_id}`: `force` (body) -> `force` (query).
+    -   `DELETE /v2/custom_field/{custom_field_id}`: `forced_update` (body) -> `force` (query).
+    -   `DELETE /v2/business/{business_id}/services` (with body parameter): Replaced by `DELETE /v2/business/{business_id}/services/{service_id}` (path parameter).
+
+### Security
+
+-   **Webhook Signatures**: Webhooks are now signed to allow verification of origin (Partoo). See Webhook Security documentation.
+
+## [2024-06-24]
+
+### Fixed
+
+-   **Swagger Corrections**: Cleaned Swagger file to comply with OpenAPI 3.0 standard. No functional API changes required for existing integrations.
+
+## [2024-02-29]
+
+### Added
+
+-   **Publisher Errors Reporting Endpoint**: Introduced `GET /v2/publisher_errors/{business_id}` to report publisher-detected errors in business information edits.
+
+## [2023-07-15]
+
+### Added
+
+-   **Rate Limiting**: Implemented API rate limiting at 300 calls per minute per organization.
+
+### Deprecated
+
+-   **Presence Analytics Endpoints**: Due to Google API changes (effective 2023-02-20). New endpoints planned.
+    -   `GET /v2/presence_analytics`
+    -   `GET /v2/presence_analytics/export`
+
+### Removed
+
+-   **Google Local Post Insights**: `views` and `clicks` data removed from `GET /v2/posts` endpoint due to Google API changes (effective 2023-02-20). Facebook insights remain available.
+
+## [2023-04-17]
+
+### Added
+
+-   **Messaging Endpoints**: Released endpoints for Business Messages product:
+    -   Conversations
+    -   Messaging Settings
+    -   Messages
+    -   Webhooks
+
+## [2023-04-15]
+
+### Changed
+
+-   **Google Services Endpoints (Breaking Change)**: Replaced `category_gmb_id` with `category_gmb_name` in request and response bodies for GmbServices endpoints. Affects:
+    -   `GET /v2/services/suggestions`
+    -   `GET /v2/business/{business_id}/services`
+    -   `POST /v2/business/{business_id}/free_form_services`
+    -   `POST /v2/business/{business_id}/structured_services`
+
+### Deprecated
+
+-   **Google Post Endpoints**: Deprecated older Google Post specific endpoints in favor of unified `/posts` endpoints supporting Google + Facebook. (Specific endpoints not listed in source, assuming prior existence).
+
+## [2022-10-15]
+
+### Changed
+
+-   **Categories Endpoint (`GET /v2/categories`)**:
+    -   `country` field removed from default response; use `with_countries` parameter to get country list in `countries` field.
+    -   `names` field removed from default response; use `with_names` parameter to get translations.
+    -   Added `with_names` and `with_countries` query parameters.
+
+### Deprecated
+
+-   **Categories Endpoint**: `GET /v2/category/{category_id}` replaced by `GET /v2/categories/{category_id}`.
+-   **Business Integration Data Endpoints**:
+    -   `GET /v2/business/{business_id}/integration_status`
+    -   `GET /v2/business/{business_id}/partner_urls`
+-   **Presence Endpoints**: Replaced by `GET /v2/publisher_states`.
+    -   `GET /v2/publisher_states/business_info`
+    -   `GET /v2/publisher_states/businesses_info`
+-   **Review Booster Parameter**: `template_id` parameter removed from `POST /v2/review_booster/send_invitation`.
+
+## [2022-07-15]
+
+### Added
+
+-   **Ordering for Search Endpoints**: Added `order_by` parameter to:
+    -   `GET /v2/business/search`
+    -   `GET /v2/user/search`
+-   **`address_full` field**: Added to Business object as a single address field.
+
+### Changed
+
+-   **Search Result Ordering**: Aligned sorting across endpoints using `order_by` parameter. Affects:
+    -   `GET /v2/reviews`
+    -   `GET /v2/categories`
+    -   `GET /v2/presence_analytics`
+
+### Deprecated
+
+-   **`address_details` field**: Replaced by `address_full`. Removed from July 2022. Affects:
+    -   `POST /v2/business`
+    -   `GET /v2/business/{business_id}`
+    -   `POST /v2/business/{business_id}`
+    -   `GET /v2/business/search`
+
+## [2022-01-15]
+
+### Changed
+
+-   **Search Result Pagination**: Extended `per_page` limit up to 100 items for:
+    -   `GET /v2/reviews`
+    -   `GET /v2/business/search`
+    -   `GET /v2/user/search`
+-   **Category Endpoint (`GET /v2/category/{category_id}`)**:
+    -   Added `gmb_id` field to response.
+    -   `id` in response now returns an integer for consistency.
+
+### Deprecated
+
+-   **Sandbox API URL**: `sandbox.api.partoo.co` deprecated (redirected until 2022-01-15); use `api.sandbox.partoo.co`.
+-   **Address Helper Endpoints**:
+    -   `GET /v2/GET street types`
+    -   `GET /v2/GET number supplements`
+
+## [2021-12-14]
+
+### Removed
+
+-   **Old Category ID Format**: Removed support for old format category IDs (e.g., `5109c3a...`) in business creation/updates and Categories endpoints. Use new `gcid:...` format.
+
+## [2021-07-15]
+
+### Changed
+
+-   **Business Endpoint Country Field**: `country` field format standardized in Business endpoints.
+
+### Deprecated
+
+-   **Category Search Endpoint**: `GET /v2/category/search` deprecated; use `GET /v2/categories` with filters.
+-   **API Key Login Endpoints**: For security reasons, replaced by `POST /v2/connection/generate_token`.
+    -   `POST /v2/authorize`
+    -   `GET /v2/authorize/list`
+    -   `POST /v2/authorize/revoke`
+
+### Removed
+
+-   **Business Endpoint Fields**: Removed from params and response in relevant Business endpoints (`GET /v2/business`, `POST /v2/business`, `GET /v2/business/{id}`, `POST /v2/business/{id}`):
+    -   `clean_name`
+    -   `video`
+    -   `siret`
+    -   `news`
