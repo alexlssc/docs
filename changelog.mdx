@@ -1,14 +1,4 @@
----
-title: 'Changelog'
-description: 'Find all our different releases'
----
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased - 2025-07-15]
-
+<Update label="2025-07-15" description="Unreleased">
 ### Added
 
 -   **Features System**: Introduced a new features system replacing products for more fine-grained control.
@@ -37,15 +27,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     -   `display_google_post`
 -   **User Field**:
     -   `sidebar_products` (replaced by `sidebar_pages`).
+</Update>
 
-## [2025-02-14]
-
+<Update label="2025-02-14" description="Release 2025-02-14">
 ### Added
 
 -   **Webhook Configuration API**: Customers with webhook access can now configure webhooks via the API, in addition to the website settings.
+</Update>
 
-## [2025-01-15]
-
+<Update label="2025-01-15" description="Release 2025-01-15">
 ### Changed
 
 -   **Content-Type Validation**: Enforced `Content-Type` validation on all POST, PATCH, and PUT requests. Default expected is `application/json` unless specified otherwise.
@@ -54,9 +44,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   **GmbServices `category_gmb_id`**: Removed usage of `category_gmb_id`. Use `category_gmb_name` instead for GmbServices endpoints.
 -   **Presence Analytics Endpoints**: Removed deprecated Presence analytics endpoints (`GET /v2/presence_analytics`, `GET /v2/presence_analytics/export`). Use Profile metrics and Profile keywords endpoints instead.
+</Update>
 
-## [2024-10-15]
-
+<Update label="2024-10-15" description="Release 2024-10-15">
 ### Added
 
 -   **Store Code Identification**: Allow using business code (`/c-{code}`) instead of business ID (`/{business_id}`) in path parameters for users within the same organization on various `/business/{business_id}/...` endpoints. Affects:
@@ -79,9 +69,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   **REPEATABLE_URL Attribute**: `REPEATABLE_URL` attributes are no longer supported due to a Google API update. Use Place Action Links (`/business/{business_id}/place_action_links`) instead. Affected endpoints:
     -   `GET /v2/business/{business_id}/attributes`
     -   `POST /v2/business/{business_id}/attributes`
+</Update>
 
-## [2024-07-15]
-
+<Update label="2024-07-15" description="Release 2024-07-15">
 ### Changed
 
 -   **Business Address Nullability**: Address-related fields (`address`, `address_full`, `address2`, `zipcode`, `city`, `long`, `lat`) in the Business object can now be `null`. Affects:
@@ -99,21 +89,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 -   **Webhook Signatures**: Webhooks are now signed to allow verification of origin (Partoo). See Webhook Security documentation.
+</Update>
 
-## [2024-06-24]
-
+<Update label="2024-06-24" description="Release 2024-06-24">
 ### Fixed
 
 -   **Swagger Corrections**: Cleaned Swagger file to comply with OpenAPI 3.0 standard. No functional API changes required for existing integrations.
+</Update>
 
-## [2024-02-29]
-
+<Update label="2024-02-29" description="Release 2024-02-29">
 ### Added
 
 -   **Publisher Errors Reporting Endpoint**: Introduced `GET /v2/publisher_errors/{business_id}` to report publisher-detected errors in business information edits.
+</Update>
 
-## [2023-07-15]
-
+<Update label="2023-07-15" description="Release 2023-07-15">
 ### Added
 
 -   **Rate Limiting**: Implemented API rate limiting at 300 calls per minute per organization.
@@ -127,9 +117,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 -   **Google Local Post Insights**: `views` and `clicks` data removed from `GET /v2/posts` endpoint due to Google API changes (effective 2023-02-20). Facebook insights remain available.
+</Update>
 
-## [2023-04-17]
-
+<Update label="2023-04-17" description="Release 2023-04-17">
 ### Added
 
 -   **Messaging Endpoints**: Released endpoints for Business Messages product:
@@ -137,9 +127,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     -   Messaging Settings
     -   Messages
     -   Webhooks
+</Update>
 
-## [2023-04-15]
-
+<Update label="2023-04-15" description="Release 2023-04-15">
 ### Changed
 
 -   **Google Services Endpoints (Breaking Change)**: Replaced `category_gmb_id` with `category_gmb_name` in request and response bodies for GmbServices endpoints. Affects:
@@ -151,9 +141,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 -   **Google Post Endpoints**: Deprecated older Google Post specific endpoints in favor of unified `/posts` endpoints supporting Google + Facebook. (Specific endpoints not listed in source, assuming prior existence).
+</Update>
 
-## [2022-10-15]
-
+<Update label="2022-10-15" description="Release 2022-10-15">
 ### Changed
 
 -   **Categories Endpoint (`GET /v2/categories`)**:
@@ -171,9 +161,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     -   `GET /v2/publisher_states/business_info`
     -   `GET /v2/publisher_states/businesses_info`
 -   **Review Booster Parameter**: `template_id` parameter removed from `POST /v2/review_booster/send_invitation`.
+</Update>
 
-## [2022-07-15]
-
+<Update label="2022-07-15" description="Release 2022-07-15">
 ### Added
 
 -   **Ordering for Search Endpoints**: Added `order_by` parameter to:
@@ -195,9 +185,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     -   `GET /v2/business/{business_id}`
     -   `POST /v2/business/{business_id}`
     -   `GET /v2/business/search`
+</Update>
 
-## [2022-01-15]
-
+<Update label="2022-01-15" description="Release 2022-01-15">
 ### Changed
 
 -   **Search Result Pagination**: Extended `per_page` limit up to 100 items for:
@@ -214,15 +204,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   **Address Helper Endpoints**:
     -   `GET /v2/GET street types`
     -   `GET /v2/GET number supplements`
+</Update>
 
-## [2021-12-14]
-
+<Update label="2021-12-14" description="Release 2021-12-14">
 ### Removed
 
 -   **Old Category ID Format**: Removed support for old format category IDs (e.g., `5109c3a...`) in business creation/updates and Categories endpoints. Use new `gcid:...` format.
+</Update>
 
-## [2021-07-15]
-
+<Update label="2021-07-15" description="Release 2021-07-15">
 ### Changed
 
 -   **Business Endpoint Country Field**: `country` field format standardized in Business endpoints.
@@ -242,3 +232,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     -   `video`
     -   `siret`
     -   `news`
+</Update>
+Use code with caution.
+Xml
