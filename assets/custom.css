@@ -1,0 +1,74 @@
+/* Custom CSS for Mintlify */
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 100; /* Thin */
+  src: url('../font/Outfit-Thin.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 200; /* ExtraLight */
+  src: url('../font/Outfit-ExtraLight.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 300; /* Light */
+  src: url('../font/Outfit-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 400; /* Regular */
+  src: url('../font/Outfit-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 500; /* Medium */
+  src: url('../font/Outfit-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 600; /* SemiBold */
+  src: url('../font/Outfit-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 700; /* Bold */
+  src: url('../font/Outfit-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 800; /* ExtraBold */
+  src: url('../font/Outfit-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 900; /* Black */
+  src: url('../font/Outfit-Black.ttf') format('truetype');
+}
+
+/* Apply the font */
+body {
+  font-family: 'Outfit', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  /* You might want a specific weight for headings, e.g., font-weight: 700; */
+} 

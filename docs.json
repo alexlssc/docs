@@ -1,13 +1,23 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Partoo API",
   "colors": {
-    "primary": "#16A34A",
+    "primary": "#0385F2",
     "light": "#07C983",
     "dark": "#15803D"
   },
   "favicon": "/favicon.svg",
+    "fonts": {
+      "body": {
+        "family": "Outfit",
+        "source": "/font/Outfit-Regular.ttf"
+      },
+      "heading": {
+        "family": "Outfit",
+        "source": "/font/Outfit-Bold.ttf"
+      }
+    },
   "navigation": {
     "tabs": [
       {
@@ -60,8 +70,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/partoo_logo_light.svg",
+    "dark": "/logo/partoo_logo_dark.svg"
   },
   "navbar": {
     "links": [
