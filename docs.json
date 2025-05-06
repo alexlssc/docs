@@ -23,8 +23,9 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart",
-              "development"            ]
+              "authentication",
+              "environments"
+            ]
           },
           {
             "group": "Essentials",
