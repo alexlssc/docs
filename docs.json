@@ -24,7 +24,8 @@
             "pages": [
               "introduction",
               "authentication",
-              "environments"
+              "environments",
+              "structures"
             ]
           },
           {
