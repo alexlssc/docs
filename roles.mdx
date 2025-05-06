@@ -1,0 +1,354 @@
+---
+title: 'Roles'
+description: 'Read this document to gain a better understanding of the various roles at Partoo and their capabilities.'
+---
+
+<Note>To use Partoo Rest API, you need an API Key ( [See Authentication section](/authentication) ). An API key authenticates a user and each user has a role.</Note>
+
+A role defines for each resource (for instance user) a READ and/or WRITE access with the scope on which this access can be used.
+
+For instance a user with Business Manager role has WRITE access on its own user and READ access to all the users of its organization.
+
+For now there are 5 roles available:
+
+| Role                  | Definition                                                                                                                             |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **PROVIDER**          | Meant for reseller admin users. Can manage organizations, users, and businesses of a provider.                                         |
+| **ORG\_ADMIN**        | Meant for client admin users. Can manage users and businesses of its organization.                                                     |
+| **GROUP\_MANAGER**    | Meant for client group managers. Can manage several businesses and users within the group they manage.                                 |
+| **BUSINESS\_MANAGER** | Meant for client business managers. Can manage several businesses, but only if they are in the same group.                             |
+| **PUBLISHER**         | Meant for publishers wanting to use Partoo as a data source. Can read Partoo businesses subscribed to the presence management product. |
+
+<Tabs>
+  <Tab title="Provider">
+    <p>The <strong>Provider</strong> role is meant for reseller admin users. It can manage its provider organizations, users, and businesses.</p>
+
+    <h3>Read access</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Resource</th>
+          <th>Scope</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>User</td>
+          <td>Provider</td>
+          <td>Can access the users that share its provider</td>
+        </tr>
+
+        <tr>
+          <td>Organization</td>
+          <td>Provider</td>
+          <td>Can access the organizations that share its provider</td>
+        </tr>
+
+        <tr>
+          <td>Group</td>
+          <td>Provider</td>
+          <td>Can access the groups that share its provider</td>
+        </tr>
+
+        <tr>
+          <td>Business</td>
+          <td>Provider</td>
+          <td>Can access the businesses that share its provider</td>
+        </tr>
+
+        <tr>
+          <td>Category</td>
+          <td>All</td>
+          <td>Can access all categories</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Write access</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Resource</th>
+          <th>Scope</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>User</td>
+          <td>Provider</td>
+
+          <td>
+            <ul>
+              <li>Can create user, it will share its provider</li>
+              <li>Can update user that shares its provider</li>
+              <li>Can give role <code>ORG\_ADMIN</code> and <code>BUSINESS\_MANAGER</code> to user</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Organization</td>
+          <td>Provider</td>
+
+          <td>
+            <ul>
+              <li>Can create organization, it will share its provider</li>
+              <li>Can update org that shares its provider</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Group</td>
+          <td>Provider</td>
+
+          <td>
+            <ul>
+              <li>Can create group, it will share its provider</li>
+              <li>Can update group that shares its provider</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Business</td>
+          <td>Provider</td>
+
+          <td>
+            <ul>
+              <li>Can create business, they will share its provider (and its org\_id if no org\_id given)</li>
+              <li>Can update businesses that share its provider</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Category</td>
+          <td>not writable</td>
+          <td>N/A</td>
+        </tr>
+      </tbody>
+    </table>
+  </Tab>
+
+  <Tab title="Org Admin">
+    <p>The <strong>Org Admin</strong> role is meant for client admin users. It can manage its organization users and businesses.</p>
+
+    <h3>Read access</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Resource</th>
+          <th>Scope</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>User</td>
+          <td>Organization</td>
+          <td>Can access the users that share its org\_id</td>
+        </tr>
+
+        <tr>
+          <td>Organization</td>
+          <td>Organization</td>
+          <td>Can access only its own org</td>
+        </tr>
+
+        <tr>
+          <td>Group</td>
+          <td>Organization</td>
+          <td>Can access the group that shares its org\_id</td>
+        </tr>
+
+        <tr>
+          <td>Business</td>
+          <td>Organization</td>
+          <td>Can access the businesses that share its org\_id</td>
+        </tr>
+
+        <tr>
+          <td>Category</td>
+          <td>All</td>
+          <td>Can access all categories</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Write access</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Resource</th>
+          <th>Scope</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>User</td>
+          <td>Organization</td>
+
+          <td>
+            <ul>
+              <li>Can create user, it will share its provider and its <code>org\_id</code>.</li>
+              <li>Can update user that shares its <code>org\_id</code></li>
+              <li>Can give the role <code>GROUP\_MANAGER</code> and <code>BUSINESS\_MANAGER</code> to its user</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Organization</td>
+          <td>Organization</td>
+
+          <td>
+            <ul>
+              <li>Can update itself</li>
+              <li>Cannot create new org</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Group</td>
+          <td>Organization</td>
+
+          <td>
+            <ul>
+              <li>Can create group, it will share its provider and its <code>org\_id</code></li>
+              <li>Can update group that shares its <code>org\_id</code></li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Business</td>
+          <td>Organization</td>
+
+          <td>
+            <ul>
+              <li>Can create business, it will share its provider and its <code>org\_id</code></li>
+              <li>Can update businesses that share its <code>org\_id</code></li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Category</td>
+          <td>not writable</td>
+          <td>N/A</td>
+        </tr>
+      </tbody>
+    </table>
+  </Tab>
+
+  <Tab title="Business Manager">
+    <p>The <strong>Business Manager</strong> role is meant for client business managers. It can manage several businesses, only if these businesses are in the same group.</p>
+
+    <h3>Read access</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Resource</th>
+          <th>Scope</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>User</td>
+          <td>Organization</td>
+          <td>Can access the users that share its org\_id</td>
+        </tr>
+
+        <tr>
+          <td>Organization</td>
+          <td>Organization</td>
+          <td>Can access only its own org</td>
+        </tr>
+
+        <tr>
+          <td>Group</td>
+          <td>Group</td>
+          <td>Can access only its group</td>
+        </tr>
+
+        <tr>
+          <td>Business</td>
+          <td>Business</td>
+          <td>Can access the businesses that it has direct access to</td>
+        </tr>
+
+        <tr>
+          <td>Category</td>
+          <td>All</td>
+          <td>Can access all categories</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Write access</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Resource</th>
+          <th>Scope</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>User</td>
+          <td>User</td>
+          <td>Can update its user only</td>
+        </tr>
+
+        <tr>
+          <td>Organization</td>
+          <td>No access</td>
+          <td>N/A</td>
+        </tr>
+
+        <tr>
+          <td>Group</td>
+          <td>No access</td>
+          <td>N/A</td>
+        </tr>
+
+        <tr>
+          <td>Business</td>
+          <td>Business</td>
+
+          <td>
+            <ul>
+              <li>Can update businesses that it has direct access to</li>
+              <li>Cannot create business</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Category</td>
+          <td>not writable</td>
+          <td>N/A</td>
+        </tr>
+      </tbody>
+    </table>
+  </Tab>
+</Tabs>
