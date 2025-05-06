@@ -4,22 +4,27 @@
   "name": "Partoo API",
   "colors": {
     "primary": "#0385F2",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "light": "#0385F2",
+    "dark": "#0385F2"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
+      {
+        "tab": "Welcome",
+        "pages": [
+          "index"
+        ]
+      },
       {
         "tab": "Guides",
         "groups": [
           {
             "group": "Get Started",
             "pages": [
-              "index",
+              "introduction",
               "quickstart",
-              "development"
-            ]
+              "development"            ]
           },
           {
             "group": "Essentials",
