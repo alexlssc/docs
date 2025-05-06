@@ -30,14 +30,21 @@
             ]
           },
           {
-            "group": "Essentials",
+            "group": "Presence Management",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
+              "presence_mgmt/overview"
+            ]
+          },
+          {
+            "group": "Review Management",
+            "pages": [
+              "review_mgmt/overview"
+            ]
+          },
+          {
+            "group": "Messages",
+            "pages": [
+              "business_message/overview"
             ]
           }
         ]
