@@ -1,0 +1,31 @@
+summary: List user API keys
+deprecated: false
+description: This endpoint lets you list all the API keys you have access to.
+operationId: getApiKeys
+tags:
+  - ApiKeys
+parameters:
+  - in: query
+    name: status
+    schema:
+      $ref: '../../components/api_keys/types.yml#/schemas/Status'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                api_keys:
+                  type: array
+                  description: List of API keys
+                  items:
+                    $ref: '../../components/api_keys/types.yml#/schemas/ApiKey'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'

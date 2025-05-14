@@ -1,0 +1,76 @@
+name: Groups and Sections
+description: >
+  <h2>Introduction</h2>
+  <p>
+      Our group system offers flexible organization of businesses through a comprehensive
+      system of Groups and Sections. Businesses can belong to multiple groups, and groups
+      are organized into logical sections for easier management and filtering.
+  </p>
+
+  <h2>Key Features</h2>
+  <ul>
+      <li>A Business can belong to multiple Groups simultaneously</li>
+      <li>Users with the <code>BUSINESS_MANAGER</code> role can manage businesses from multiple Groups</li>
+      <li>Groups are organized into Sections for efficient filtering and organization</li>
+  </ul>
+
+  <h2>Groups Architecture</h2>
+  <img src="https://partoo-api-doc.s3.eu-west-1.amazonaws.com/groups_example.png" />
+
+  <p>Here, Country / Facade Color / Service are the sections in which groups are organized.</p>
+  <p>A business can belong to any combination of these groups, for example:</p>
+  <ul>
+      <li>France / Blue</li>
+      <li>Spain / Green / Red / Bakery</li>
+      <li>Italy / Pharmacy</li>
+  </ul>
+
+  <h3>Filtering</h3>
+
+  <p>Groups are used as a filtering system, either to filter businesses by group in our different pages (such as our Analytics pages), or to assign multiple businesses to a user using groups:</p>
+
+  <ul>
+    <li>When selecting different groups from the same section, the system will consider the selection as an <b>"OR"</b> condition. Example: selecting "France" and "Spain" will return all businesses that belong to <b>either</b> "France" <b>or</b> "Spain".</li>
+    <li>When selecting groups from different sections, the system will consider the selection as an <b>"AND"</b> condition. Example: selecting "France" and "Blue" will return all businesses that belong to <b>both</b> "France" <b>and</b> "Blue".</li>
+  </ul>
+
+  <h2>Group Manager Access</h2>
+
+  <p>
+      Users with the <code>GROUP_MANAGER</code> role can manage businesses using group combinations.
+      A business filtering using groups is what we call an <b>access</b>. For example, the access "France/Bakery" will return all businesses that belong to the "France" group and the "Bakery" group.
+  </p>
+
+  <p>
+     A <code>GROUP_MANAGER</code> can be assigned to one or multiple accesses, and will be able to manage all businesses that belong to the groups included in these accesses.
+  </p>
+
+  <h3>Example</h3>
+
+  <p>
+      A <code>GROUP_MANAGER</code> can be set up to manage all Bakery businesses in France with the access "France/Bakery":
+  </p>
+
+  <img src="https://partoo-api-doc.s3.eu-west-1.amazonaws.com/groups_single_access.png" />
+
+  <p>
+      For more complex scenarios, multiple accesses can be created for the same user. For example, this user can manage:
+  </p>
+  <ul>
+      <li>All banks in France</li>
+      <li>All green pharmacies in Italy</li>
+  </ul>
+
+  <img src="https://partoo-api-doc.s3.eu-west-1.amazonaws.com/groups_multiple_accesses.png" />
+
+  <h2>Assigning groups to businesses and accesses to users</h2>
+
+  <ul>
+      <li>You can assign businesses to a group using the <a href="#operation/createGroup">create group endpoint</a> or the <a href="#operation/updateGroup">update group endpoint</a>.</li>
+      <li>For a single business, you can specify its groups using the <code>groups</code> field during the creation or update of the business using the <a href="#operation/createBusiness">create business endpoint</a> or the <a href="#operation/updateBusiness">update business endpoint</a>.</li>
+      <li>You can assign accesses to a <code>GROUP_MANAGER</code> user using the <code>accesses</code> field during the creation or update of the user using the <a href="#operation/createUser">create user endpoint</a> or the <a href="#operation/updateUser">update user endpoint</a>.</li>
+  </ul>
+
+  <p>
+      If you have any questions about implementing the groups system, please reach out to our technical support team at <a href="mailto:api@partoo.fr">api@partoo.fr</a>.
+  </p>

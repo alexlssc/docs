@@ -1,0 +1,23 @@
+Page:
+  type: integer
+  description: The current page number.
+  example: 1
+
+Count:
+  type: integer
+  description: |
+    Total number of results available for the filters and dimensions requested.
+  example: 1
+
+NextCursor:
+  type:
+    - string
+    - "null"
+  description: |
+    The cursor to use in order to retrieve the next page of data.
+    When all data have been fetched, the value is null.
+
+MaxPage:
+  type: integer
+  description: Total number of pages available for this request.
+  example: 1

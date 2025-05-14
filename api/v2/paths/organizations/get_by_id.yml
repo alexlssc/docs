@@ -1,0 +1,22 @@
+tags:
+    - Organizations
+summary: Organization information
+operationId: getOrganization
+description: >
+  This endpoint lets you retrieve all the detail about a specific organization.
+  You need to have `READ` access to this organization.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_org_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/Org'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

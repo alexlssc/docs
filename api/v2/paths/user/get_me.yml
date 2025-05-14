@@ -1,0 +1,14 @@
+tags:
+  - Users
+summary: My user
+description: This endpoint lets you retrieve all the information about your user
+operationId: getMyUser
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/UserWithFeatures'
+  401:
+    $ref: '../../components/index.yml#/responses/401'

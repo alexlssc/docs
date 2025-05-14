@@ -1,0 +1,47 @@
+tags:
+  - Messages
+summary: Read conversation
+operationId: readConversation
+description:  |
+  This endpoint lets you mark a conversation as read.
+  It will be set for the user that performs the request 
+  ("is_read" may have different values for different
+  users).
+parameters:
+  - name: conversation_id
+    in: path
+    required: true
+    schema:
+      type: integer
+      description: The id of the conversation to update
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to mark a Conversation as read
+        type: object
+        properties:
+          is_read:
+            type: boolean
+            description: |
+              Whether the last message received was read. 
+              This property is scoped to the user who performs the request.
+              Multiple users can have a different "is_read" status for the same 
+              conversation.
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: 
+                - success
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

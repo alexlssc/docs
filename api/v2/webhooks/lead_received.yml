@@ -1,0 +1,25 @@
+operationId: lead_received
+tags:
+  - Webhooks
+summary: Lead Received
+description: |
+  This event is triggered when a Lead is added in Partoo Database.
+
+  The event payload contains the event type and the lead contents.
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - lead_received
+          payload:
+            type: object
+            $ref: '../components/leads/schemas.yml#/LeadWebhook'
+responses:
+  $ref: ./webhook_responses.yml
+
+security: []

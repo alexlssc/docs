@@ -1,0 +1,27 @@
+summary: Delete a review reply template
+description: >
+  This endpoint lets you delete a review reply template given its id.
+operationId: deleteTemplate
+tags:
+  - Reviews
+
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_template_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          description: Response object
+          type: object
+          properties:
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

@@ -1,0 +1,80 @@
+query_metrics:
+  in: query
+  name: metrics
+  required: true
+  description: >
+    List of analytics to return.
+     At least one in that list.
+  schema:
+    type: string
+    enum:
+      - count
+      - threshold
+    example: metrics=count,threshold
+
+query_dimensions:
+  in: query
+  name: dimensions
+  required: false
+  description: |
+    How the returned data will be aggregated.
+    At most 'business' and one time dimensions of the list.
+    If no dimension is given, the request will return the sum of each metric for all requested days and businesses.
+  schema:
+    type: string
+    enum:
+      - business
+      - keyword
+      - month
+      - year
+    example: dimensions=keyword,month
+
+query_order_by:
+  in: query
+  name: order_by
+  required: false
+  description: >
+    Where the object is either a dimension or a metric
+     and is used in the request. At most one in the list.
+     - before a field to order_by DESC, nothing for ASC
+
+  schema:
+    type: string
+    enum:
+      - <object>
+      - -<object>
+    example: order_by=-count
+
+query_business__in:
+  in: query
+  name: business__in
+  description: Filter by business ids
+  required: false
+  schema:
+    type: array
+    items:
+      $ref: "./types.yml#/BusinessID"
+
+query_filter_date__gte:
+  in: query
+  name: filter_date__gte
+  required: false
+  description: |
+    Filter by date.
+
+    Return all the analytics whose `date >= given_date`.
+  schema:
+    type: string
+    format: datetime
+
+query_filter_date__lte:
+  in: query
+  name: filter_date__lte
+  required: false
+  description: |
+    Filter by date.
+
+    Return all the analytics whose `date <= give_date`.
+  schema:
+    type: string
+    format: datetime

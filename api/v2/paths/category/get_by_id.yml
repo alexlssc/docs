@@ -1,0 +1,102 @@
+summary: Category information
+tags:
+  - Categories
+description: >
+  This endpoint lets you retrieve the data of a specific category.
+operationId: getCategory
+parameters:
+  - in: path
+    required: true
+    name: category_id
+    schema:
+      $ref: '../../components/index.yml#/schemas/CategoryId'
+  - $ref: '../../components/index.yml#/parameters/query_category_lang'
+  - $ref: '../../components/index.yml#/parameters/query_category_return_live'
+  - $ref: '../../components/index.yml#/parameters/query_category_with_names'
+  - $ref: '../../components/index.yml#/parameters/query_category_with_countries'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/CategorySql'
+        examples:
+          with default parameters:
+            value:
+              id: 4018
+              gmb_id: "gcid:wood_industry"
+              name: "Industrie du bois"
+              state: "OK"
+              block_push_long_description_on_gmb: false
+              live_id: null
+          with_countries=true:
+            value:
+              id: 4018
+              gmb_id: "gcid:wood_industry"
+              name: "Industrie du bois"
+              state: "OK"
+              block_push_long_description_on_gmb: false
+              live_id: null
+              countries: [
+                  "RU",
+                  "FR"
+                ]
+          with_names=true:
+            value:
+              id: 4018
+              gmb_id: "gcid:wood_industry"
+              name: "Industrie du bois"
+              state: "OK"
+              block_push_long_description_on_gmb: false
+              live_id: null
+              names: [
+                  {
+                    "name": "Wood industry",
+                    "lang": "de"
+                  },
+                  {
+                    "name": "Wood industry",
+                    "lang": "es"
+                  },
+                  {
+                    "name": "Wood industry",
+                    "lang": "ar"
+                  },
+                  {
+                    "name": "Industrie du bois",
+                    "lang": "fr"
+                  },
+                  {
+                    "name": "Wood industry",
+                    "lang": "en"
+                  },
+                  {
+                    "name": "Wood industry",
+                    "lang": "it"
+                  },
+                  {
+                    "name": "Wood industry",
+                    "lang": "pt-BR"
+                  }
+                ]
+          deprecated category with return_live=false:
+            value:
+              id: 7652
+              gmb_id: "gcid:bailiff"
+              name: ""
+              state: "DEPRECATED"
+              block_push_long_description_on_gmb: false
+              live_id: "gcid:business_to_business_service"
+          deprecated category with return_live=true:
+            value:
+              id: 6715
+              gmb_id: "gcid:business_to_business_service"
+              name: "Services aux entreprises"
+              state: "OK"
+              block_push_long_description_on_gmb: false
+              live_id: null
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'

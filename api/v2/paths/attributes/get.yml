@@ -1,0 +1,40 @@
+summary: List Google Attributes
+description: >
+  <p>Get all Google Attributes available for a Category in a given language. </p>
+  <p>⚠️ <b>What are Google Attributes ?</b>
+  <p>Google Attributes are highly visible statements about your business that appear on your Google listing.
+  <p>They indicate things like Payment Options, Amenities, Accessibility and Highlights.
+  <p>Does a business provide parking? Does it have a fireplace? Can customers pay with a debit card?
+  <p>To recover attributes values set for a business, <a href="#operation/getBusinessAttributes">see get attributes business endpoints</a>.
+  <p>To handle attributes values for businesses, <a href="#operation/postBusinessAttributes">see set attributes business endpoints</a>.
+  <p>This endpoint allows you to view the **Google** attributes available for a given Category.
+
+operationId: getAttributes
+tags:
+  - Google
+parameters:
+  - $ref: '../../components/index.yml#/parameters/category_name'
+  - $ref: '../../components/index.yml#/parameters/country'
+  - $ref: '../../components/index.yml#/parameters/lang'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/AttributesGroupResponse'
+  400:
+    description: Wrong or missing parameters
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../components/index.yml#/schemas/AttributesMissingParametersError'
+            - $ref: '../../components/index.yml#/schemas/AttributesWrongCategoryError'
+            - $ref: '../../components/index.yml#/schemas/AttributesWrongLangError'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

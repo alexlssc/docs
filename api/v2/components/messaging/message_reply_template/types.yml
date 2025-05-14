@@ -1,0 +1,46 @@
+MessageReplyTemplate:
+  type: object
+  title: MessageReplyTemplate
+  properties:
+    id:
+      type: string
+      example: "642bca3d2830e15c6806cc33"
+    title:
+      type: string
+      description: The title of the message template.
+      example: "Quote request"
+    content:
+      type: string
+      enum: [client_full_name, client_first_name, business_name, my_first_name, rb_link, address, website_url, phone_number]
+      description: |
+        The content of the message template should be a __stringified JSON__ object. This includes both the message content (`"text"`) and the pair `"_version": "0.1"`.
+
+        The `"text"` can contain placeholders (values from the enum above within double curly braces `{{}}`) that will be replaced with the actual values when the message is sent.
+      example: '{"text": "Hello {{client_full_name}}, thank you for your request. For a quote, please contact us at 0123456789."
+                "_version": "0.1"}'
+    icon:
+      type:
+        - string
+        - "null"
+      description: The icon associated with the message template.
+      example: "📝"
+    org_id:
+      type: integer
+      description: The organization ID that the message template belongs to.
+      example: 123
+    created_at:
+      type: string
+      format: date-time
+      description: The date and time when the message template was created, in ISO 8601 format.
+      example: "2023-01-31T16:22:17.327878+00:00"
+    updated_at:
+      type:
+        - string
+        - "null"
+      format: date-time
+      description: The date and time when the message template was last updated, in ISO 8601 format.
+      example: "2023-02-15T10:00:00.000000+00:00"
+    usage_count:
+      type: integer
+      description: The number of times the message template has been used.
+      example: 50

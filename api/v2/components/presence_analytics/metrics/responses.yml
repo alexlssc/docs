@@ -1,0 +1,37 @@
+PresenceAnalyticsMetricsResults:
+  type: array
+  items:
+    type: object
+    properties:
+      business_impressions_desktop_maps:
+        $ref: "./types.yml#/BusinessImpressionsDesktopMaps"
+      business_impressions_mobile_maps:
+        $ref: "./types.yml#/BusinessImpressionsMobileMaps"
+      business_impressions_desktop_search:
+        $ref: "./types.yml#/BusinessImpressionsDesktopSearch"
+      business_impressions_mobile_search:
+        $ref: "./types.yml#/BusinessImpressionsMobileSearch"
+      business_direction_requests:
+        $ref: "./types.yml#/BusinessDirectionRequests"
+      call_clicks:
+        $ref: "./types.yml#/ActionsPhone"
+      website_clicks:
+        $ref: "./types.yml#/ActionsWebsite"
+      date:
+        $ref: "./types.yml#/AnalyticsDate"
+      bucket:
+        $ref: "./types.yml#/AnalyticsBucket"
+      business_id:
+        $ref: "./types.yml#/BusinessID"
+
+PresenceAnalyticsMetricsResponse:
+  type: object
+  properties:
+    page:
+      $ref: "../pagination/types.yml#/Page"
+    count:
+      $ref: "../pagination/types.yml#/TotalItemsCount"
+    max_page:
+      $ref: "../pagination/types.yml#/MaxPage"
+    metrics:
+      $ref: "#/PresenceAnalyticsMetricsResults"

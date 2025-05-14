@@ -1,0 +1,36 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier of the reply suggestion
+    example: 1
+  index:
+    type: integer
+    description: Index of the reply suggestion
+    example: 0
+  content:
+    type: string
+    description: Content of the reply suggestion
+    example: "Thank you for your feedback."
+  feedback_result_id:
+    type: integer
+    description: Identifier of the feedback result
+    example: 123
+  report:
+    type: object
+    description: Report details if the suggestion was reported (can be null)
+    properties:
+      id:
+        type: integer
+        description: Report id
+        example: 3587
+      user_id:
+        type: string
+        description: User id of the user who reported the suggestion
+        example: "xyz123"
+      created_at:
+        type: string
+        format: datetime
+        description: Date the review suggestion report was created on
+        example: "2025-05-12T12:57:21.895170Z"
+

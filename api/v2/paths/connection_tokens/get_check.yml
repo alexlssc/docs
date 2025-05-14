@@ -1,0 +1,76 @@
+tags:
+  - Connection Tokens
+summary: Check connection token
+description: >
+  This endpoint lets you check the status of a connection token.
+  To be able to check a connection token of a user, you need to have `WRITE` access on that user.
+operationId: checkConnectionToken
+parameters:
+  - in: query
+    name: user_id
+    description: User id
+    required: true
+    schema:
+      $ref: '../../components/index.yml#/schemas/UserId'
+  - in: query
+    name: token
+    description: User connection token
+    required: true
+    schema:
+      type: string
+      example: \xaf3e8951c1f4c42f9cc53116b3fc855bd44bce01cf27604b
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            token:
+              description: New connection token
+              type: string
+              example: \xaf3e8951c1f4c42f9cc53116b3fc855bd44bce01cf27604b
+            expiration_date:
+              type: string
+              description: Expiration date of the token
+              format: date-time
+              example: 2019-08-02T19:15:54.256000+02:00
+            generated_by:
+              type: string
+              description: Id of the user that created the token
+              example: 5309c3a237bbc544d8e26737
+            creation_date:
+              type: string
+              description: Creation date of the token
+              format: date-time
+              example: 2019-08-01T19:15:54.256000+02:00
+            consumption_date:
+              type: string
+              description: Date the token was consumed, ie. used to log in
+              format: date-time
+              example: 2019-08-01T23:15:54.256000+02:00
+            status:
+              type: string
+              example: consumed
+              enum:
+                - revoked
+                - consumed
+                - expired
+                - valid
+              description: >
+                Status of the token:
+
+                 - `valid` means it can be use to log in
+                 - `consumed` means it has been used to log in
+                 - `revoked` means it has been revoked before being used or expired
+                 - `expired` means it has expired before being used
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

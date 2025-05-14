@@ -1,0 +1,37 @@
+tags:
+  - Organizations
+summary: Update organization's plans
+operationId: updateOrganizationPlans
+description: >
+  This endpoint lets you update the plans of an organization.<br />
+  You need to be a Provider to access this endpoint.<br />
+  ⚠️You need to send <b>all the plans</b>, those not sent will be removed. We advise you to call the GET endpoint first. ⚠️
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_org_id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/index.yml#/schemas/OrgPlansUpdate'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          description: Result object
+          properties:
+            org_id:
+              $ref: '../../components/index.yml#/schemas/OrgId'
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

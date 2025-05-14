@@ -1,0 +1,30 @@
+operationId: retrySendMessage
+tags:
+  - Messages
+summary: Retry send message
+description: |
+  This endpoint let you retry sending a message that has failed to be sent.
+parameters:
+  - name: message_id
+    in: path
+    schema:
+      type: integer
+      description: The id of the message to send
+    required: true
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: 
+                - success
+  400:
+    $ref: "../../components/index.yml#/responses/400"
+  401:
+    $ref: "../../components/index.yml#/responses/401"

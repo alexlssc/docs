@@ -1,0 +1,57 @@
+tags:
+  - Review Booster
+operationId: checkDuplicatedReviewInvitation
+summary: Search for an invitation matching a set of criteria
+description: >
+    This endpoint allows to fetch previously sent invitations.
+    Your access token must be for an user subscribed to the Review Booster product to access this route.
+    The user must have access to the business.
+    This can be useful to avoid sending multiple invitations to the same user in a defined period.
+parameters:
+  - in: query
+    name: business_id
+    required: true
+    schema:
+      $ref: '../../../components/index.yml#/schemas/BusinessId'
+  - in: query
+    name: target_phone
+    required: true
+    schema:
+      $ref: '../../../components/index.yml#/schemas/TargetPhone'
+  - in: query
+    name: after
+    schema:
+      type: number
+      example: 1559148288
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+          - $ref: '../../../components/index.yml#/schemas/ListResult'
+          - type: object
+            properties:
+              review_invitations:
+                type: array
+                description: List of invitations sent
+                items:
+                  type: object
+                  properties:
+                    user_name:
+                      type: string
+                      example: Perceval
+                    user_id:
+                      type: string
+                      example: 54b6733b9826bf1dd29af128
+                    id:
+                      type: string
+                      example: "3d90efec-0d7f-4960-98c0-951d58dc14cb"
+                    sent_time:
+                      type: string
+                      example: "2019-06-06 11:57:27.274725+00:00"
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  404:
+    $ref: '../../../components/index.yml#/responses/404'

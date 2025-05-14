@@ -1,0 +1,44 @@
+# operationId: getConversations
+tags:
+  - Messages
+summary: List conversations
+operationId: listConversations
+description: |
+  This endpoint lets you list all the Conversations you have access to.
+
+  You can filter the conversations based on the Organization or the Business
+  that they are related to.
+
+  If you want to keep an up-to-date list of ongoing conversations for your
+  businesses, we recommend using the [Message Received](#operation/message_received) and
+  [Message Deleted](#operation/message_deleted) Webhooks instead of periodically calling this endpoint.
+
+  ⚠️ This endpoint is paginated using cursor pagination. This means that in
+  order to get the next page of results, you need to provide the cursor
+  returned in the previous call.
+parameters:
+  - $ref: '../../components/messaging/parameters.yml#/PerPage'
+  - $ref: '../../components/messaging/parameters.yml#/Cursor'
+  - $ref: '../../components/index.yml#/parameters/query_business__in'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          description: Response object
+          type: object
+          properties:
+            conversations:
+              type: array
+              description: The list of conversations, paginated.
+              items:
+                $ref: '../../components/messaging/types.yml#/Conversation'
+            count:
+              $ref: '../../components/messaging/pagination.yml#/Count'
+            next_cursor:
+              $ref: '../../components/messaging/pagination.yml#/NextCursor'
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

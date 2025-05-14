@@ -1,0 +1,30 @@
+tags:
+  - Businesses
+operationId: deleteBusiness
+summary: Delete business
+description: >
+  This endpoint lets you delete a business.
+  You need to have `WRITE`access on this business.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          description: Response object
+          type: object
+          properties:
+            id:
+              $ref: '../../components/index.yml#/schemas/BusinessId'
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

@@ -1,0 +1,24 @@
+summary: Google attributes for your business
+description: >
+  This endpoint allows you to view the **Google attributes** set for your business.
+
+operationId: getBusinessAttributes
+tags:
+  - Businesses
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+  - $ref: '../../components/index.yml#/parameters/category_name_optional'
+  - $ref: '../../components/index.yml#/parameters/country'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/BusinessAttributesResponse'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

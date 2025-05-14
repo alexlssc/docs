@@ -1,0 +1,71 @@
+summary: Complete Google Location Verification Process
+description: >
+  This endpoint completes the Google location verification process identified by `google_location_id`. It requires 
+  authentication and authorization with at least the role of `BUSINESS_MANAGER`.
+
+
+  If the verification process is not in the `PENDING` status, or if the PIN code is invalid, an error response will be
+  returned. If the completion is successful, the verification status of the location will be updated.
+
+operationId: completeGoogleLocationVerification
+tags:
+  - Google
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/google_location_id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          method:
+            type: string
+            enum:
+              - PHONE_CALL
+              - SMS
+              - EMAIL
+              - ADDRESS
+          pin_code:
+            type: string
+            description: The PIN code provided by the user during the verification process.
+            example: "1234"
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              description: The status of the response `success` or `error`.
+              example: "success"
+            message:
+              type: string
+              example:
+              description: >
+                Details of the message. Can be one of the following:
+                  - `complete_success`: The verification process has been completed successfully (returned with a `success` status).
+                  - `complete_in_review`: The verification process has been completed successfully but the verification is still in review (returned with a `success` status).
+                  - `complete_only_pending`: The verification process can be completed only on a `PENDING` verification (returned with a `error` status).
+                  - `complete_invalid_pin`: The PIN code provided is invalid (returned with a `error` status).
+                  - `complete_error`: An error occurred during the completion of the verification process (returned with a `error` status).
+              enum:
+                - complete_success
+                - complete_in_review
+                - complete_only_pending
+                - complete_invalid_pin
+                - complete_error
+
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

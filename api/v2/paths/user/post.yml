@@ -1,0 +1,98 @@
+tags:
+  - Users
+summary: Create user
+description: >
+  This endpoint lets you create a user. If no password given, a password will automatically be generated.
+  
+  
+  The password will be ignored if `send_invitation` is set to `True`.
+  
+  
+  You need to have `WRITE` access on the organization of the user you want to create.
+  
+  
+  If you want to have an `invited` user but send the invitation email later, you have to send the `send_invitation` parameter as `False` and a `status` parameter to `invited`.<br />
+  You will then have to call the <a href="#operation/reinviteUser">invitation endpoint</a> to send the invitation email to the user.
+operationId: createUser
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to create a user
+        type: object
+        required:
+          - email
+          - first_name
+          - last_name
+        properties:
+          email:
+            description: User email (must be unique will return otherwise)
+            type: string
+            format: email
+          first_name:
+            $ref: '../../components/index.yml#/schemas/UserFirstName'
+          last_name:
+            $ref: '../../components/index.yml#/schemas/UserLastName'
+          org_id:
+            description: >
+              Id of the organization to which the user should belong.
+              If no `org_id` given, the user will have the same organization as you.
+            type: integer
+          accesses:
+            $ref: '../../components/index.yml#/schemas/accesses'
+          business_ids:
+            description: >
+              The list of business to which the user has access to.
+              Will be taken into account only if user has `BUSINESS_MANAGER` role.
+            type: array
+            items:
+              type: string
+          phone:
+            $ref: '../../components/index.yml#/schemas/UserPhone'
+          role:
+            $ref: '../../components/index.yml#/schemas/RoleWithoutProvider'
+          sidebar_products:
+            deprecated: true
+            type: array
+            items:
+              $ref: '../../components/index.yml#/schemas/Product'
+          sidebar_pages:
+            allOf:
+              - $ref: '../../components/index.yml#/schemas/SidebarPages'
+            description: |
+              List of features the user can access from the sidebar.
+              If not provided in the payload or set to `null`, then the user will be given all the available features of their organization.
+          send_invitation:
+            description: >
+              Send an invitation email to the User.
+              
+              
+              If you want to have an `invited` user but send the invitation email later, you have to send the `send_invitation` parameter as `False` and a `status` parameter to `invited`.<br />
+              You will then have to call the <a href="#operation/reinviteUser">invitation endpoint</a> to send the invitation email to the user.
+            type: boolean
+            default: False
+          password:
+            $ref: '../../components/index.yml#/schemas/Password'
+          lang:
+            $ref: '../../components/index.yml#/schemas/Lang'
+          sso_only:
+            $ref: '../../components/index.yml#/schemas/SsoOnly'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              $ref: '../../components/index.yml#/schemas/UserId'
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

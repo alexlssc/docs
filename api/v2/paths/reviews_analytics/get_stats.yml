@@ -1,0 +1,38 @@
+tags:
+  - Review analytics
+summary: Global reviews statistics
+operationId: getReviewAnalytics
+deprecated: true
+description: |
+  This endpoint let you view the global reviews statistics for all your businesses subscribed to
+  **Review Management**.
+
+  You can use the following filters:
+    - by date (statistics before and/or after a date)
+    - by businesses (businesses id in list or not in list)
+    - by keywords
+
+  The response is aggregated according to the previously selected filters.
+
+  In order to get analytics evolution overtime returned by specific time range, please refer to
+  **Qualitative Evolution** and **Quantitative Evolution** endpoints.
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_review_business__in'
+  - $ref: '../../components/reviews/parameters.yml#/query_keywords'
+  - $ref: '../../components/reviews/parameters.yml#/query_review_update_date__gte'
+  - $ref: '../../components/reviews/parameters.yml#/query_review_update_date__lte'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/ReviewsStatisticsResponse'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

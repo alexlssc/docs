@@ -1,0 +1,277 @@
+name: Change Log
+description: |
+  ### Instructions and examples to help you get started.
+
+  ## Synchronise business info on Partoo
+
+  The provided code snippet demonstrates an API request to create a new business entry.<br />
+  The request is sent to the endpoint `https://api.partoo.co/v2/business` using the HTTP method POST.
+  The request includes a JSON payload in the request body, containing various parameters to create the business entry.
+
+  ### Request Parameters
+  The following parameters are required to successfully execute this request:
+
+  - `name` : The name of the business
+  - `country` : The country where the business is located
+  - `city` : The city where the business is situated
+  - `categories` : An array of categories associated with the business, you will find all our categories code just [here](https://admin.partoo.co/categories).
+  - `contacts` : An array of contact information for the business, the details for a single contact person, including their name, email, phone number, and fax number.
+  
+  ### Optional Parameters
+  In addition to the required parameters mentioned above, there are several optional parameters included in the request body. 
+  These optional parameters provide additional information about the business. By utilizing these parameters, you can effectively augment your online presence, 
+  broaden your reach, and enhance overall visibility, thus achieving improved brand recognition and increased exposure to potential customers. 
+
+  - `org_id` : The organization unique identifier at Partoo. During onboarding, Partoo creates an organization where all your businesses will be aggregated.
+  - `zipcode` :	Zipcode (or postal code) for the business address. Can be empty if the business' country does not require one.
+  - `region` : The region where the business is located. Can be empty, it is only useful for some countries like Italy or Spain among others.
+  - `code`: The unique store code of the business. If not provided, it will be automatically generated.
+  - `status` : Defines the current status of the business. `Open` indicates the business is up and running. `Closed` means that the business has definitely closed. `Temporarily closed` means that the business is temporarily closed, it is advised when your business is closed for more than one week, otherwise use the specific hours.
+  - `address_full` : Full address of the business.
+  - `address2` : Complement of address. Any additional information that could help better find the business location.
+  - `lat` : Latitude. Decimals are separated by a dot and not by a comma.
+  - `long` : Longitude. Decimals are separated by a dot and not by a comma.
+  - `website_url` : The business own website url or the main url of the company.
+  - `facebook_url` : Business Facebook page url
+  - `twitter_url` : Business twitter page url
+  - `description_short` : A short description of the business.<br />**⚠️It is limited to 80 characters**
+  - `description_long` : A more detailed description of the business.<br />**⚠️It is limited to 750 characters**
+  - `open_hours` : The opening hours of the business (in its timezone). Opening hours are specified per weekday. This is done by supplying an object mapping weekdays ("monday", "tuesday", etc.) to a list of of strings. These strings in turn represent time slots during which the business is open. To indicate that a business is open 24 hours for a specific weekday, use the value ["00:00-23:59"].
+
+  ```json
+  {"monday": ["08:00-15:00", "18:00-23:00"]}
+  ```
+
+  - `specific_hours` : Exceptional opening or closing times for the business (in its timezone).<br />
+    Specific hours are defined by two values:<br />
+      - `open` :  Containing a list of days with exceptional opening hours.<br />
+      - `close` : Containing a list of days where the business is exceptionally closed all day.<br />
+      These values in turn, contain:<br />
+        - `starts_at` : Indicating the first date for which the exceptional hours are valid.<br />
+        - `ends_at` :  Indicating the last date (inclusive) for which the exceptional hours are valid.<br />
+        - `open_hours` : Indicating the actual time slots for the given period, following the same pattern as the time slots in open_hours (only used for days with exceptional opening hours).
+
+  - `photos` : Business photos.<br />
+    Photo object :<br />
+    - `LOGO` : The logo image of the brand.<br />
+    - `primary` : The business's main photo URL.<br />
+    - `secondary`: Additional photos that can highlight the features of the business.<br />
+
+  - `national_identification_number` : The National Identification Number of the business.
+  
+  - `custom_fields` : Custom Fields set for this Business.
+
+  ### Response Description
+  The provided API response is an example of a successful response for the previously described API request. 
+  Below is a breakdown of the response body:
+
+  - `status` : Indicates the status of the response.
+  - `id` : Represents the unique identifier assigned to the newly created business entry.
+
+  ```
+  fetch('https://api.partoo.co/v2/business', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'x-APIKey': 'your_api_keys'
+    },
+    body: JSON.stringify({ 
+      {
+        "name": "Corner shop",
+        "country": "FR",
+        "city": "Paris",
+        "categories": [
+          "gcid:restaurant",
+          "gcid:fast_food_restaurant",
+          "gcid:hamburger_restaurant"
+        ],
+        "contacts": [
+          {
+            "name": "Hubert Bonisseur de la Bath",
+            "email": "hubert@oss117.fr",
+            "phone_numbers": [
+              "+33302060628"
+            ],
+            "fax": "+33302060629"
+          }
+        ],
+        "org_id": 42,
+        "zipcode": "75019",
+        "region": "Ile-de-France",
+        "code": "CS-75019",
+        "status": "open",
+        "address_full": "12 bis rue du coquelicot",
+        "address2": "string",
+        "lat": -3.585993,
+        "long": 47.870341,
+        "website_url": "https://www.corner-shop.co/",
+        "facebook_url": "https://www.facebook.com/the-corner-shop",
+        "twitter_url": "https://www.twitter.com/the-corner-shop",
+        "description_short": "lorem ipsum",
+        "description_long": "lorem ipsum dolor sit amet",
+        "open_hours": {
+          "monday": [
+            "10:00-14:00"
+          ],
+          "tuesday": [
+            "10:00-14:00"
+          ],
+          "wednesday": [
+            "10:00-14:00"
+          ],
+          "thursday": [
+            "10:00-14:00"
+          ],
+          "friday": [
+            "10:00-14:00"
+          ],
+          "saturday": [
+            "10:00-14:00"
+          ],
+          "sunday": [
+            "10:00-14:00"
+          ]
+        },
+        "specific_hours": {
+          "open": [
+            {
+              "starts_at": "2020-01-20",
+              "ends_at": "2020-01-20",
+              "open_hours": [
+                "10:00-14:00"
+              ]
+            }
+          ],
+          "close": [
+            {
+              "starts_at": "2020-01-20",
+              "ends_at": "2020-01-22"
+            }
+          ]
+        },
+        "photos": {
+          "LOGO": "http://example.com",
+          "primary": "http://example.com",
+          "secondary": [
+            "http://example.com"
+          ]
+        },
+        "national_identification_number": "string",
+        "custom_fields": {
+          "Parking": true,
+          "ManagerName": "toto",
+          "Surface": 35,
+          "DistanceFromSubway": 1.5,
+          "Level": "one",
+          "Services": [
+            "DisabledAccess",
+            "FreeParking"
+          ],
+          "BannerImage\"": [
+            "image 1",
+            "image 2"
+          ]
+        }
+      }
+    })
+  })
+  ```
+
+  ## Store the business id Partoo
+
+  ## Information from the establishment
+
+  ## Retrieve reviews
+  This endpoint performs to get reviews about your business.
+  The request is sent to the endpoint `https://api.partoo.co/v2/reviews` using the HTTP method GET.<br />
+  To access the reviews of a business you need to have `READ` access on it. The response is paginated (30 results per page).
+  To this endpoint you have not required parameters.
+
+  ### Optional Parameters
+  When you want to retrieve the reviews of your business you can apply filters in the query with the following parameters.
+  - `business__in` <span style="font-size:12px; color:grey" >Array of strings (BusinessId)</span> : Filter by business ids.
+
+  - `business__notin` <span style="font-size:12px; color:grey" >Array of strings (BusinessId)</span> : Excludes from the request all businesses provided
+
+  - `content__isnull` <span style="font-size:12px; color:grey" >String</span> : Filter by review's content.<br />
+  If set to true, the endpoint will return all the reviews without content.<br />
+  Note: This is the content of the review and not the content of the reply.
+
+  - `partner__in` <span style="font-size:12px; color:grey" >Array of strings (ReviewPublisherLabel)</span> : Filter by publisher
+
+  - `gmb_rating__in` 	<span style="font-size:12px; color:grey" >Array of numbers</span> : Filter only by Google ratings
+
+  - `tripadvisor_rating__in` <span style="font-size:12px; color:grey" >Array of numbers</span> : Filter only by Tripadvisor ratings.
+
+  - `recommended__in` <span style="font-size:12px; color:grey" >Array of booleans</span> : Filter only by Facebook recommendation.
+
+  - `update_date__gte` 	<span style="font-size:12px; color:grey" >String<datetime></span> : Filter by `update_date`<br />
+  Return all the reviews whose update_date >= given_date.<br />
+  Note : The update dates are stored in UTC.
+
+  - `update_date__lte` 	<span style="font-size:12px; color:grey" >String<datetime></span> : Filter by update_date<br />
+  Return all the reviews whose update_date <= given_date.<br />
+  Note : The update dates are stored in UTC.
+
+  - `state__in` <span style="font-size:12px; color:grey" >Array of strings (ReviewState)</span> : Filter by state
+
+  - `keywords` <span style="font-size:12px; color:grey" >Array of strings</span> : Filter by keywords<br />
+  Return all the reviews with not-nullable content, that contain the provided list of keywords.<br />
+  Note: This is the content of the review and not the content of the reply.<br />
+  The filter accepts both simple and composed words. To indicate it's a composed keyword, add the + as separator.<br />
+  For example:<br />
+   - keywords=bonjour returns all reviews containing the keyword bonjour<br />
+   - keywords=good+service returns all reviews containing the combined keyword good service, without splitting the keyword. No reviews containing just good or just service will be returned.<br />
+   - keywords=bonjour,good+service: returns all reviews that contain either just bonjour, either just good service or both keywords at the same time.<br />
+
+  - `page` <span style="font-size:12px; color:grey" >Integer</span> : Page number, Starts at 1. From 1 to 100 results per page (see per_page)
+
+  - `per_page` <span style="font-size:12px; color:grey" >Integer</span> : Number of items to return per page. Currently limited to 100.
+
+  - `order_by` <span style="font-size:12px; color:grey" >String</span> : Where object is either a dimension or a metric and is used in the request. At most one in the list. - before a field to order_by DESC, nothing for ASC
+
+  ### Response Description
+  The provided API response is an example of a successful response for the previously described API request. 
+  Below is a breakdown of the response body:
+
+  - `page` 	<span style="font-size:12px; color:grey" >Integer (current_page)</span> : Current page number
+
+  - `max_page` <span style="font-size:12px; color:grey" >Integer (max_page)</span> : Last page number
+
+  - `count` <span style="font-size:12px; color:grey" >Integer (count)</span> : Number of resources complying with filters
+
+  - `reviews` <span style="font-size:12px; color:grey" >Array of objects (Review)</span> : Filtered reviews<br />
+    Array (Review) : 
+      - `key` <span style="font-size:12px; color:grey" >String</span>
+      - `org_id` <span style="font-size:12px; color:grey" >Integer (OrgId)</span> : Integer (OrgId)
+      - `id` <span style="font-size:12px; color:grey" >Integer (ReviewId)</span> : Review id
+      - `business_id` <span style="font-size:12px; color:grey" >String (BusinessId)</span> : Business id
+      - `partner` <span style="font-size:12px; color:grey" >String (ReviewPublisherLabel)</span> : Publisher label<br />
+          Enum: "google_my_business" "facebook" "tripadvisor"
+      - `partner_id` <span style="font-size:12px; color:grey" >String (ReviewPublisherId)</span> : Review id on publisher
+      - `author_name` <span style="font-size:12px; color:grey" >String (ReviewAuthorName)</span> :The author name of the review.<br />
+          Note: Replies don't have an author.
+      - `date` <span style="font-size:12px; color:grey" >String <datetime> (ReviewUpdateDate)</span> : Review update date
+      - `update_date` <span style="font-size:12px; color:grey" >String <datetime> (ReviewUpdateDate)</span> : Review update date
+      - `delete_date` <span style="font-size:12px; color:grey" >String <datetime> (ReviewDeleteDate)</span> : Review deletion date
+      - `rating` <span style="font-size:12px; color:grey" >String <datetime> (ReviewDeleteDate)</span> : Review rating (can be null)
+      - `recommended` <span style="font-size:12px; color:grey" >Boolean (ReviewRecommended)</span> : Review recommended (can be null)
+      - `title` <span style="font-size:12px; color:grey" >String (ReviewTitle)</span> : Review title
+      - `content` <span style="font-size:12px; color:grey" >String (ReviewBody)</span> : Review body content
+      - `state` <span style="font-size:12px; color:grey" >String (ReviewState)</span> : Reply state<br />
+          Enum: "treated" "not_treated" "deleted"
+      - `link` <span style="font-size:12px; color:grey" >String <uri> (ReviewLink)</span> : Link to review on publisher platform
+      - `comments` <span style="font-size:12px; color:grey" >Object (Comment)</span> : Reply to a review<br />
+        Comment object :
+        - `id` <span style="font-size:12px; color:grey" >Integer (CommentId)</span> : Comment id
+        - `partner_id` <span style="font-size:12px; color:grey" >String (ReviewPublisherId)</span> : Review id on publisher
+        - `created` <span style="font-size:12px; color:grey" >String <datetime> (CreatedDate)</span> : Creation date on Partoo
+        - 'author_name' <span style="font-size:12px; color:grey" >String (ReviewAuthorName)</span> : The author name of the review.<br />
+          Note: Replies don't have an author.
+        - `content` <span style="font-size:12px; color:grey" >String (CommentBody)</span> : Reply content.
+        - `date` <span style="font-size:12px; color:grey" >String <datetime> (ReviewUpdateDate)</span> : Review update date.
+        - `can_edit` <span style="font-size:12px; color:grey" >Boolean</span> : If the current user can or cannot edit a reply.<br />
+          Note: This applies on Facebook replies only. A reply left by an external user on Facebook cannot be edited.xs.
+        - `review_id`	<span style="font-size:12px; color:grey" >Integer (ReviewId)</span> : Review id.
+        - `parent_id` <span style="font-size:12px; color:grey" >Integer (ParentId)</span> : Id of the parent comment.<br />

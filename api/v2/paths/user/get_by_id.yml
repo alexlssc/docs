@@ -1,0 +1,22 @@
+tags:
+  - Users
+summary: User information
+description: >
+  This endpoint lets you retrieve all the information on a user.
+  You need to have `READ` access to this users.
+operationId: getUser
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_user_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/UserWithFeatures'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

@@ -1,0 +1,75 @@
+tags:
+  - Review analytics
+summary: Qualitative evolution
+operationId: getQualitativeEvolution
+deprecated: true
+description: |
+  This endpoint lets you view the qualitative evolution of the **reviews rating** for all of your businesses
+  subscribed to **Review Management**. The API returns the reviews average rating by bucket (time range).
+
+  You can use the following filters:
+    - by date (analytics before and/or after a date)
+    - by businesses (businesses id in list or not in list)
+    - by keywords
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_review_bucket'
+  - $ref: '../../components/index.yml#/parameters/query_review_cumulative'
+  - $ref: '../../components/index.yml#/parameters/query_review_business__in'
+  - $ref: '../../components/reviews/parameters.yml#/query_keywords'
+  - $ref: '../../components/reviews/parameters.yml#/query_review_update_date__gte'
+  - $ref: '../../components/reviews/parameters.yml#/query_review_update_date__lte'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+            type: array
+            example:
+              [
+              {
+                date: '2019-11-29',
+                average: 4.54,
+                added: 50,
+                cum_sum: 70
+              },
+              {
+                date: '2019-12-05',
+                average: 4.34,
+                added: 34,
+                cum_sum: 104
+              },
+              {
+                date: '2019-12-12',
+                average: 4.41,
+                added: 4,
+                cum_sum: 108
+              }
+              ]
+
+            items:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: datetype
+                  description: Start date of the bucket
+                average:
+                  type: number
+                  format: float
+                  description: Average rating.
+                added:
+                  type: integer
+                  description: Number of reviews added during the current bucket.
+                cum_sum:
+                  type: number
+                  format: float
+                  description: Cumulative sum of the number of reviews.
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

@@ -1,0 +1,27 @@
+operationId: business_deleted
+tags:
+  - Webhooks
+summary: Business Deleted
+description: |
+  This event is triggered when a Business is removed from Partoo Database.
+
+  The event payload contains the event type and the business id.
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - business_deleted
+          payload:
+            type: object
+            properties:
+              business_id:
+                $ref: '../components/index.yml#/schemas/BusinessId'
+responses:
+  $ref: ./webhook_responses.yml
+
+security: []

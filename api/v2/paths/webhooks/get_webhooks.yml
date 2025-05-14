@@ -1,0 +1,37 @@
+tags:
+  - Webhooks
+operationId: getWebhookList
+summary: Get a list of webhook configurations
+description: >
+  This endpoint returns the list of webhook configurations.
+
+
+parameters:
+  - $ref: '../../components/webhooks/parameters.yml#/org_id'
+  - $ref: '../../components/index.yml#/parameters/query_page_up_to_100'
+  - $ref: '../../components/index.yml#/parameters/query_per_page_1_100'
+
+x-badges:
+  - name: 'Beta'
+    position: after
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                items:
+                  type: array
+                  description: List of webhook configurations
+                  items:
+                    $ref: '../../components/webhooks/schemas.yml#/WebhookItem'
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

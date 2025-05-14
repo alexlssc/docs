@@ -1,0 +1,79 @@
+tags:
+  - Users
+summary: Update user
+description: >
+  This endpoint lets you update a user.
+  You need to have `WRITE` access to this user.
+  It has a patch behaviour which means that only indicated value will be changed.
+operationId: updateUser
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_user_id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to update a user.
+        type: object
+        properties:
+          email:
+            $ref: '../../components/index.yml#/schemas/UserEmail'
+          first_name:
+            $ref: '../../components/index.yml#/schemas/UserFirstName'
+          last_name:
+            $ref: '../../components/index.yml#/schemas/UserLastName'
+          org_id:
+            description: Org to which the user should belong
+            type: integer
+          accesses:
+            $ref: '../../components/index.yml#/schemas/accesses'
+          business_ids:
+            description: >
+              The list of business to which the user has access to.
+              Will be taken into account only if user has `BUSINESS_MANAGER` role.
+            type: array
+            items:
+              type: string
+          phone:
+            $ref: '../../components/index.yml#/schemas/UserPhone'
+          role:
+            $ref: '../../components/index.yml#/schemas/RoleWithoutProvider'
+          sidebar_products:
+            deprecated: true
+            type: array
+            items:
+              $ref: '../../components/index.yml#/schemas/Product'
+          sidebar_pages:
+            $ref: '../../components/index.yml#/schemas/SidebarPages'
+          password:
+            $ref: '../../components/index.yml#/schemas/Password'
+          lang:
+            $ref: '../../components/index.yml#/schemas/Lang'
+          sso_only:
+            $ref: '../../components/index.yml#/schemas/SsoOnly'
+          keywords:
+            $ref: '../../components/index.yml#/schemas/Keywords'
+          receive_reviews_email_notifications:
+            description: The parameter decides if the user subscribes to negative reviews email notifications
+            type: boolean
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              $ref: '../../components/index.yml#/schemas/UserId'
+            status:
+              type: string
+              enum: ["success"]
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

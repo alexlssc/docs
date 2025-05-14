@@ -1,0 +1,59 @@
+tags:
+  - Custom Fields
+summary: Update custom field
+description: >
+  <p>This endpoint enables an ORG_ADMIN to update a specific custom field of his organization by specifying its id.
+  <p>Name and constraints can be updated. The type of a custom field cannot be modified.
+operationId: putUpdateCustomFields
+parameters:
+  - $ref: '../../components/index.yml#/parameters/custom_field_id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        oneOf:
+          - $ref: '../../components/index.yml#/schemas/CustomFieldEditTypeBool'
+          - $ref: '../../components/index.yml#/schemas/CustomFieldEditTypeText'
+          - $ref: '../../components/index.yml#/schemas/CustomFieldEditTypeInteger'
+          - $ref: '../../components/index.yml#/schemas/CustomFieldEditTypeFloat'
+          - $ref: '../../components/index.yml#/schemas/CustomFieldTypeEditSingleSelect'
+          - $ref: '../../components/index.yml#/schemas/CustomFieldTypeEditMultipleSelect'
+          - $ref: '../../components/index.yml#/schemas/CustomFieldTypeEditMultipleSelectImage'
+          - $ref: '../../components/index.yml#/schemas/CustomFieldTypeEditImagesUploader'
+        discriminator: 
+          propertyName: type
+          mapping:
+            BOOLEAN: '../../components/index.yml#/schemas/CustomFieldEditTypeBool'
+            TEXT: '../../components/index.yml#/schemas/CustomFieldEditTypeText'
+            INTEGER: '../../components/index.yml#/schemas/CustomFieldEditTypeInteger'
+            FLOAT: '../../components/index.yml#/schemas/CustomFieldEditTypeFloat'
+            SINGLE_SELECT: '../../components/index.yml#/schemas/CustomFieldTypeEditSingleSelect'
+            MULTIPLE_SELECT: '../../components/index.yml#/schemas/CustomFieldTypeEditMultipleSelect'
+            MULTIPLE_SELECT_IMAGE: '../../components/index.yml#/schemas/CustomFieldTypeEditMultipleSelectImage'
+            IMAGES_UPLOADER: '../../components/index.yml#/schemas/CustomFieldTypeEditImagesUploader'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  400:
+    description: New constraints are not respected for some businesses
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../components/index.yml#/schemas/CustomFieldTextError'
+            - $ref: '../../components/index.yml#/schemas/CustomFieldNumberError'
+            - $ref: '../../components/index.yml#/schemas/CustomFieldSelectError'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

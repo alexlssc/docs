@@ -1,0 +1,5522 @@
+securitySchemes:
+  ApiKeyAuth:
+    description: >
+      The authentication system on Partoo API is using API Key that should be put in the header of the request (the name
+      of the header is `x-APIKey`).
+      An api_key is linked to a user. This user's role will give you different access level to the API features.
+    type: apiKey
+    in: header
+    name: x-APIKey
+schemas:
+  business_ids:
+    description: List of business ids
+    type: array
+    example: ['5409c35a97bbc544d8e26737', '595badaef348ab6b3530033f', '59d53302b12ff6429f262639']
+    items:
+      $ref: '#/schemas/BusinessId'
+  ListResult:
+    type: object
+    properties:
+      page:
+        $ref: '#/schemas/current_page'
+      max_page:
+        $ref: '#/schemas/max_page'
+      count:
+        $ref: '#/schemas/count'
+  CategoryName:
+    type: string
+    description: Category name in given language or user's language
+    example: Cabinet d'expertise comptable
+  CategoryId:
+    oneOf:
+      - type: integer
+        description: Category id
+      - type: string
+        description: Google's category id
+    description: Category id or Google's category id
+    example: 5706 or gcid:bank
+  CategorySqlId:
+    type: integer
+    description: Category id
+    example: 42
+  CategorySqlGmbId:
+    type: string
+    description: |
+      Unique category id. This is the id you should pass in business.categories array when creating/updating a business<br/>
+    example: 'gcid:climbing_gym'
+  CategorySqlName:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Translated category name
+        example: salle d'escalade
+      lang:
+        type: string
+        description: Available language in the application
+        example: 'FR'
+  DeprecatedCategorySqlName:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Translated category name
+        example: salle d'escalade
+      lang:
+        type: string
+        description: Available language in the application
+        example: 'FR'
+      country:
+        type: string
+        description: Country code, will be removed after 2022-10-15
+        example: 'FR'
+        deprecated: true
+  CategorySqlNames:
+    type: array
+    description: |
+      Category names translated for available languages
+
+      *If `with_names` is true*
+    items:
+      $ref: '#/schemas/CategorySqlName'
+  DeprecatedCategorySqlNames:
+    type: array
+    description: |
+      Category name translated for available languages
+
+      *If `with_names` is true*
+    items:
+      $ref: '#/schemas/DeprecatedCategorySqlName'
+  CategoryCountries:
+    type: array
+    items:
+      type: string
+    description: |
+      Array of strings representing the list of country codes in which the category is available
+
+      *If `with_countries` is true*
+    example: ['FR', 'GB', 'IT', 'ES']
+  CategorySqlState:
+    type: string
+    description: State of category ( OK or DEPRECATED )
+    example: 'OK'
+  CategorySqlBlockPushLong:
+    type: boolean
+    description:  Boolean indicating if the business long description can be pushed to Google when the business belongs to this category
+    example: false
+  CategorySqlLiveId:
+    type:
+      - string
+      - "null"
+    description: Live category id to which the category is mapped (deprecated categories are mapped to the closest category)
+    example: 'gcid:sport_club'
+  CategorySql:
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/CategorySqlId'
+      gmb_id:
+        $ref: '#/schemas/CategorySqlGmbId'
+      name:
+        $ref: '#/schemas/CategoryName'
+      names:
+        $ref: '#/schemas/CategorySqlNames'
+      state:
+        $ref: '#/schemas/CategorySqlState'
+      block_push_long_description_on_gmb:
+        $ref: '#/schemas/CategorySqlBlockPushLong'
+      countries:
+        $ref: '#/schemas/CategoryCountries'
+      live_id:
+        $ref: '#/schemas/CategorySqlLiveId'
+  DeprecatedCategorySql:
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/CategorySqlId'
+      gmb_id:
+        $ref: '#/schemas/CategorySqlGmbId'
+      name:
+        $ref: '#/schemas/CategoryName'
+      names:
+        $ref: '#/schemas/DeprecatedCategorySqlNames'
+      state:
+        $ref: '#/schemas/CategorySqlState'
+      block_push_long_description_on_gmb:
+        $ref: '#/schemas/CategorySqlBlockPushLong'
+      countries:
+        $ref: '#/schemas/CategoryCountries'
+      live_id:
+        $ref: '#/schemas/CategorySqlLiveId'
+  SuggestedAdditionalCategoriesObject:
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/CategorySqlId'
+      gmb_id:
+        $ref: '#/schemas/CategorySqlGmbId'
+      name:
+        $ref: '#/schemas/CategoryName'
+      state:
+        $ref: '#/schemas/CategorySqlState'
+      block_push_long_description_on_gmb:
+        $ref: '#/schemas/CategorySqlBlockPushLong'
+      live_id:
+        $ref: '#/schemas/CategorySqlLiveId'
+  ProductSubscribeResponseObject:
+    type: object
+    properties:
+      subscription_date:
+        type: integer
+        description: Date on which the subscription was activated
+        example: 1540628702
+      status:
+        type: string
+        enum:
+          - active
+  ProductUnsubscribeResponseObject:
+    type: object
+    properties:
+      canceling_date:
+        type: integer
+        description: Date on which the subscription was canceled
+        example: 1540628702
+      status:
+        type: string
+        enum:
+          - inactive
+  Password:
+    description: >
+      The User password.
+      It should comply with the following rules:
+
+      - should be at least 8 characters long
+
+      - should have one upper case letter and one lower case letter
+
+      - should have one special character
+    type: string
+    format: password
+    minLength: 8
+  SsoOnly:
+    description: |
+      <p>Prevent the user from connecting directly from Partoo connexion page.
+      <p>This field is available for users which organization has defined an SSO configuration.
+      <p>This field can be edited by a user with role <code>ORG_ADMIN</code> or <code>PROVIDER</code>.
+    type: boolean
+    default: False
+  accesses:
+    description: |
+      List of (list of Group ID).
+
+      Accesses of the users for the new groups system, only for <code>GROUP_MANAGER</code> users.
+
+      See <a href="#tag/Groups-and-Sections">the Groups and Sections description</a>
+    type: array
+    items:
+      type: array
+      items:
+        type: integer
+    example: [ [ 1, 2 ], [ 1, 3 ] ]
+  groups:
+    description: |
+      List of Group ID of the business.
+
+      Groups the business belongs to.
+
+      See <a href="#tag/Groups-and-Sections">the Groups and Sections description</a>
+    type: array
+    items:
+      type: integer
+    example: [1, 2, 3]
+  current_page:
+    type: integer
+    description: Current page number
+    example: 1
+  max_page:
+    type: integer
+    description: Last page number
+    example: 10
+  count:
+    type: integer
+    description: Number of resources complying with filters
+    example: 287
+  TimeWindow:
+    description: Time window
+    type: string
+    pattern: '^([0-1][0-9]|2[0-3]):([0-5][0-9])-([0-1][0-9]|2[0-3]):([0-5][0-9])$'
+    example: 10:00-14:00
+  Day:
+    description: Open in the morning and in the evening `[10:00-14:00, 18:00-00:00]`. Closed the whole day `[]`
+    type: array
+    items:
+      $ref: '#/schemas/TimeWindow'
+    example: ['10:00-14:00']
+  Role:
+    description: User role in the application
+    type: string
+    enum:
+      - PROVIDER
+      - ORG_ADMIN
+      - GROUP_MANAGER
+      - BUSINESS_MANAGER
+      - PUBLISHER
+    example: BUSINESS_MANAGER
+  RoleWithoutProvider:
+    description: User role in the application
+    type: string
+    enum:
+      - ORG_ADMIN
+      - GROUP_MANAGER
+      - BUSINESS_MANAGER
+      - PUBLISHER
+    example: BUSINESS_MANAGER
+  Lang:
+    description: Available language in the application
+    type: string
+    enum:
+      - fr
+      - en
+      - es
+      - it
+      - pt-br
+      - de
+      - ar
+      - nl
+      - pl
+      - cs
+      - ca
+      - sk
+      - pt
+      - lv
+      - ro
+      - bg
+      - hu
+    example: fr
+  UserStatus:
+    description: User status in the application
+    type: string
+    enum:
+      - active
+      - invited
+    example: active
+  Product:
+    type: string
+    enum:
+      - presence_management
+      - review_booster
+      - review_management
+      - messages
+    example: presence_management
+  Subscriptions:
+    deprecated: true
+    description: Business product subscriptions. Deprecated, use `features` instead.
+    type: object
+    required:
+      - presence_management
+      - review_booster
+      - review_management
+      - messages
+    properties:
+      presence_management:
+        $ref: '#/schemas/SubscriptionActive'
+        description: Is business subscribed to Presence Management
+      review_management:
+        $ref: '#/schemas/SubscriptionActive'
+        description: Is business subscribed to Review Management
+      review_booster:
+        $ref: '#/schemas/SubscriptionActive'
+        description: Is business subscribed to Review Booster
+      messages:
+        $ref: '#/schemas/SubscriptionActive'
+        description: Is business subscribed to Business Message
+    example:
+      presence_management:
+        active: true
+      review_management:
+        active: true
+      review_booster:
+        active: false
+      messages:
+        active: false
+  SubscriptionActive:
+    type: object
+    required:
+      - active
+    properties:
+      active:
+        type: boolean
+        description: Product has been activated
+  Features:
+    description: |
+      List of business' features.
+    type: array
+    items:
+      $ref: '#/schemas/Feature'
+    example: ["business_edition", "diffusion", "review_management", "review_invite", "messages"]
+  Feature:
+    allOf:
+      - $ref: '#/schemas/FeatureEnum'
+    type: string
+    description: Business feature name
+  FeatureEnum:
+    enum:
+      - diffusion
+      - feedback_management
+      - messages
+      - posts
+      - review_invite
+      - review_management
+  SidebarPages:
+    type: array
+    description: |
+      List of features the user can access from the sidebar.
+    items:
+      allOf:
+        - $ref: '#/schemas/SidebarPagesFeatureEnum'
+      type: string
+      description: Sidebar page feature name
+  SidebarPagesFeatureEnum:
+    enum:
+      - bulk_modification
+      - diffusion
+      - feedback_management
+      - messages
+      - posts
+      - presence_analytics
+      - review_analytics
+      - review_invite
+      - review_management
+  OrgFeatures:
+    description: |
+      List of organization's available features.
+      Contains the features the organization can subscribe to as well as the ones only some businesses may have subscribed to additionally.
+    type: array
+    items:
+      $ref: '#/schemas/Feature'
+    example: ["business_edition", "diffusion", "review_management", "review_invite", "messages"]
+  OrgAvailableFeatures:
+    description: |
+      List of organization's features.
+      Only contains the features the organization has subscribed to.
+    type: array
+    items:
+      $ref: '#/schemas/Feature'
+    example: ["business_edition", "diffusion", "review_management", "review_invite", "messages", "review_ai_suggestion"]
+  ReviewId:
+    type: integer
+    description: Review id
+    example: 34
+  CommentId:
+    type: integer
+    description: Comment id
+    example: 82938
+  ReviewPublisherLabel:
+    type: string
+    description: Publisher label
+    enum:
+      - google_my_business
+      - facebook
+      - tripadvisor
+  ReviewPublisherId:
+    type: string
+    description: Review id on publisher
+    example: accounts/114063712393225091258/locations/74805271119400652054
+  ReviewAuthorName:
+    type: string
+    description: |
+      The author name of the review.
+
+      **Note:** Replies don't have an author.
+    example: Castorche
+  ReviewCreateDate:
+    type: string
+    description: Review creation date
+    format: datetime
+    example: 2017-07-01T16:10:23.156000+02:00
+  ReviewUpdateDate:
+    type: string
+    description: Review update date
+    format: datetime
+    example: 2017-08-01T19:15:54.256000+02:00
+  CreatedDate:
+    type: string
+    description: Creation date on Partoo
+    format: datetime
+    example: 2019-08-01T19:15:54.256000+02:00
+  UpdatedDate:
+    type: string
+    description: Last update date (either on Partoo or on Partner platform)
+    format: datetime
+    example: 2019-09-01T15:12:35.256000+02:00
+  ReviewDeleteDate:
+    type: string
+    description: Review deletion date
+    format: datetime
+  ReviewRating:
+    type: integer
+    description: Review rating (can be null)
+    maximum: 5
+    minimum: 0
+    example: 3
+  ReviewRecommended:
+    type: boolean
+    description: Review recommended (can be null)
+  ParentId:
+    type: integer
+    description: |
+      id of the parent comment.
+      Is only specified if the comment is a reply to another comment
+
+      **Note:** This applies on Facebook replies only.
+  ReviewTitle:
+    type: string
+    description: Review title
+  ReviewBody:
+    type: string
+    description: Review body content
+    example: Magasin un peu vieillot , mais personnel très sympathique, nombreuses références en rayons , un très bon choix côté vin...
+  CommentBody:
+    type: string
+    description: Reply content
+    example: Merci ❤️
+  ReviewState:
+    type: string
+    description: Reply state
+    enum:
+      - treated
+      - not_treated
+      - deleted
+  ReviewLink:
+    type: string
+    format: uri
+    description: Link to review on publisher platform
+  Comment:
+    description: Reply to a review
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/CommentId'
+      partner_id:
+        $ref: '#/schemas/ReviewPublisherId'
+      created:
+        $ref: '#/schemas/CreatedDate'
+      author_name:
+        $ref: '#/schemas/ReviewAuthorName'
+      content:
+        $ref: '#/schemas/CommentBody'
+      date:
+        type: string
+        description: Comment date
+        format: datetime
+        example: 2017-08-01T19:15:54.256000+02:00
+      update_date:
+        type: string
+        format: datetime
+        description: |
+          Comment update date. Only specified if the comment was updated
+        example: 2017-08-01T19:15:54.256000+02:00
+      can_edit:
+        type: boolean
+        description: |
+          If the current user can or cannot edit a reply
+
+          **Note:** This applies on Facebook replies only.
+          A reply left by an external user on Facebook cannot be edited.
+        example: true
+      review_id:
+        $ref: '#/schemas/ReviewId'
+      parent_id:
+        $ref: '#/schemas/ParentId'
+      user_id:
+        type: string
+        description: |
+          User id of the comment author
+        example: 123456789abcdef2f60c42ff
+      is_reply_suggestion:
+        type: boolean
+        description: |
+          If AI reply suggestion was used to generate this comment
+      replies:
+        type: array
+        items:
+          $ref: '#/schemas/Comment'
+        description: |
+          List of replies to this comment
+  ReviewsStatisticsResponse:
+    type: object
+    properties:
+      answer_time:
+        type: number
+        format: float
+        description: |
+          Average reviews answer time in seconds. Only measured for reviews with a comment from Google
+          partner.
+          It returns the time between the update date of a review and the creation date of its comments.
+        example: 10493.90997409
+      average:
+        type: number
+        format: float
+        description: |
+          Average reviews rating.
+        maximum: 5
+        minimum: 0
+        example: 3.0394
+      treated:
+        type: number
+        format: integer
+        description: |
+          Total number of treated reviews.
+        example: 9
+      not_treated:
+        type: number
+        format: integer
+        description: |
+          Total number of non treated reviews.
+        example: 10
+      answered:
+        type: number
+        format: integer
+        description: |
+          Total number of answered reviews (reviews with a comment).
+        example: 8
+      satisfied:
+        type: number
+        format: integer
+        description: |
+          Total number of reviews of type *satisfied*.
+
+          *Satisfied* reviews are defined by a rating of 4 or more for google_my_business and tripadvisor or recommended
+          for facebook.
+        example: 10
+      neutral:
+        type: number
+        format: integer
+        description: |
+          Total number of reviews of type *neutral*.
+
+          *Neutral* reviews are defined by a rating of 3 for google_my_business and tripadvisor.
+        example: 6
+      dissatisfied:
+        type: number
+        format: integer
+        description: |
+          Total number of reviews of type *dissatisfied*.
+
+          *Dissatisfied* reviews are defined by a rating of 2 or less for google_my_business and tripadvisor
+          or not recommended for facebook.
+        example: 3
+      total:
+        type: number
+        format: integer
+        description: |
+          Total number of reviews.
+        example: 19
+
+  Review:
+    description: Business Review on partner
+    type: object
+    properties:
+      key:
+        type: string
+      org_id:
+        $ref: '#/schemas/OrgId'
+      id:
+        $ref: '#/schemas/ReviewId'
+      business_id:
+        $ref: '#/schemas/BusinessId'
+      partner:
+        $ref: '#/schemas/ReviewPublisherLabel'
+      partner_id:
+        $ref: '#/schemas/ReviewPublisherId'
+      author_name:
+        $ref: '#/schemas/ReviewAuthorName'
+      date:
+        $ref: '#/schemas/ReviewCreateDate'
+      update_date:
+        $ref: '#/schemas/ReviewUpdateDate'
+      delete_date:
+        $ref: '#/schemas/ReviewDeleteDate'
+      rating:
+        $ref: '#/schemas/ReviewRating'
+      recommended:
+        $ref: '#/schemas/ReviewRecommended'
+      title:
+        $ref: '#/schemas/ReviewTitle'
+      content:
+        $ref: '#/schemas/ReviewBody'
+      state:
+        $ref: '#/schemas/ReviewState'
+      link:
+        $ref: '#/schemas/ReviewLink'
+      comments:
+        $ref:  '#/schemas/Comment'
+      tags:
+        type: array
+        description: Tags associated to the review
+        items:
+          $ref: '#/schemas/Tag'
+  OrgId:
+    description: Organization id
+    type: integer
+    example: 42
+  OrgName:
+    description: Organization name
+    type: string
+    example: Fast Retailer
+  OrgAlias:
+    description: Organization alias (should match regex `[a-z0-9_]`)
+    type: string
+    example: fast_retailer
+  OrgProvider:
+    description: Organization provider
+    type: string
+    example: partoo
+  OrgHasGooglePost:
+    deprecated: true
+    description: |
+      Organization has subscribed Google Post.
+      Deprecated, please use <code>features</code> or <code>org_features</code> instead.
+    type: boolean
+  OrgDisplayGooglePost:
+    deprecated: true
+    description: |
+      Organization can display Google Post
+      Deprecated, please use <code>features</code> or <code>org_features</code> instead.
+    type: boolean
+  OrgLastApiCall:
+    description: Date of the last API call made with one of the API keys linked to the organization
+    type: string
+    example: '05-11-2021'
+  OrgType:
+    description: Organization type
+    type: string
+    enum: [small_medium_business, enterprise]
+    default: small_medium_business
+  OrgMaxBusinesses:
+    description: |
+      Maximum number of local businesses the organization can have.
+      It does not include the global (brand) businesses.
+      If null, there is no limit for the organization.
+      This field can only be set by a provider.
+    type:
+      - integer
+      - "null"
+    example: 100
+  Org:
+    description: Organization
+    type: object
+    properties:
+      org_id:
+        $ref:  '#/schemas/OrgId'
+      name:
+        $ref:  '#/schemas/OrgName'
+      alias:
+        $ref:  '#/schemas/OrgAlias'
+      provider:
+        $ref:  '#/schemas/OrgProvider'
+      type:
+        $ref:  '#/schemas/OrgType'
+      has_google_post:
+        $ref:  '#/schemas/OrgHasGooglePost'
+      display_google_post:
+        $ref:  '#/schemas/OrgDisplayGooglePost'
+      features:
+        $ref:  '#/schemas/OrgFeatures'
+      org_features:
+        $ref:  '#/schemas/OrgAvailableFeatures'
+      last_org_api_call:
+        $ref: '#/schemas/OrgLastApiCall'
+      max_businesses:
+        $ref: '#/schemas/OrgMaxBusinesses'
+  OrgPlans:
+    properties:
+      plans:
+        description: The exhaustive list of the organization's plans.
+        type: array
+        items:
+          $ref: '#/schemas/Plan'
+        example: [
+          {
+            "name": "presence_management",
+            "subscription_date": "2025-01-01",
+            "expiration_date": "2026-01-01",
+          },
+          {
+            "name": "review_management",
+            "subscription_date": "2025-01-01",
+            "expiration_date": null,
+          }
+        ]
+  OrgPlansUpdate:
+    properties:
+      plans:
+        description: The exhaustive list of the organization's plans.
+        type: array
+        items:
+          $ref: '#/schemas/PlanUpdate'
+        example: [
+          {
+            "name": "presence_management",
+            "expiration_date": "2026-01-01",
+          },
+          {
+            "name": "review_management",
+          }
+        ]
+  PlanUpdate:
+    description: Plan
+    type: object
+    required: [name]
+    properties:
+      name:
+        type: string
+        enum:
+          - presence_management
+          - review_management
+          - posts
+          - messages
+          - review_booster
+          - bulk_modification
+          - feedback_management
+          - partoo_smb
+          - competitive_benchmark
+          - messages_channel_sms
+          - review_management_advanced
+          - booking_links
+          - webhooks
+        description: Plan's name.
+        example: "presence_management"
+      expiration_date:
+        type: string
+        pattern: date
+        description: Plan's expiration date. If not set, the plan is active indefinitely.
+        example: "2026-01-01"
+        default: null
+  Plan:
+    allOf:
+      - $ref: '#/schemas/PlanUpdate'
+    properties:
+      subscription_date:
+        type: string
+        pattern: date
+        description: Plan's subscription date.
+        example: "2025-01-01"
+
+  BusinessId:
+    description: Business id
+    type: string
+    example: 5409c35a97bbc544d8e26737
+  BusinessName:
+    description: The name of the business (POI) as it will appear on the publishing platforms
+    type: string
+    minLength: 1
+    example: Corner shop
+  BusinessReach:
+    description: Defines whether the business is a physical entity with an address (LOCAL) or a Brand (GLOBAL).
+    type: string
+    enum: [LOCAL, GLOBAL]
+    default: LOCAL
+    example: LOCAL
+  BusinessCity:
+    description: The city where the business is located
+    type:
+      - string
+      - "null"
+    example: Paris
+  RequiredBusinessCity:
+    description: |
+      The city where the business is located.
+
+      `Required if 'reach' is not specified or set to 'LOCAL'`.
+    type: string
+    example: Paris
+  BusinessCountry:
+    description: Business country - In the ISO 3166 alpha2 code format (i.e. use “FR” for France instead of "fr")
+    type: string
+    example: FR
+  BusinessDefaultLang:
+    description: Business default language - it either corresponds to the country's default language or set as English by default
+    type: string
+    example: fr
+  BusinessRegion:
+    description: The region where the business is located. Can be empty, it is only useful for some countries like Italy or Spain among others.
+    type:
+      - string
+      - "null"
+    example: Ile-de-France
+  BusinessCode:
+    description: The unique store code of the business. If not provided, it will be automatically generated
+    type: string
+    example: CS-75019
+  BusinessZipcode:
+    description: Zipcode (or postal code) for the business address. Can be empty if the business' country does not require one.
+    type:
+      - string
+      - "null"
+    example: "75019"
+  BusinessNationalIdentificationNumber:
+    description: |
+      <p>The National Identification Number of the business
+      <p> It describes a unique number for which the business is registered in a specific country. For example, in France, it's SIRET code or for Ireland it's the CRO
+    type: string
+  BusinessCompletionRate:
+    description: |
+      <p>The completion rate percentage of the business
+      <p>The completion rate is calculated based on how many fields are filled for the business. If some necessary fields are not filled, it will lower the completion rate.
+      <p> ⚠️ After the update of the business, it may take up to 24h for this field to be updated
+    type: integer
+    example: 77
+  BusinessCategories:
+    minItems: 1
+    description: |
+      A list of category ids mapped to the business. At least one category needs to be provided. For more information see [Categories section](https://developers.partoo.co/rest_api/v2/#tag/Categories)
+    type: array
+    items:
+      type: string
+    example: ['gcid:restaurant', 'gcid:fast_food_restaurant', 'gcid:hamburger_restaurant']
+  BusinessLatitude:
+    description: Latitude. Decimals are separated by a dot and not by a comma.
+    type: number
+    format: double
+    example: -3.585993
+  BusinessLongitude:
+    description: Longitude. Decimals are separated by a dot and not by a comma.
+    type: number
+    format: double
+    example: 47.870341
+  Latitude:
+    description: Latitude pushed on publishers. Decimals are separated by a dot and not by a comma.
+    type:
+      - number
+      - "null"
+    format: double
+    example: -3.585993
+  Longitude:
+    description: Longitude pushed on publishers. Decimals are separated by a dot and not by a comma.
+    type:
+      - number
+      - "null"
+    format: double
+    example: 47.870341
+  BusinessStatus:
+    description: |
+      <p>Defines the current status of the business. <code>open</code> indicates the business is up and running. <code>closed</code> means that the business has definitely closed. <code>temporarily_closed</code> means that the business is temporarily closed, it is advised when your business is closed for more than one week, otherwise use the <code>specific_hours</code></p>
+    type: string
+    enum: [open, closed, temporarily_closed]
+    default: open
+    example: open
+  BusinessStatusFilter:
+    description: |
+      <p>Defines the current status of the business. `Open` indicates the business is up and running. `Closed` means that the business has definitely closed. `Opening Soon` indicates the business is open with an opening date set in the future. `Temporarily closed` means that the business is temporarily closed.
+      <p>⚠️ To get all businesses with the status <code>open</code>, regardless of whether the <code>opening_date</code> has passed yet or not, submit both the <code>open</code> and <code>opening_soon</code> options in the filter: <code>status=open,opening_soon</code>
+    type: string
+    enum: [ open, closed, opening_soon, temporarily_closed ]
+    default: open
+    example: open
+  BusinessOpeningDate:
+    description: The opening_date represents the date when a business was opened. The format of the date must be in ISO 8601 format (YYYY-MM-DD). ⚠️ The date must be in the past or no more than one year in the future from the current date (Google API requirement).
+    type: string
+    format: YYYY-MM-DD
+    example: '2025-01-01'
+  BusinessWebsite:
+    description: The business own website url or the main url of the company.
+    type: string
+    format: uri
+    example: https://www.corner-shop.co/
+  BusinessFacebookPage:
+    description: Business Facebook page url
+    type: string
+    format: uri
+    example: https://www.facebook.com/the-corner-shop
+  BusinessTwitter:
+    description: Business twitter page url
+    type: string
+    format: uri
+    example: https://www.twitter.com/the-corner-shop
+  BusinessVideos:
+    description: Business videos URLs
+    deprecated: true
+    type: array
+    items:
+      type: string
+      format: uri
+  BusinessNews:
+    deprecated: true
+    type: array
+    items:
+      $ref: '#/schemas/News'
+  BusinessPromos:
+    deprecated: true
+    type: array
+    items:
+      $ref: '#/schemas/Promo'
+  BusinessLongDescription:
+    description: |
+      <p>A more detailed description of the business.
+      <p>⚠️It is limited to 750 characters
+    type: string
+    example: lorem ipsum dolor sit amet
+  BusinessShortDescription:
+    description: |
+      <p>A short description of the business.
+      <p>⚠️It is limited to 80 characters
+    type: string
+    example: lorem ipsum
+  BusinessOrgId:
+    description: The organization unique identifier at Partoo. During onboarding, Partoo creates an organization where all your businesses will be aggregated
+    type: integer
+    example: 42
+  BusinessContacts:
+    description: Specify how the clients can reach the persons in charge of the business in case they have questions.</br>
+    type: array
+    items:
+      $ref: '#/schemas/Contact'
+  BusinessContactsCreate:
+    description: Specify how the clients can reach the persons in charge of the business in case they have questions.</br>
+    type: array
+    items:
+      $ref: '#/schemas/Contact'
+  GroupId:
+    description: The id of the group the business belongs to. An organization can have multiple groups that contain one or more businesses. A business can belong to only one group.
+    type: integer
+    example: 23
+    deprecated: true
+
+  ### CREATE SECTION
+  SectionName:
+    description: "Name of the section. Cannot include any of the following characters: `,;/`"
+    type: string
+    example: Country
+  SectionCreateOrgId:
+    description: ID of the organization in which to create the section (only available to `PROVIDER` users)
+    type: integer
+    example: 1
+  SectionCreateSuccessResponse:
+    type: object
+    properties:
+      status:
+        description: Request status
+        type: string
+        enum:
+          - success
+      id:
+        description: ID of the created section
+        type: integer
+        example: 1
+  SectionCreateNameConflictResponse:
+    type: object
+    properties:
+      errors:
+        description: The detail of the error encountered
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              name:
+                type: string
+                example: name_already_exists
+  SectionCreateForbiddenCharactersResponse:
+    type: object
+    properties:
+      errors:
+        description: The detail of the error encountered
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              name:
+                type: string
+                example: name_contains_forbidden_characters
+
+  ### GET SECTIONS
+  SectionsGetSuccessResponse:
+    type: object
+    properties:
+      page:
+        type: integer
+        example: 1
+      count:
+        type: integer
+        example: 6
+      max_page:
+        type: integer
+        example: 1
+      sections:
+        type: array
+        items:
+          $ref: '#/schemas/SectionItem'
+  SectionItem:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+        description: ID of the section
+      name:
+        type: string
+        example: Country
+        description: Name of the section, must be unique
+      groups:
+        type: array
+        items:
+          $ref: '#/schemas/GroupItem'
+      can_edit:
+        description: If the current user has the right to edit or delete the section, or one of the groups it contains
+        type: boolean
+      has_puller:
+        description: If the section is connected to an automated data puller or not. Sections linked to pullers cannot be modified or deleted. Should you want to make any changes to a section connected to a puller, please contact support for assistance.
+        type: boolean
+  GroupItem:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      has_puller:
+        description: If the group is connected to an automated data puller or not. Groups linked to pullers cannot be modified or deleted. Should you want to make any changes to a group connected to a puller, please contact support for assistance.
+        type: boolean
+
+  ### DELETE SECTION
+  SectionDeleteSuccessResponse:
+    type: object
+    properties:
+      status:
+        description: Request status
+        type: string
+        enum:
+          - success
+      id:
+        description: ID of the deleted section
+        type: integer
+        example: 1
+
+  ### UPDATE SECTION
+  SectionUpdateSuccessResponse:
+    type: object
+    properties:
+      status:
+        description: Request status
+        type: string
+        enum:
+          - success
+      id:
+        description: ID of the updated section
+        type: integer
+        example: 1
+
+  ### CREATE GROUP
+  GroupV2Name:
+    description: "Name of the group. Cannot include any of the following characters: `,;/`"
+    type: string
+    example: France
+  GroupCreateSuccessResponse:
+    type: object
+    properties:
+      status:
+        description: Request status
+        type: string
+        enum:
+          - success
+      id:
+        description: ID of the created group
+        type: integer
+        example: 1
+
+  ### DELETE GROUP
+  GroupDeleteSuccessResponse:
+    type: object
+    properties:
+      status:
+        description: Request status
+        type: string
+        enum:
+          - success
+      id:
+        description: ID of the deleted group
+        type: integer
+        example: 1
+
+  ### GET GROUP
+  GetGroupItem:
+    type: object
+    properties:
+      id:
+        description: ID of the group
+        type: integer
+        example: 1
+      name:
+        description: Name of the group, must be unique
+        type: string
+        example: France
+      has_puller:
+        description: If the group is linked to a puller. If so, it's not possible to delete the group. Should you want to make any changes to a group connected to a puller, please contact support for assistance.
+        type: boolean
+      business_ids:
+        description: list of business ids in the group
+        type: array
+        items:
+          $ref: '#/schemas/BusinessId'
+        example:
+          - a1f0e2d3b4c5e6f7a8b9c0d1
+          - 3f2e1d4c5b6a7f8e9d0c1a2
+          - 0e1d2c3b4a5f6e7d8c9a0b1
+
+  GroupV2GetSuccessResponse:
+    $ref: '#/schemas/GroupItem'
+
+
+  Business:
+    description: Partoo App Business
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/BusinessId'
+      created:
+        description: Timestamp (in seconds) of the business creation
+        type: number
+        format: float
+        example: 1409925979.5
+      modified:
+        description: Timestamp (in seconds) of the business last modification. It doesn’t take into account changes to the Custom Fields or related objects.
+        type: number
+        format: float
+        example: 1561335111.681374
+      code:
+        $ref: '#/schemas/BusinessCode'
+      status:
+        $ref: '#/schemas/BusinessStatus'
+      org_id:
+        $ref: '#/schemas/BusinessOrgId'
+      group_id:
+        $ref: '#/schemas/GroupId'
+      name:
+        $ref: '#/schemas/BusinessName'
+      address:
+        description: Business address. This fields returns the same value as the field `address_full` for historical reasons. You should prefer the use `address_full`.
+        type: string
+      address_full:
+        $ref: '#/schemas/AddressFull'
+      address2:
+        $ref: '#/schemas/Address2'
+      city:
+        $ref: '#/schemas/BusinessCity'
+      zipcode:
+        $ref: '#/schemas/BusinessZipcode'
+      region:
+        $ref: '#/schemas/BusinessRegion'
+      country:
+        $ref: '#/schemas/BusinessCountry'
+      default_lang:
+        $ref: '#/schemas/BusinessDefaultLang'
+      open_hours:
+        $ref: '#/schemas/OpenHours'
+      specific_hours:
+        $ref: '#/schemas/SpecificHours'
+      description_short:
+        $ref: '#/schemas/BusinessShortDescription'
+      description_long:
+        $ref: '#/schemas/BusinessLongDescription'
+      website_url:
+        $ref: '#/schemas/BusinessWebsite'
+      facebook_url:
+        $ref: '#/schemas/BusinessFacebookPage'
+      twitter_url:
+        $ref: '#/schemas/BusinessTwitter'
+      google_location_id:
+        description: Id of Google Location to which the business is linked
+        type: string
+      facebook_page_id:
+        description: Id of Facebook Location to which the business is linked
+        type: string
+      national_identification_number:
+        $ref: '#/schemas/BusinessNationalIdentificationNumber'
+      logo_url:
+        description: Business LOGO URL
+        type: string
+        format: uri
+      contacts:
+        $ref: '#/schemas/BusinessContacts'
+      photos:
+        $ref: '#/schemas/Photos'
+      lat:
+        $ref: '#/schemas/Latitude'
+      long:
+        $ref: '#/schemas/Longitude'
+      subscriptions:
+        $ref: '#/schemas/Subscriptions'
+      features:
+        $ref: '#/schemas/Features'
+      videos:
+        $ref: '#/schemas/BusinessVideos'
+      siret:
+        deprecated: true
+        description:
+         Business SIRET (for french businesses)
+        type: string
+      completion_rate:
+        $ref: '#/schemas/BusinessCompletionRate'
+      news:
+        $ref: '#/schemas/BusinessNews'
+      promos:
+        $ref: '#/schemas/BusinessPromos'
+  BusinessWithCustomFields:
+    description: Partoo App Business
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/BusinessId'
+      created:
+        description: Timestamp (in seconds) of the business creation
+        type: number
+        format: float
+        example: 1409925979.5
+      modified:
+        description: Timestamp (in seconds) of the business last modification. Doesn’t take into account changes to the Custom Fields or related objects.
+        type: number
+        format: float
+        example: 1561335111.681374
+      code:
+        $ref: '#/schemas/BusinessCode'
+      status:
+        $ref: '#/schemas/BusinessStatus'
+      opening_date:
+        $ref: '#/schemas/BusinessOpeningDate'
+      org_id:
+        $ref: '#/schemas/BusinessOrgId'
+      group_id:
+        $ref: '#/schemas/GroupId'
+      groups:
+        $ref: '#/schemas/groups'
+      name:
+        $ref: '#/schemas/BusinessName'
+      address:
+        description: Business address. This fields returns the same value as the field `address_full` for historical reasons. You should prefer the use `address_full`.
+        type:
+          - string
+          - "null"
+      address_full:
+        $ref: '#/schemas/AddressFull'
+      address2:
+        $ref: '#/schemas/Address2'
+      city:
+        $ref: '#/schemas/BusinessCity'
+      zipcode:
+        $ref: '#/schemas/BusinessZipcode'
+      region:
+        $ref: '#/schemas/BusinessRegion'
+      country:
+        $ref: '#/schemas/BusinessCountry'
+      default_lang:
+        $ref: '#/schemas/BusinessDefaultLang'
+      categories:
+        $ref: '#/schemas/BusinessCategories'
+      time_slot_reference:
+        $ref: '#/schemas/TimeSlotReference'
+      open_hours:
+        $ref: '#/schemas/OpenHours'
+      specific_hours:
+        $ref: '#/schemas/SpecificHours'
+      description_short:
+        $ref: '#/schemas/BusinessShortDescription'
+      description_long:
+        $ref: '#/schemas/BusinessLongDescription'
+      website_url:
+        $ref: '#/schemas/BusinessWebsite'
+      facebook_url:
+        $ref: '#/schemas/BusinessFacebookPage'
+      twitter_url:
+        $ref: '#/schemas/BusinessTwitter'
+      google_location_id:
+        description: Id of Google Location to which the business is linked
+        type: string
+      facebook_page_id:
+        description: Id of Facebook Location to which the business is linked
+        type: string
+      national_identification_number:
+        $ref: '#/schemas/BusinessNationalIdentificationNumber'
+      logo_url:
+        description: Business LOGO URL
+        type: string
+        format: uri
+      contacts:
+        $ref: '#/schemas/BusinessContacts'
+      photos:
+        $ref: '#/schemas/Photos'
+      lat:
+        $ref: '#/schemas/Latitude'
+      long:
+        $ref: '#/schemas/Longitude'
+      subscriptions:
+        $ref: '#/schemas/Subscriptions'
+      features:
+        $ref: '#/schemas/Features'
+      custom_fields:
+        $ref: '#/schemas/CustomFields.Array'
+      completion_rate:
+        $ref: '#/schemas/BusinessCompletionRate'
+      promos:
+        $ref: '#/schemas/BusinessPromos'
+  Attributes.Field.Base:
+    description: A Google Attribute
+    type: object
+    properties:
+      gmb_id:
+        description: Google id of the attribute
+        type: string
+      type:
+        description: Possible values are "BOOL", "ENUM", "REPEATABLE_ENUM", "URL", "REPEATABLE_URL".
+        type: string
+  Attributes.Field.BOOL:
+    allOf:
+      - $ref: '#/schemas/Attributes.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Attribute. Can be null if not set
+            type:
+              - boolean
+              - "null"
+  Attributes.Field.ENUM:
+    allOf:
+      - $ref: '#/schemas/Attributes.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Attribute. Can be null if not set
+            type:
+              - string
+              - "null"
+  Attributes.Field.REPEATABLE_ENUM:
+    allOf:
+      - $ref: '#/schemas/Attributes.Field.Base'
+      - properties:
+          value:
+            type:
+              - object
+              - "null"
+            description: >
+              Value for this Attribute. Can be null if not set
+            properties:
+              set_values:
+                type: array
+                description: >
+                  Options which are true for the Attribute. Can be empty.
+                items:
+                  type: string
+              unset_values:
+                type: array
+                description: >
+                  Options which are false for the Attributes. Can be empty
+                items:
+                  type: string
+  Attributes.Field.REPEATABLE_URL:
+    allOf:
+      - $ref: '#/schemas/Attributes.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Attribute. Can be null if not set
+            type:
+              - array
+              - "null"
+            items:
+              type: string
+            deprecated: true
+  Attributes.Field.URL:
+    allOf:
+      - $ref: '#/schemas/Attributes.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Attribute. Can be null if not set
+            type:
+              - string
+              - "null"
+  Attributes.Array:
+    description: List of Business Attributes
+    type: array
+    items:
+      oneOf:
+        - $ref: '#/schemas/Attributes.Field.BOOL'
+        - $ref: '#/schemas/Attributes.Field.ENUM'
+        - $ref: '#/schemas/Attributes.Field.REPEATABLE_ENUM'
+        - $ref: '#/schemas/Attributes.Field.URL'
+        - $ref: '#/schemas/Attributes.Field.REPEATABLE_URL'
+      discriminator:
+        propertyName: type
+        mapping:
+          BOOL: '#/schemas/Attributes.Field.BOOL'
+          ENUM: '#/schemas/Attributes.Field.ENUM'
+          REPEATABLE_ENUM: '#/schemas/Attributes.Field.REPEATABLE_ENUM'
+          URL: '#/schemas/Attributes.Field.URL'
+          REPEATABLE_URL: '#/schemas/Attributes.Field.REPEATABLE_URL'
+    example: [
+      {
+        "type": "BOOL",
+        "gmb_id": "has_curbside_pickup",
+        "value": false
+      },
+      {
+        "type": "BOOL",
+        "gmb_id": "has_delivery",
+        "value": true
+      },
+      {
+        "type": "ENUM",
+        "gmb_id": "wi_fi",
+        "value": "free_wi_fi"
+      },
+      {
+        "type": "REPEATABLE_ENUM",
+        "gmb_id": "pay_credit_card_types_accepted",
+        "value": {
+          "set_values": [
+              "american_express",
+              "discover"
+          ],
+          "unset_values": []
+        }
+      },
+      {
+        "type": "URL",
+        "gmb_id": "url_menu",
+        "value": "https://www.test.fr"
+      },
+      {
+        "type": "REPEATABLE_URL",
+        "gmb_id": "url_order_ahead",
+        "value": null
+      },
+      {
+        "type": "REPEATABLE_URL",
+        "gmb_id": "url_reservations",
+        "value": [
+            "https://www.test1.fr",
+            "https://www.test2.fr"
+        ]
+      },
+    ]
+  PostAttributes.Array:
+    description: List of Business Attributes
+    type: array
+    items:
+      oneOf:
+        - $ref: '#/schemas/Attributes.Field.BOOL'
+        - $ref: '#/schemas/Attributes.Field.ENUM'
+        - $ref: '#/schemas/Attributes.Field.REPEATABLE_ENUM'
+        - $ref: '#/schemas/Attributes.Field.URL'
+        - $ref: '#/schemas/Attributes.Field.REPEATABLE_URL'
+      discriminator:
+        propertyName: type
+        mapping:
+          BOOL: '#/schemas/Attributes.Field.BOOL'
+          ENUM: '#/schemas/Attributes.Field.ENUM'
+          REPEATABLE_ENUM: '#/schemas/Attributes.Field.REPEATABLE_ENUM'
+          URL: '#/schemas/Attributes.Field.URL'
+          REPEATABLE_URL: '#/schemas/Attributes.Field.REPEATABLE_URL'
+    example: [
+      {
+        "type": "BOOL",
+        "gmb_id": "has_curbside_pickup",
+        "value": false
+      },
+      {
+        "type": "ENUM",
+        "gmb_id": "wi_fi",
+        "value": "free_wi_fi"
+      },
+      {
+        "type": "REPEATABLE_ENUM",
+        "gmb_id": "pay_credit_card_types_accepted",
+        "value": {
+          "set_values": [
+              "american_express",
+              "discover"
+          ],
+          "unset_values": [ ]
+        }
+      },
+      {
+        "type": "REPEATABLE_URL",
+        "gmb_id": "url_reservations",
+        "value": [
+            "https://www.test1.fr",
+            "https://www.test2.fr"
+        ]
+      },
+    ]
+  BusinessPostAttributesBody:
+    type: object
+    properties:
+      attributes:
+        $ref: '#/schemas/PostAttributes.Array'
+  BusinessAttributesResponse:
+    type: object
+    properties:
+      attributes:
+        $ref: '#/schemas/Attributes.Array'
+  BusinessPostUnknownAttributesError:
+    description: At least one of the attributes in the request body does not exist in our Database
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+    example: {
+      "errors": {
+        "json": {
+          "unknown_attribute": "does not exist in DB"
+        }
+      }
+    }
+  BusinessPostWrongAttributesValuesError:
+    description: At least one of the attributes values in the request body is incorrect
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+    example: {
+      "errors": {
+        "json": {
+          "wi_fi": "must be a string",
+          "has_curbside_pickup": "must be a bool",
+          "url_reservations": "must be a list",
+          "url_menu": "must be a valid url",
+          "pay_credit_card_types_accepted": "must contain set_values and unset_values"
+        }
+      }
+    }
+
+  PlaceActionLinksPostBody:
+    type: object
+    properties:
+      place_action_links:
+        $ref: '#/schemas/PostPlaceActionLinks.Array'
+  PlaceActionLinksResponse:
+    type: object
+    properties:
+      place_action_links:
+        $ref: '#/schemas/PlaceActionLinks.Array'
+  GetPlaceActionLinksResponse:
+    type: object
+    properties:
+      place_action_links:
+        $ref: '#/schemas/GetPlaceActionLinks.Array'
+
+  PostPlaceActionLinks.Array:
+    description: List of Business Place Action Links
+    type: array
+    items:
+      type: object
+      required:
+        - gmb_id
+        - urls
+      properties:
+        gmb_id:
+          type: string
+          description: "The Google My Business ID for the place action type."
+          enum:
+            - APPOINTMENT
+            - ONLINE_APPOINTMENT
+            - DINING_RESERVATION
+            - FOOD_ORDERING
+            - FOOD_DELIVERY
+            - FOOD_TAKEOUT
+            - SHOP_ONLINE
+        urls:
+          type: array
+          description: "List of place action links associated with a given gmb_id."
+          items:
+            type: object
+            required:
+              - value
+              - is_preferred
+            properties:
+              id:
+                type: integer
+                description: 'Optional: Include for existing links to update'
+              value:
+                type: string
+                description: "Must be a valid url value and be unique within the list of URLs for this gmb_id."
+              is_preferred:
+                type: boolean
+                description: "Indicates if this URL is the preferred link. There can only be one preferred URL per gmb_id."
+    example: [
+      {
+        "gmb_id": "SHOP_ONLINE",
+        "urls": [
+          {
+            "value": "https://www.example.com/shop_online",
+            "is_preferred": true
+          },
+          {
+            "id": 2,
+            "value": "https://www.example.com/shop_online2",
+            "is_preferred": false
+          }
+        ]
+      },
+      {
+        "gmb_id": "FOOD_TAKEOUT",
+        "urls": [
+          {
+            "id": 3,
+            "value": "https://www.example.com/food_takeout1",
+            "is_preferred": false
+          },
+          {
+            "id": 4,
+            "value": "https://www.example.com/food_takeout2",
+            "is_preferred": false
+          },
+          {
+            "value": "https://www.example.com/food_takeout3",
+            "is_preferred": false
+          }
+        ]
+      },
+      {
+        "gmb_id": "ONLINE_APPOINTMENT",
+        "urls": [
+          {
+            "value": "https://www.example.com/online_appointment",
+            "is_preferred": true
+          },
+          {
+            "id": 7,
+            "value": "https://www.example.com/online_appointment2",
+            "is_preferred": false
+          }
+        ]
+      },
+      {
+        "gmb_id": "DINING_RESERVATION",
+        "urls": [
+          {
+            "id": 8,
+            "value": "https://www.example.com/dining_reservation1",
+            "is_preferred": true
+          },
+          {
+            "id": 9,
+            "value": "https://www.example.com/dining_reservation2",
+            "is_preferred": false
+          }
+        ]
+      },
+      {
+        "gmb_id": "APPOINTMENT",
+        "urls": [
+          {
+            "value": "https://www.example.com/appointment1",
+            "is_preferred": true
+          },
+          {
+            "id": 11,
+            "value": "https://www.example.com/appointment2",
+            "is_preferred": false
+          }
+        ]
+      },
+      {
+        "gmb_id": "FOOD_ORDERING",
+        "urls": [
+          {
+            "value": "https://www.example.com/food_ordering1",
+            "is_preferred": true
+          },
+          {
+            "id": 13,
+            "value": "https://www.example.com/food_ordering2",
+            "is_preferred": false
+          }
+        ]
+      },
+      {
+        "gmb_id": "FOOD_DELIVERY",
+        "urls": [
+          {
+            "id": 14,
+            "value": "https://www.example.com/food_delivery1",
+            "is_preferred": true
+          },
+          {
+            "value": "https://www.example.com/food_delivery2",
+            "is_preferred": false
+          }
+        ]
+      }
+    ]
+
+  PlaceActionLinks.Array:
+    description: List of Business Place Action Links
+    type: array
+    items:
+      type: object
+      properties:
+        gmb_id:
+          type: string
+          description: "The Google My Business ID for the place action type."
+          enum:
+            - APPOINTMENT
+            - ONLINE_APPOINTMENT
+            - DINING_RESERVATION
+            - FOOD_ORDERING
+            - FOOD_DELIVERY
+            - FOOD_TAKEOUT
+            - SHOP_ONLINE
+        urls:
+          type: array
+          description: "List of place action links associated with a given gmb_id."
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                description: 'Id for link'
+              value:
+                type: string
+                description: "Must be a valid url value and be unique within the list of URLs for this gmb_id."
+              is_preferred:
+                type: boolean
+                description: "Indicates if this URL is the preferred link. There can only be one preferred URL per gmb_id."
+              is_editable:
+                type: boolean
+                description: "Indicates if this URL is editable."
+    example: [
+      {
+        "gmb_id": "SHOP_ONLINE",
+        "urls": [
+          {
+            "id": 1,
+            "value": "https://www.example.com/shop_online",
+            "is_preferred": true,
+            "is_editable": true
+          },
+          {
+            "id": 2,
+            "value": "https://www.example.com/shop_online2",
+            "is_preferred": false,
+            "is_editable": true
+          }
+        ]
+      },
+      {
+        "gmb_id": "FOOD_TAKEOUT",
+        "urls": [
+          {
+            "id": 3,
+            "value": "https://www.example.com/food_takeout1",
+            "is_preferred": false,
+            "is_editable": false
+          },
+          {
+            "id": 4,
+            "value": "https://www.example.com/food_takeout2",
+            "is_preferred": false,
+            "is_editable": true
+          },
+          {
+            "id": 5,
+            "value": "https://www.example.com/food_takeout3",
+            "is_preferred": false,
+            "is_editable": true
+          }
+        ]
+      },
+      {
+        "gmb_id": "ONLINE_APPOINTMENT",
+        "urls": [
+          {
+            "id": 6,
+            "value": "https://www.example.com/online_appointment",
+            "is_preferred": true,
+            "is_editable": true
+          },
+          {
+            "id": 7,
+            "value": "https://www.example.com/online_appointment2",
+            "is_preferred": false,
+            "is_editable": true
+          }
+        ]
+      },
+      {
+        "gmb_id": "DINING_RESERVATION",
+        "urls": [
+          {
+            "id": 8,
+            "value": "https://www.example.com/dining_reservation1",
+            "is_preferred": true,
+            "is_editable": false
+          },
+          {
+            "id": 9,
+            "value": "https://www.example.com/dining_reservation2",
+            "is_preferred": false,
+            "is_editable": true
+          }
+        ]
+      },
+      {
+        "gmb_id": "APPOINTMENT",
+        "urls": [
+          {
+            "id": 10,
+            "value": "https://www.example.com/appointment1",
+            "is_preferred": true,
+            "is_editable": true
+          },
+          {
+            "id": 11,
+            "value": "https://www.example.com/appointment2",
+            "is_preferred": false,
+            "is_editable": true
+          }
+        ]
+      },
+      {
+        "gmb_id": "FOOD_ORDERING",
+        "urls": [
+          {
+            "id": 12,
+            "value": "https://www.example.com/food_ordering1",
+            "is_preferred": true,
+            "is_editable": true
+          },
+          {
+            "id": 13,
+            "value": "https://www.example.com/food_ordering2",
+            "is_preferred": false,
+            "is_editable": true
+          }
+        ]
+      },
+      {
+        "gmb_id": "FOOD_DELIVERY",
+        "urls": []
+      }
+    ]
+
+  GetPlaceActionLinks.Array:
+    description: List of available Place Action Links
+    type: array
+    items:
+      type: object
+      properties:
+        gmb_id:
+          type: string
+          description: "The Google My Business ID for the place action type."
+        name:
+          type: string
+          description: "The name for the place action type."
+    example:
+      - gmb_id: "APPOINTMENT"
+        name: "Appointment links"
+      - gmb_id: "DINING_RESERVATION"
+        name: "Reservations links"
+      - gmb_id: "FOOD_DELIVERY"
+        name: "Food delivery links"
+      - gmb_id: "FOOD_ORDERING"
+        name: "Food ordering links"
+      - gmb_id: "FOOD_TAKEOUT"
+        name: "Food takeout links"
+      - gmb_id: "ONLINE_APPOINTMENT"
+        name: "Online appointment links"
+      - gmb_id: "SHOP_ONLINE"
+        name: "Shop Online links"
+
+  PlaceActionLinksNonExistingGmbIdsError:
+    description: At least one of the attributes values in the request body is incorrect
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          non_existing_gmb_ids:
+            type: array
+            items:
+              type: string
+            description: List of `gmb_id` values that do not exist.
+    example:
+      errors:
+        json:
+          message: "following gmb_ids do not exist in place_action_links: ['SHOPIFY_ONLINE', 'JUST_TAKEOUT']"
+  PlaceActionLinksNonUniqueGmbIdsError:
+    description: The `gmb_id` values in the request are not unique.
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message indicating that `gmb_id` values must be unique.
+    example:
+      errors:
+        json:
+          message: "gmb_ids must be unique"
+  PlaceActionLinksNonUniqueUrlsError:
+    description: URL values are not unique within each `gmb_id`.
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message indicating that URL values per `gmb_id` must be unique.
+    example:
+      errors:
+        json:
+          message: "url values per gmb_id must be unique"
+  PlaceActionLinksMultiplePreferredUrlsError:
+    description: More than one URL is marked as preferred for a `gmb_id`.
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message indicating that only one URL can be marked as preferred per `gmb_id`.
+    example:
+      errors:
+        json:
+          message: "only one is_preferred url at most per place_action_link"
+  PlaceActionLinksMissingIdsError:
+    description: The `id` values in the request do not exist in the backend.
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message indicating that some `id` values do not exist for the business place action links.
+    example:
+      errors:
+        json:
+          message: "place_action_link ids do not exist for business: {1, 2}"
+  PlaceActionLinksNonUniqueIdsError:
+    description: The `id` values in the request are not unique.
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message indicating that `id` values must be unique.
+    example:
+      errors:
+        json:
+          message: "place_action_link ids must be unique"
+
+  UserPhone:
+    description: User phone number
+    type: string
+  UserName:
+    description: User first name and last name concatenated. Can be null if it's your org integration api key.
+    type: string
+    example: Perceval de Galles
+  UserFirstName:
+    description: User first name
+    type: string
+    example: Perceval
+  UserLastName:
+    description: User last name
+    type: string
+    example: de Galles
+  UserEmail:
+    description: User email
+    type: string
+    format: email
+    example: perceval@kaamelott.com
+  UserProvider:
+    description: User provider label
+    type: string
+    example: partoo
+  UserId:
+    description: User id
+    type: string
+    example: 5309c3a237bbc544d8e26737
+  UserOrgId:
+    description: User organization id
+    type: integer
+    example: 42
+  User:
+    description: Partoo App User
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/UserId'
+      org_id:
+        $ref: '#/schemas/UserOrgId'
+      first_name:
+        $ref: '#/schemas/UserFirstName'
+      last_name:
+        $ref: '#/schemas/UserLastName'
+      email:
+        $ref: '#/schemas/UserEmail'
+      lang:
+        $ref: '#/schemas/Lang'
+      phone:
+        $ref: '#/schemas/UserPhone'
+      sidebar_products:
+        deprecated: true
+        description: |
+          The products the user has access to.
+          Deprecated, please use <code>available_features</code> instead (not returned for this endpoint, but can be found in [operation/getUser](https://developers.partoo.co/rest_api/v2/#operation/getUser) and [operation/getMyUser](https://developers.partoo.co/rest_api/v2/#operation/getMyUser)).
+        type: array
+        items:
+          $ref: '#/schemas/Product'
+      business_ids:
+        description: |
+          Populated only for BUSINESS_MANAGER role.
+
+          List of businesses ids the user can access.
+
+          Note: For a reliable way of getting all the businesses the user can access, use [operation/searchBusinesses](https://developers.partoo.co/rest_api/v2/#operation/searchBusinesses).
+        type: array
+        items:
+          $ref: '#/schemas/BusinessId'
+      group_id:
+        description: Group id of the user (it affects only the group manager), for the old group system
+        type: integer
+        example: 42
+        deprecated: true
+      accesses:
+        $ref: '#/schemas/accesses'
+      role:
+        $ref: '#/schemas/Role'
+      provider:
+        $ref: '#/schemas/UserProvider'
+      status:
+        $ref: '#/schemas/UserStatus'
+      keywords:
+        $ref: '#/schemas/Keywords'
+      created_at:
+        description: Timestamp representing the date the user was created
+        type: number
+        example: 1615299414
+      shadow_user_id:
+        description: Used internally at Partoo
+        type: string
+        example: ""
+      sso_only:
+        $ref: '#/schemas/SsoOnly'
+  UserWithFeatures:
+    description: Partoo App User
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/UserId'
+      org_id:
+        $ref: '#/schemas/UserOrgId'
+      first_name:
+        $ref: '#/schemas/UserFirstName'
+      last_name:
+        $ref: '#/schemas/UserLastName'
+      email:
+        $ref: '#/schemas/UserEmail'
+      lang:
+        $ref: '#/schemas/Lang'
+      phone:
+        $ref: '#/schemas/UserPhone'
+      sidebar_products:
+        deprecated: true
+        description: The products the user has access to. Deprecated, please use <code>available_features</code> instead.
+        type: array
+        items:
+          $ref: '#/schemas/Product'
+      sidebar_pages:
+        $ref: '#/schemas/SidebarPages'
+      available_features:
+        description: The features the user has access to.
+        type: array
+        items:
+          $ref: '#/schemas/Feature'
+      business_ids:
+        description: |
+          Populated only for BUSINESS_MANAGER role.
+
+          List of businesses ids the user can access.
+
+          Note: For a reliable way of getting all the businesses the user can access, use [operation/searchBusinesses](https://developers.partoo.co/rest_api/v2/#operation/searchBusinesses).
+        type: array
+        items:
+          $ref: '#/schemas/BusinessId'
+      group_id:
+        description: Group id of the user (it affects only the group manager), for the old group system
+        type: integer
+        example: 42
+        deprecated: true
+      accesses:
+        $ref: '#/schemas/accesses'
+      role:
+        $ref: '#/schemas/Role'
+      provider:
+        $ref: '#/schemas/UserProvider'
+      status:
+        $ref: '#/schemas/UserStatus'
+      keywords:
+        $ref: '#/schemas/Keywords'
+      created_at:
+        description: Timestamp representing the date the user was created
+        type: number
+        example: 1615299414
+      shadow_user_id:
+        description: Used internally at Partoo
+        type: string
+        example: ""
+      sso_only:
+        $ref: '#/schemas/SsoOnly'
+  UserReports:
+    description: Daily, weekly and monthly reports preferences
+    type: object
+    properties:
+      review_management_daily:
+        description: The user's preference on receiving a daily review management email.
+        type: boolean
+      review_management_weekly:
+        description: The user's preference on receiving a weekly review management email.
+        type: boolean
+      review_management_monthly:
+        description: The user's preference on receiving a monthly review management email.
+        type: boolean
+      daily_review_preferences:
+        $ref: '#/schemas/DailyReviewPreferences'
+  DailyReviewPreferences:
+    description: Daily report preferences
+    type: object
+    properties:
+      partners:
+        description: list of partners to receive daily reviews notifications from.
+        type: array
+        items:
+          description: The partner to receive daily reviews notification from. "facebook", "google_my_business" or "tripadvisor"
+          type: string
+          enum: ["facebook", "google_my_business", "tripadvisor"]
+        example: ["facebook", "google_my_business", "tripadvisor"]
+      review_type:
+        description: Review type. 1 to receive negative reviews, 2 for negative and neutral reviews, 3 for all reviews.
+        type: integer
+        enum: [1, 2, 3]
+        example: 2
+  ReceiveNegativeReviewsEmailNotifications:
+    description: Receive a notification when there is a negative review.
+    type: boolean
+  TimeSlotReference:
+    description: Default time period, can be used to set open hours of a day from Partoo's interface.
+    type: array
+    items:
+      $ref: '#/schemas/TimeWindow'
+  OpenHours:
+    description: |
+      <p>The opening hours of the business (in its timezone).
+      <p>Opening hours are specified per weekday. This is done by supplying an object mapping weekdays ("monday", "tuesday", etc.) to a list of of strings. These strings in turn represent time slots during which the business is open.
+      <p>For example, the following value would set the opening hours to between 08:00-15:00 in the afternoon and 18:00-23:00 in the evening on Mondays:
+      <p><code>{"monday": ["08:00-15:00", "18:00-23:00"]}</code>
+      <p>To indicate that a business is open 24 hours for a specific weekday, use the value <code>["00:00-23:59"]</code>.
+      <p>❗ This field is not mandatory, but if not provided then the business will not be pushed on some platforms (example: Google). If provided, then a schedule needs to be sent for each day in particular
+    type: object
+    required:
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+      - saturday
+      - sunday
+    properties:
+      monday:
+        $ref: '#/schemas/Day'
+      tuesday:
+        $ref: '#/schemas/Day'
+      wednesday:
+        $ref: '#/schemas/Day'
+      thursday:
+        $ref: '#/schemas/Day'
+      friday:
+        $ref: '#/schemas/Day'
+      saturday:
+        $ref: '#/schemas/Day'
+      sunday:
+        $ref: '#/schemas/Day'
+  SpecificHours:
+    description: |
+      <p>Exceptional opening or closing times for the business (in its timezone).</p>
+      <p>All exceptional days of the year, including temporarily closed, can be specified beforehand or on the go. For example:</p>
+      <ul>
+       <li>Beforehand: bank holidays (like Christmas or Labor Day)</li>
+       <li>Unpredicted: COVID-19 exceptional situation</li>
+      </ul>
+      <p>Specific hours are defined by two values:</p>
+      <ul>
+        <li><code>open</code>, containing a list of days with exceptional <i>opening</i> hours</li>
+        <li><code>close</code>, containing a list of days where the business is exceptionally closed all day.
+      </ul>
+      <p>These values in turn, contain:</p>
+      <ul>
+       <li><code>starts_at</code> indicating the first date for which the exceptional hours are valid</li>
+       <li><code>ends_at</code> indicating the last date (inclusive) for which the exceptional hours are valid</li>
+       <li><code>open_hours</code> (only used for days with exceptional <i>opening</i> hours) indicating the actual time slots for the given period, following the same pattern as the time slots in <code>open_hours</code></li>
+      </ul>
+    type: object
+    required:
+      - open
+      - close
+    properties:
+      open:
+        type: array
+        items:
+          type: object
+          properties:
+            starts_at:
+              type: string
+              pattern: date
+              example: "2020-01-20"
+            ends_at:
+              type: string
+              pattern: date
+              example: "2020-01-20"
+            open_hours:
+              type: array
+              items:
+                $ref: '#/schemas/TimeWindow'
+      close:
+        type: array
+        items:
+          type: object
+          properties:
+            starts_at:
+              type: string
+              pattern: date
+              example: "2020-01-20"
+            ends_at:
+              type: string
+              pattern: date
+              example: "2020-01-22"
+  MoreHoursPost:
+    description: |
+      <p>The More Hours of the business and category (in its timezone).
+      <p>More hours are specified per weekday. This is done by supplying a More Hour ID (<code>BREAKFAST</code>, <code>DINNER</code>, etc.), and an object mapping weekdays (<code>monday</code>, <code>tuesday</code>, etc.) to a list of of strings. These strings in turn represent time slots during which the business is open.
+      <p>For example, the following value would set the kitchen hours to between 08:00-15:00 in the afternoon and 18:00-23:00 in the evening on Mondays:
+      <p><code>{"gmb_id": "KITCHEN", "value": {"monday": ["08:00-15:00", "18:00-23:00"]}}</code>
+      <p>To indicate that a business is open 24 hours for a specific weekday, use the value <code>["00:00-23:59"]</code>.
+      <p>To delete a More Hours value, supply a <code>null</code> value.
+    type: object
+    properties:
+      monday:
+        $ref: '#/schemas/Day'
+      tuesday:
+        $ref: '#/schemas/Day'
+      wednesday:
+        $ref: '#/schemas/Day'
+      thursday:
+        $ref: '#/schemas/Day'
+      friday:
+        $ref: '#/schemas/Day'
+      saturday:
+        $ref: '#/schemas/Day'
+      sunday:
+        $ref: '#/schemas/Day'
+  MoreHoursGet:
+    description: |
+      <p>The More Hours of the business and category (in its timezone).
+      <p>More hours are specified per weekday. Every value in this array is an object mapping weekdays (<code>monday</code>, <code>tuesday</code>, etc.) to a list of of strings. These strings in turn represent time slots during which the business is open.
+      <p>For example, the following value sets the hours to 08:00-15:00 in the afternoon and 18:00-23:00 in the evening on Mondays:
+      <p><code>{"monday": ["08:00-15:00", "18:00-23:00"]}</code>
+      <p>If a business is open 24 hours for a specific weekday, the value <code>["00:00-23:59"]</code> is used.
+      <p>If a business does not have any defined More Hours, <code>value</code> will be <code>null</code>.
+    type: object
+    properties:
+      monday:
+        $ref: '#/schemas/Day'
+      tuesday:
+        $ref: '#/schemas/Day'
+      wednesday:
+        $ref: '#/schemas/Day'
+      thursday:
+        $ref: '#/schemas/Day'
+      friday:
+        $ref: '#/schemas/Day'
+      saturday:
+        $ref: '#/schemas/Day'
+      sunday:
+        $ref: '#/schemas/Day'
+  Contact:
+    description: Business contact
+    type: object
+    properties:
+      name:
+        description: Contact full name
+        type: string
+        example: Hubert Bonisseur de la Bath
+      email:
+        description: Contact email
+        type: string
+        format: email
+        example: hubert@oss117.fr
+      phone_numbers:
+        description: Contact phone numbers - Preferably in the format E.164 ('+33302060628' instead of '0302060628')
+        type: array
+        items:
+          type: string
+        example: ['+33302060628']
+      fax:
+        description: Contact fax
+        type: string
+        example: "+33302060629"
+  Address2:
+    description: Complement of address. Any additional information that could help better find the business location
+    type:
+      - string
+      - "null"
+  AddressFull:
+    description: |
+      Full address of the business.
+
+      For example : `130 Rue du Mont-Cenis`.
+    type:
+      - string
+      - "null"
+    example: 12 bis rue du coquelicot
+  Keywords:
+    description: Array of keywords
+    type: array
+    maxItems: 12
+    items:
+      type: string
+  Photos:
+    description: |
+      <p>Business photos
+      <p>Each business can have one or more photos associated
+    type: object
+    properties:
+      LOGO:
+        description: The logo image of the brand. On Google, for example, for businesses that have their basic information (phone number, hours, etc.), the Business Profile will highlight the logo.
+        type: string
+        format: uri
+      primary:
+        description: The business's main photo URL. On Google, for example, it represents the cover photo on the top of the profile.
+        type: string
+        format: uri
+      secondary:
+        description: Additional photos that can highlight the features of the business.
+        type: array
+        items:
+          type: string
+          format: uri
+  InvitationId:
+    description: invitation id
+    type: string
+    example: d3d8c966-0356-4ec0-baae-13ec3622ebc2
+  TargetPhone:
+    type: string
+    description: the exact phone number we would have sent the invitation(s) to
+    example: '0701020304'
+
+  CustomFields.Array:
+    description: |
+      <p>Custom Fields set for this Business
+      <p>They represent configurable fields that can be defined in addition to the normal business fields proposed by Partoo.
+      They are unique to the organization and can be entirely adapted to the company's needs.
+    type: array
+    items:
+      oneOf:
+        - $ref: '#/schemas/CustomFields.Field.Integer'
+        - $ref: '#/schemas/CustomFields.Field.Number'
+        - $ref: '#/schemas/CustomFields.Field.Text'
+        - $ref: '#/schemas/CustomFields.Field.Boolean'
+        - $ref: '#/schemas/CustomFields.Field.MultiSelect'
+        - $ref: '#/schemas/CustomFields.Field.MultiSelectImage'
+        - $ref: '#/schemas/CustomFields.Field.SingleSelect'
+        - $ref: '#/schemas/CustomFields.Field.ImagesUploader'
+      discriminator:
+        propertyName: type
+        mapping:
+          TEXT: '#/schemas/CustomFields.Field.Text'
+          INTEGER: '#/schemas/CustomFields.Field.Integer'
+          FLOAT: '#/schemas/CustomFields.Field.Number'
+          BOOLEAN: '#/schemas/CustomFields.Field.Boolean'
+          SINGLE_SELECT: '#/schemas/CustomFields.Field.SingleSelect'
+          MULTIPLE_SELECT: '#/schemas/CustomFields.Field.MultiSelect'
+          MULTIPLE_SELECT_IMAGE: '#/schemas/CustomFields.Field.MultiSelectImage'
+          IMAGES_UPLOADER: '#/schemas/CustomFields.Field.ImagesUploader'
+    example: [
+      {
+        id: 1,
+        type: "BOOLEAN",
+        name: "Parking",
+        value: true,
+        order: 1,
+      },
+      {
+        id: 2,
+        type: "TEXT",
+        name: "ManagerName",
+        value: toto,
+        order: 2,
+      },
+      {
+        id: 3,
+        type: "TEXT",
+        name: "Supervisor",
+        value: null,
+        order: 2,
+      },
+      {
+        id: 4,
+        type: "INTEGER",
+        name: "Surface",
+        value: 2,
+        order: 3,
+      },
+      {
+        id: 5,
+        type: "FLOAT",
+        name: "DistanceFromSubway",
+        value: 2.55,
+        order: 4,
+      },
+      {
+        id: 6,
+        type: "SINGLE_SELECT",
+        name: "Level",
+        value: "two",
+        order: 4,
+      },
+      {
+        id: 7,
+        type: "MULTIPLE_SELECT",
+        name: "Services",
+        value: ["one", "two"],
+        order: 5,
+      },
+      {
+        id: 8,
+        type: "MULTIPLE_SELECT_IMAGE",
+        name: "BannerImage",
+        value: ["image 1", "image 2"],
+        order: 6,
+      },
+      {
+        id: 9,
+        type: "IMAGES_UPLOADER",
+        name: "TeamMembers",
+        value: [{"url": "image1", "texts": {"name1": "value 1", "name2": "value 2"}}],
+        order: 7,
+      }
+    ]
+
+  CustomFields.Field.Base:
+    description: A Custom Field
+    type: object
+    properties:
+      name:
+        description: Name of the custom field
+        type: string
+      type:
+        description: Possible values are "BOOLEAN", "INTEGER", "TEXT", "FLOAT", "SINGLE_SELECT", "MULTIPLE_SELECT", "MULTIPLE_SELECT_IMAGE", "IMAGES_UPLOADER".
+        type: string
+      id:
+        description: Id of the custom field
+        type: integer
+      order:
+        type: integer
+
+  CustomFields.Field.Integer:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Custom Field. Can be NULL if not set.
+            type:
+              - integer
+              - "null"
+
+  CustomFields.Field.Number:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Custom Field. Can be NULL if not set.
+            type:
+              - number
+              - "null"
+
+  CustomFields.Field.Text:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Custom Field. Can be NULL if not set.
+            type:
+              - string
+              - "null"
+
+  CustomFields.Field.Boolean:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Custom Field. Can be NULL if not set.
+            type:
+              - boolean
+              - "null"
+
+  CustomFields.Field.SingleSelect:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Custom Field. Can be NULL if not set.
+            type:
+              - string
+              - "null"
+
+  CustomFields.Field.MultiSelect:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Custom Field. Can be NULL if not set.
+            type: array
+            items:
+              type: string
+
+  CustomFields.Field.MultiSelectImage:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Custom Field. Can be NULL if not set.
+            type: array
+            items:
+              type: string
+
+  CustomFields.Field.ImagesUploader:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Field.Base'
+      - properties:
+          value:
+            description: >
+              Value for this Custom Field. Can be NULL if not set.
+            type: array
+            items:
+              $ref: '#/schemas/CustomFieldValuesImagesUploader'
+
+
+  CustomFields.Update:
+    description: |
+      <p>Custom Fields set for this Business
+      <p>They represent configurable fields that can be defined in addition to the normal business fields proposed by Partoo.
+      They are unique to the organization and should suit your company needs.
+    type: object
+    additionalProperties: # custom field name:
+        description: >
+          Replace \<custom_fields_name\> with the name of the custom field to update.
+          The value must comply with the custom field type.
+          <p> Set to NULL to empty the field.
+    example: {
+        Parking: true,
+        ManagerName: 'toto',
+        Surface: 35,
+        DistanceFromSubway: 1.5,
+        Level: 'one',
+        Services: ['DisabledAccess', 'FreeParking'],
+        BannerImage: ["image 1", "image 2"],
+        TeamMembers: [{"url": "image1", "texts": {"name1": "value 1", "name2": "value 2"}}],
+      }
+
+  BusinessFields.SectionArray:
+    description: Business Fields sections array
+    type: array
+    items:
+      oneOf:
+        - $ref: '#/schemas/BusinessFields.SectionNormal'
+        - $ref: '#/schemas/BusinessFields.SectionCustomFields'
+    example: [
+      {
+        name: 'address',
+        fields: [
+        {
+          name: "country",
+          enabled: true,
+          enabled_for_subroles: true
+        },
+        {
+          name: "city",
+          enabled: true,
+          enabled_for_subroles: false
+        },
+        ]
+      },
+      {
+        name: 'description',
+        fields: [
+        {
+          name: "categories",
+          enabled: true,
+          enabled_for_subroles: true
+        },
+        {
+          name: "website_url",
+          enabled: true,
+          enabled_for_subroles: true
+        }
+        ]
+      },
+      {
+        name: "hours",
+        fields: [
+        {
+          name: "open_hours",
+          enabled: true,
+          enabled_for_subroles: true
+        },
+        ]
+      },
+      {
+        name: "photos",
+        fields: [
+        {
+          name: "cover",
+          enabled: false,
+          enabled_for_subroles: false
+        },
+        ]
+      },
+      {
+        name: "contact",
+        fields: [
+        {
+          name: "phone_number",
+          enabled: true,
+          enabled_for_subroles: false
+        },
+        ]
+      },
+      {
+        name: "custom_fields",
+        fields: [
+        {
+          name: "has_parking",
+          enabled: true,
+          enabled_for_subroles: true,
+          type: "BOOLEAN",
+          id: 1,
+          order: 10,
+          section_id: 4
+        },
+        {
+          name: "special_description",
+          enabled: true,
+          enabled_for_subroles: true,
+          type: "TEXT",
+          id: 2,
+          order: 11,
+          max_len: 250,
+          section_id: 6
+        },
+        {
+          name: "facilities",
+          enabled: true,
+          enabled_for_subroles: true,
+          type: "MULTIPLE_SELECT",
+          id: 3,
+          order: 2,
+          possible_values: ["handicapped access", "toilets", "break room"]
+        },
+        {
+          name: "banner image",
+          enabled: true,
+          enabled_for_subroles: true,
+          id: 4,
+          type: "MULTIPLE_SELECT_IMAGE",
+          order: 10,
+          possible_values: ["image 1", "image 2", "image 3"],
+          possible_images_labels: ["label image 1", label image 2, label image 3],
+          possible_images_urls: ["url_of_image_1","url_of_image_2","url_of_image_3"],
+        },
+        {
+          name: "team members",
+          enabled: true,
+          enabled_for_subroles: true,
+          id: 5,
+          type: "IMAGES_UPLOADER",
+          order: 11,
+          text_fields: [{text_field: "text 1", max_length: 10},  {text_field: "text 2", max_length: 20}, {text_field: "text 3", max_length: 30}],
+        },
+        ]
+      }
+    ]
+
+  BusinessFields.Section:
+    description: Business Fields sections permissions
+    type: object
+    properties:
+      name:
+        description: >
+          Name of a the section. The structure of the fields inside it depends of the section and is described below.
+        type: string
+
+
+  BusinessFields.SectionNormal:
+    allOf:
+      - $ref: '#/schemas/BusinessFields.Section'
+      - description: Business Fields Section
+        type: object
+        properties:
+          fields:
+            type: array
+            items:
+              $ref: '#/schemas/BusinessFields.Field'
+
+  BusinessFields.SectionCustomFields:
+    allOf:
+      - $ref: '#/schemas/BusinessFields.Section'
+      - description: Business Fields Section of Custom Fields
+        type: object
+        properties:
+          fields:
+            type: array
+            items:
+              $ref: '#/schemas/CustomFields.Metadata'
+
+  BusinessFields.Field:
+      description: Business Field
+      type: object
+      properties:
+        name:
+          description: Name of the field
+          type: string
+        enabled:
+          description: Permission (enabled | disabled) of the field for the current user
+          type: boolean
+        enabled_for_subroles:
+          description: >
+            Permission (enabled | disabled) of the field for
+            the users with a more restrictive role compared to the current user.
+            <p> E.g. if the user is ORG_ADMIN: enabled_for_subroles describes
+            the permissions of the field for all the GROUP_MANAGER and
+            BUSINESS_MANAGER of the given organization.
+            <p> E.g. if the user is PROVIDER: enabled_for_subroles describes
+            the permissions of the field for all the ORG_ADMIN, GROUP_MANAGER and
+            BUSINESS_MANAGER of the given provider.
+          type: boolean
+
+  CustomFields.Metadata:
+    allOf:
+      - $ref: '#/schemas/BusinessFields.Field'
+      - description: Business Fields permissions
+        type: object
+        properties:
+          type:
+            description: >
+              Type of the custom field.
+              <p> Possible values are "TEXT", "INTEGER", "FLOAT", "BOOLEAN", "SINGLE_SELECT", "MULTIPLE_SELECT", "MULTIPLE_SELECT_IMAGE", "IMAGES_UPLOADER".
+            type: string
+            enum: ["TEXT", "INTEGER", "FLOAT", "BOOLEAN", "SINGLE_SELECT", "MULTIPLE_SELECT", "MULTIPLE_SELECT_IMAGE", "IMAGES_UPLOADER"]
+          id:
+            description: ID of the custom field.
+            type: integer
+          order:
+            type: integer
+
+  CustomFields.Metadata.Text:
+    allOf:
+    - $ref: '#/schemas/CustomFields.Metadata'
+    - type: object
+      properties:
+        max_len:
+          type: integer
+          description: If set, maximum number of characters that this Custom Field will accept.
+
+  CustomFields.Metadata.Integer:
+    allOf:
+    - $ref: '#/schemas/CustomFields.Metadata'
+    - type: object
+      properties:
+        min:
+          type: integer
+          description: If set, minimum value that this Custom Field will accept.
+        max:
+          type: integer
+          description: If set, maximum value that this Custom Field will accept.
+
+  CustomFields.Metadata.Number:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Metadata'
+      - type: object
+        properties:
+          min:
+            type: number
+            description: If set, minimum value that this Custom Field will accept.
+          max:
+            type: number
+            description: If set, maximum value that this Custom Field will accept.
+
+  CustomFields.Metadata.Select:
+    allOf:
+    - $ref: '#/schemas/CustomFields.Metadata'
+    - type: object
+      properties:
+        possible_values:
+          type: array
+          description: List of values that the select will have
+          items:
+            type: string
+
+  CustomFields.Metadata.MultipleSelectImage:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Metadata'
+      - type: object
+        properties:
+          possible_values:
+            type: array
+            description: List of values that the select will have
+            items:
+              type: string
+          possible_images_labels:
+            type: array
+            description: List of labels corresponding to each value
+            items:
+              type: string
+          possible_images_urls:
+            type: array
+            description: List of image urls corresponding to each value
+            items:
+              type: string
+
+  CustomFields.Metadata.ImagesUploader:
+    allOf:
+      - $ref: '#/schemas/CustomFields.Metadata'
+      - type: object
+        properties:
+          text_fields:
+            type: array
+            description: List of text fields associated with each image
+            items:
+              $ref: '#/schemas/CustomFieldValuesImagesUploader'
+
+  TemplateId:
+    type: integer
+    description: Template id
+    example: 34
+  TemplateUpdateDate:
+    type: string
+    description: Template update date
+    format: datetime
+    example: 2017-08-01T19:15:54.256000+02:00
+  TemplateCreationDate:
+    type: string
+    description: Template creation date
+    format: datetime
+    example: 2017-08-01T19:15:54.256000+02:00
+  TemplateLanguage:
+    type: string
+    description: Template language
+    $ref: '#/schemas/Lang'
+  TemplateTitle:
+    type: string
+    description: Template title
+  TemplateText:
+    description:  |
+      The content of the reply template.
+
+      Placeholders are recognisable within the text by this exact markup `@[](name_of_the_placeholder)`.
+      Where `name_of_the_placeholder` is the `value` field taken from the `GET placeholders` operation.
+
+      Example of usable placeholder values: `client_full_name`, `client_first_name`, `business_name`, `my_first_name`.
+    type: string
+    example: "hello @[](client_full_name),
+
+      Thanks from the team at @[](business_name).
+
+      @[](my_first_name)"
+  TemplateNegative:
+    type: boolean
+    description: Template is made for negative reviews (ex from 1 to 2 stars on gmb)
+  TemplateNeutral:
+    type: boolean
+    description: Template is made for neutral reviews (ex 3 stars on gmb)
+  TemplatePositive:
+    type: boolean
+    description: Template is made for positive reviews (ex from 4 to 5 stars on gmb)
+  Template:
+    description: Review's reply template
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/TemplateId'
+      org_id:
+        $ref: '#/schemas/OrgId'
+      update_date:
+        $ref: '#/schemas/TemplateUpdateDate'
+      creation_date:
+        $ref: '#/schemas/TemplateCreationDate'
+      language:
+        $ref: '#/schemas/TemplateLanguage'
+      title:
+        $ref: '#/schemas/TemplateTitle'
+      text:
+        $ref: '#/schemas/TemplateText'
+      negative:
+        $ref: '#/schemas/TemplateNegative'
+      neutral:
+        $ref: '#/schemas/TemplateNeutral'
+      positive:
+        $ref: '#/schemas/TemplatePositive'
+  TemplatePlaceholder:
+    description: |
+      Reply templates available placeholders.
+      A template placeholder is a dynamically updated word depending on the context.
+    type: object
+    properties:
+      id:
+        type: integer
+        description: Placeholder id
+        example: 2
+      value:
+        type: string
+        description: |
+          Placeholder value
+
+          This value must be used within the placeholder markup `@[](placeholder_value)` in a template `text` in order to work properly.
+        example: "my_first_name"
+  ######## Reply suggestion #######
+  ReplySuggestionId:
+    type: integer
+    description: Reply suggestion id
+    example: 820459
+  ReplySuggestion:
+    description: Review's reply suggestion
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/ReplySuggestionId'
+      index:
+        type: integer
+        description: Index of the reply suggestion
+        example: 1
+      review_id:
+        $ref: '#/schemas/ReviewId'
+      content:
+        type: string
+        description: The content of the reply suggestion
+        example: "Dear Client, thanks for your kind feedback."
+      report:
+        type: object
+        description: Report details if the suggestion was reported (can be null)
+        properties:
+          id:
+            type: integer
+            description: Report id
+            example: 3587
+          user_id:
+            type: string
+            description: User id of the user who reported the suggestion
+            example: "52e10f004ee65a020"
+          created_at:
+            type: string
+            format: datetime
+            description: Date the review suggestion report was created on
+            example: "2025-05-12T12:57:21.895170Z"
+ 
+  ######## Tag #######
+  TagId:
+    description: Tag id
+    type: integer
+    example: 25
+
+  TagLabel:
+    description: |
+      The label of the tag
+      Must be <= 30 characters and cannot contain a comma (commas will be ignored)
+    type: string
+    example: food
+
+  TagColor:
+    description: The color of the tag, in hexadecimal representation
+    type: string
+    enum: [
+      "#808080",
+      "#9B7CDB",
+      "#F47FBE",
+      "#4D4D4D",
+      "#9E6957",
+      "#2F8DE4",
+      "#37CED0",
+      "#53C944",
+      "#B1DA34",
+      "#F78234",
+      "#F4BD38",
+      "#992842"
+    ]
+    example: "#808080"
+
+  Tag:
+    description: Tag
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/TagId'
+      label:
+        description: The label of the tag
+        allOf:
+          - $ref: '#/schemas/TagLabel'
+      color:
+        $ref: '#/schemas/TagColor'
+
+  GoogleLocation:
+    description: Google location
+    type: object
+    properties:
+      id:
+        description: The unique identifier of the Google location on Partoo.
+        type: string
+        example: "6047dac0604f33da03018004"
+      location_name:
+        description: The name of the location.
+        type: string
+        example: "Annie - HQ"
+      store_code:
+        description: The store code of the google location.
+        type: string
+        example: "annie-hq"
+      region_code:
+        description: The region code where the location is situated.
+        type: string
+        example: "FR"
+      postal_code:
+        description: The postal code of the location.
+        type: string
+        example: "75018"
+      address_details:
+        description: The details of the location's address.
+        type: string
+        example: "130 rue mont cenis"
+      locality:
+        description: The locality of the location.
+        type: string
+        example: "Paris"
+      place_id:
+        description: The unique identifier of the Google Maps place.
+        type: string
+        example: "ChIJ3Qu-HpFt5kcRNHUedqwIzQY"
+      google_verifications:
+        description: The status and checked date of the Google verification for the location.
+        type: object
+        properties:
+          status:
+            description: The status of the Google verification.
+            type: string
+            example: "verified"
+          checked_at:
+            description: The date and time when the Google verification was last checked.
+            type: string
+            format: date-time
+            example: "2023-01-30T14:25:11.163950Z"
+      phone_numbers:
+        description: The phone number associated with the location.
+        type: string
+        example: "0675181818"
+
+  GoogleLocations:
+    description: Paginated Google Locations
+    type: object
+    properties:
+      locations:
+        type: array
+        items:
+          $ref: '#/schemas/GoogleLocation'
+      page:
+        $ref: '#/schemas/current_page'
+      max_page:
+        $ref: '#/schemas/max_page'
+      count:
+        $ref: '#/schemas/count'
+  ######### Post #########
+  postId:
+    description: The Post id
+    type: integer
+    example: 34
+  postType:
+    type: string
+    description: The type of the post to be created.
+      Event and Offer are not yet available for Facebook.
+    enum:
+      - "news"
+      - "event"
+      - "offer"
+      - "covid"
+  postImageURL:
+    description: |
+      URLs of the images displayed with the post.
+
+      **Note:**
+        - Add up to 10 images for multi-image post on Facebook and IG
+
+        - Multi-image is not supported by Google, only the first image will be displayed
+
+        - Image ratio must be between 4:5 and 16:9 for IG
+
+        - All images must be same ratio for IG or they will be crop at the first image ratio by IG
+    anyOf:
+      - type: string
+      - type: array
+        items:
+          type: string
+    example: ["https://example.com/1.png", "https://example.com/2.png"]
+  postTitle:
+    type: string
+    description: Title of the post.
+    example: Great post title !
+  postSummary:
+    type: string
+    description: Main text content of the post.
+    example: Wonderful post summary !
+  postCTAType:
+    description: The type of the post to be created. Some type mig.
+    type: string
+    enum:
+      - "book"
+      - "order"
+      - "shop"
+      - "learn_more"
+      - "sign_up"
+      - "call"
+      - "no_cta"
+  postLink:
+    description: Link displayed in the post to redirect the client clicking on it.
+      Use can only have one of the following parameters ('use_business_url' or 'custom_url').
+    type: object
+    properties:
+      use_business_url:
+        type: boolean
+        description: Use the business google url for link on the post.
+      custom_url:
+        type: string
+        description: An URL to redirect client when they click on the button
+  postScheduleTime:
+    type: string
+    description: Date and time of when the post will be diffused corresponding platforms.
+      It needs to be at least 2 hours after the time of the request.
+      The timezone used is UTC.
+    example: 2050-01-01T09:00:00
+  postExpirationTime:
+    type: string
+    description: This parameter is mandatory when creating a draft post.
+      It indicates when the draft will expire, the time after which BM/GM users will no longer be able
+      to validate and publish the post
+    example: 2050-01-01T09:00:00
+  postCouponCode:
+    type: string
+    description: Offer code that is usable in store or online
+    example: PROMO25
+  postOfferTerms:
+    type: string
+    description: Terms and conditions of the offer
+    example: These are the conditions
+  postStartAt:
+    type: string
+    description: For either event or offer post type. Defined when it start.
+      Timezone is defined by the business timezone.
+    example: 2050-01-01T09:00:00
+  postEndAt:
+    type: string
+    description: For either event or offer post type. Defined when it end.
+      Timezone is defined by the business timezone.
+    example: 2050-01-01T09:00:00
+  postState:
+    description: The state of the post, indicating at which lifecycle stage it is currently.
+    type: string
+    enum:
+      - 'live'
+      - 'pending'
+      - 'to_configure'
+      - 'scheduled'
+      - 'error'
+      - 'expired'
+    example: live
+  postCTALink:
+    description: Link displayed in the post to redirect the client clicking on it.
+    type: string
+    example: www.partoo.co
+
+  postPublisherPost:
+    type: string
+    description: Publisher related to the post
+    enum:
+      - 'google_my_business__posts'
+      - 'facebook__posts'
+    example: facebook__posts
+  postInsight:
+    description: Statistics related to the posts on the different platforms.
+                 </br>
+                 ⚠️ Due to a Google deprecation, on 20/02/2023, Google views and counts won't be available anymore.
+                 Old insights will still be sent. Facebook ones will still be available.
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          $ref: '#/schemas/postPublisherPost'
+        click_count:
+          type: integer
+          description: number of times a user has clicked on the post.
+          example: 1512
+        view_count:
+          type: integer
+          description: number of times the post has been viewed.
+          example: 2012
+  postStatus:
+    description: Status related to the posts on the different platforms.
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          $ref: '#/schemas/postPublisherPost'
+        state:
+          $ref: '#/schemas/postState'
+        link:
+          $ref: '#/schemas/postCTALink'
+
+  postMedias:
+    description: The photo that will be on the Post
+    type: array
+    items:
+      type: object
+      properties:
+        media_url:
+          $ref: '#/schemas/postImageURL'
+
+  PostPublishers:
+    description: List of publisher to diffuse the post
+    type: array
+    items:
+      type: string
+      enum:
+        - 'google_my_business'
+        - 'facebook'
+        - 'instagram'
+    example: ['google_my_business', 'facebook', 'instagram']
+
+  PostBusinessSearch:
+    description: Business to create post
+    type: object
+    required: [business__in]
+    properties:
+      business__in:
+        type: array
+        items:
+          $ref: '#/schemas/business_ids'
+
+  postBusinessInfo:
+    description: name and address of the business that the post is related to.
+    type: string
+    example: Rick - HQ - 157 boulevard Macdonald, Paris
+
+  postCreatedOnPartoo:
+    description: Indicates whether or not the post was created using Partoo App/API
+    type: boolean
+    example: false
+
+  postUpdatedOnPartoo:
+    description: Indicates whether or not the post was updated using Partoo App/API
+    type: boolean
+    example: false
+
+  PostData:
+    description: Information on post to create
+    type: object
+    required:
+      - post_type
+      - summary
+    properties:
+      post_type:
+        $ref: '#/schemas/postType'
+      summary:
+        $ref: '#/schemas/postSummary'
+      image_url:
+        $ref: '#/schemas/postImageURL'
+      title:
+        $ref: '#/schemas/postTitle'
+      cta_type:
+        $ref: '#/schemas/postCTAType'
+      link:
+        $ref: '#/schemas/postLink'
+      schedule_time:
+        $ref: '#/schemas/postScheduleTime'
+      expiration_time:
+        $ref: '#/schemas/postExpirationTime'
+      coupon_code:
+        $ref: '#/schemas/postCouponCode'
+      offer_terms:
+        $ref: '#/schemas/postOfferTerms'
+      start_at:
+        $ref: '#/schemas/postStartAt'
+      end_at:
+        $ref: '#/schemas/postEndAt'
+
+  PostUpdateData:
+    description: Request body to update a Post
+    type: object
+    properties:
+      title:
+        $ref: '#/schemas/postTitle'
+      summary:
+        $ref: '#/schemas/postSummary'
+      image_url:
+        $ref: '#/schemas/postImageURL'
+      cta_type:
+        $ref: '#/schemas/postCTAType'
+      link:
+        $ref: '#/schemas/postLink'
+      schedule_time:
+        $ref: '#/schemas/postScheduleTime'
+      start_at:
+        $ref: '#/schemas/postStartAt'
+      end_at:
+        $ref: '#/schemas/postEndAt'
+      coupon_code:
+        $ref: '#/schemas/postCouponCode'
+      offer_terms:
+        $ref: '#/schemas/postOfferTerms'
+
+  Post:
+    description: Post
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/postId'
+      business_id:
+        $ref: '#/schemas/BusinessId'
+      post_type:
+        $ref: '#/schemas/postType'
+      summary:
+        $ref: '#/schemas/postSummary'
+      schedule_time:
+        description: Date when the Post will be published.
+          No scheduled start time means that the Post will be published immediately.
+        type: string
+        example: 2020-01-01T12:00:00+02:00
+        default: null
+      expiration_time:
+        description: If this post is a draft, this indicates the date when it will be expired 
+          (= date after which the BM/GM user will no longer be able to validate and publish).
+        type: string
+        example: 2020-01-01T12:00:00+02:00
+        default: null
+      validation_time:
+        description: Date when the Draft post has been validated by the BM or GM user
+          If the post doesn't also have a schedule time, this date coincides with the publishing date
+        type: string
+        example: 2020-01-01T12:00:00+02:00
+        default: null
+      post_medias:
+        $ref: '#/schemas/postMedias'
+      created_at:
+        $ref: '#/schemas/CreatedDate'
+      updated_at:
+        $ref: '#/schemas/UpdatedDate'
+      created_on_partoo:
+        $ref: '#/schemas/postCreatedOnPartoo'
+      updated_on_partoo:
+        $ref: '#/schemas/postUpdatedOnPartoo'
+      business_info:
+        $ref: '#/schemas/postBusinessInfo'
+      post_insight:
+        $ref: '#/schemas/postInsight'
+      post_status:
+        $ref: '#/schemas/postStatus'
+      offer_terms:
+        $ref: '#/schemas/postOfferTerms'
+      offer_code:
+        $ref: '#/schemas/postCouponCode'
+      cta_link:
+        $ref: '#/schemas/postCTALink'
+      cta_type:
+        $ref: '#/schemas/postCTAType'
+
+
+  # END POST
+
+  # DEPRECATED fields
+  Promo:
+    deprecated: true
+    description: Business promotions
+    type: object
+    required:
+      - title
+      - description
+      - begin
+      - end
+    properties:
+      title:
+        type: string
+        description: Promo title
+      description:
+        type: string
+        description: Promo description
+      term_of_use:
+        type: string
+        description: Promo term of use
+      additional_informations:
+        type: string
+        description: Promo additional informations
+      begin:
+        type: number
+        description: Promo start timestamp
+      end:
+        type: number
+        description: Promo end timestamp
+      images:
+        type: array
+        description: Promo images to be displayed
+        items:
+          type: string
+          format: uri
+      client_offer_url:
+        description: Promo URL
+        type: string
+        format: uri
+      promo_url:
+        description: URL of the website
+        type: string
+        format: uri
+  News:
+    deprecated: true
+    type: object
+    required:
+      - title
+      - description
+    properties:
+
+      description:
+        type: string
+        description: News description
+  RequestStatus:
+    description: Request status
+    type: string
+    enum:
+      - success
+  requestResponsePost:
+    properties:
+      status:
+        description: Request status
+        type: string
+        enum:
+          - success
+      code:
+        description: Request code
+        type: number
+        example: 200
+      message:
+        description: Number of post(s) created
+        type: string
+        example: "2 posts have been created."
+      ids:
+        deprecated: true
+        description: Id(s) of post(s) created
+        type: string
+        example: "45,46"
+      data:
+        description: Post ID and relative business ID pair list
+        type: array
+        items:
+          type: object
+          properties:
+            post_id:
+              type: integer
+            business_id:
+              type: string
+        example: [{'post_id': 101, 'business_id': "1234567890"}, {'post_id': 102, 'business_id': "1234567891"}]
+  SubscriptionDetails:
+    type: object
+    description: The details on the product subscription
+    properties:
+      status:
+        type: string
+        enum: ["inactive", "active"]
+      canceling_date:
+        type: number
+        description: timestamp
+  CustomFieldSectionName:
+    description: The name of the custom field section. Needs to be unique from all other section names.
+    type: string
+    example: Section A
+  CustomFieldName:
+    description: The name of the custom field
+    type: string
+    minLength: 1
+    maxLength: 50
+    example: Click and collect
+  CustomFieldTypeBool:
+    description: BOOLEAN
+    minLength: 1
+    type: string
+    example: BOOLEAN
+  CustomFieldTypeText:
+    description: TEXT
+    minLength: 1
+    type: string
+    example: TEXT
+  CustomFieldTypeInteger:
+    description: INTEGER
+    minLength: 1
+    type: string
+    example: INTEGER
+  CustomFieldTypeFloat:
+    description: FLOAT
+    minLength: 1
+    type: string
+    example: FLOAT
+  CustomFieldTypeSingleSelect:
+    description: SINGLE_SELECT
+    minLength: 1
+    type: string
+    example: SINGLE_SELECT
+  CustomFieldTypeMultipleSelect:
+    description: MULTIPLE_SELECT
+    minLength: 1
+    type: string
+    example: MULTIPLE_SELECT
+  CustomFieldTypeMultipleSelectImage:
+    description: MULTIPLE_SELECT_IMAGE
+    minLength: 1
+    type: string
+    example: MULTIPLE_SELECT_IMAGE
+  CustomFieldTypeImagesUploader:
+    description: IMAGES_UPLOADER
+    minLength: 1
+    type: string
+    example: IMAGES_UPLOADER
+  CustomFieldSectionOrder:
+    description: Describes where the custom field section is displayed on the Business Edit view of the Partoo App.
+    type: integer
+    example: 18
+  CustomFieldOrder:
+    description: Describes where the custom field is displayed on the Business Edit view of the Partoo App. If the custom field is within a section, <b>order</b> specifies its position within the custom field section.
+    type: integer
+    default: 10
+    example: 30
+  CustomFieldMaxLen:
+    description: maximum lenght for TEXT field
+    type: integer
+    example: 10
+  CustomFieldMin:
+    description: minimum value for INTEGER field
+    type: integer
+    example: 0
+  CustomFieldMax:
+    description: maximum value for INTEGER field
+    type: integer
+    example: 100
+  CustomFieldFloatMin:
+    description: minimum value for FLOAT field
+    type: number
+    example: 0.0
+  CustomFieldFloatMax:
+    description: maximum value for FLOAT field
+    type: number
+    example: 10.5
+  CustomFieldPossibleValues:
+    minItems: 1
+    description: list of available values
+    type: array
+    items:
+      type: string
+    example: ['free parking', 'disabled access']
+  CustomFieldPossibleValuesMSI:
+    minItems: 1
+    description: >
+      <p>List of available values.
+      <p>Each element correspond to one of possible_images_urls and possible_images_labels.
+      <p>Hence the 3 lists shall have the same size.
+    type: array
+    items:
+      type: string
+    example: ['first image', 'second image']
+  CustomFieldPossibleImagesUrls:
+    minItems: 1
+    description: List of available urls
+    type: array
+    items:
+      type: string
+    example: ['https://image1', 'https://image2']
+  CustomFieldPossibleImagesLabels:
+    minItems: 1
+    description: >
+      <p>List of available labels.
+      <p>Can be set to null but shall always have the same number of elements than possible_values and possible_images_urls.
+    type: array
+    items:
+      type: string
+    example: ['Image 1', 'Image 2']
+  CustomFieldCreatedValues:
+    description: list of available values to add
+    type: array
+    items:
+      type: string
+    example: ['Image 3']
+  CustomFieldCreatedValuesMSI:
+    description: list of available values to add
+    type: array
+    items:
+      type: string
+    example: [{'label': 'Image 3', 'url': 'https://image3', 'value': 'Image 3'}]
+  CustomFieldDeletedValues:
+    description: list of available values to remove
+    type: array
+    items:
+      type: string
+    example: ['Image 1']
+  CustomFieldRenamedValues:
+    description: list of available values to rename
+    type: array
+    items:
+      type: object
+      properties:
+        old_value:
+          type: string
+        new_value:
+          type: string
+    example: [{'old_value': 'Image 1', 'new_value': 'Draw 1'}, {'old_value': 'Image 2', 'new_value': 'Photo 2'}]
+  CustomFieldRenamedValuesMSI:
+    description: list of available values to add
+    type: array
+    items:
+      type: object
+      properties:
+        label:
+          type: string
+        url:
+          type: string
+        value:
+          type: string
+        old_value:
+          type: string
+    example: [{'label': 'new label', 'url': 'https://new_url', 'value': 'new value', 'old_value': 'Image 1'}]
+  CustomFieldValuesImagesUploader:
+    description: Images uploader custom field value
+    type: object
+    properties:
+      text_field:
+        type: string
+      max_length:
+        type: number
+    example: [{'text_field': 'name 1', 'max_length': 20}, {'text_field': 'name 2', 'max_length': 30}]
+  CustomFieldCreatedValuesImagesUploader:
+    description: List of text fields to add
+    type: array
+    items:
+      $ref: '#/schemas/CustomFieldValuesImagesUploader'
+    example: [{text_field: "text 1", max_length: 30}, {text_field: "text 2", max_length: 20}]
+  CustomFieldDeletedValuesImagesUploader:
+    description: List of text fields to delete
+    type: array
+    items:
+      type: string
+    example: ["my text field"]
+  CustomFieldEditedValuesImagesUploader:
+    description: List of edited text fields
+    type: array
+    items:
+      type: object
+      properties:
+        new_value:
+          $ref: '#/schemas/CustomFieldValuesImagesUploader'
+        old_value:
+          $ref: '#/schemas/CustomFieldValuesImagesUploader'
+    example: [{'new_value': {'text_field': 'new name', 'max_length': 40}, 'old_value': {'text_field': 'old name', 'max_length': 20}}]
+  CustomFieldOrdersObject:
+    type: object
+    properties:
+      id:
+        $ref:  '#/schemas/CustomFieldId'
+      order:
+        $ref:  '#/schemas/CustomFieldOrder'
+  CustomFieldSectionOrdersObject:
+    type: object
+    properties:
+      id:
+        $ref: '#/schemas/CustomFieldSectionId'
+      order:
+        $ref: '#/schemas/CustomFieldSectionOrder'
+  CustomFieldOrders:
+    description: >
+      On the Business Edit view of the Partoo App, custom fields will be displayed depending on their order.
+      </br>
+      The lowest number will be the first.
+    type: array
+    items:
+        $ref: '#/schemas/CustomFieldOrdersObject'
+  CustomFieldSectionOrders:
+    description: >
+      On the Business Edit view of the Partoo App, custom fields section will be displayed depending on their order.
+      </br>
+      The lowest number will be the first.
+    type: array
+    items:
+      $ref: '#/schemas/CustomFieldSectionOrdersObject'
+  CustomFieldSection:
+    description: Section containing custom fields
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        $ref: '#/schemas/CustomFieldSectionName'
+      order:
+        $ref: '#/schemas/CustomFieldSectionOrder'
+  CustomFieldBool:
+    description: Boolean Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeBool'
+      order:
+        $ref:  '#/schemas/CustomFieldOrder'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldText:
+    description: Text Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeText'
+      max_len:
+        $ref:  '#/schemas/CustomFieldMaxLen'
+      order:
+        $ref:  '#/schemas/CustomFieldOrder'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldInteger:
+    description: Integer Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeInteger'
+      min:
+        $ref:  '#/schemas/CustomFieldMin'
+      max:
+        $ref:  '#/schemas/CustomFieldMax'
+      order:
+        $ref:  '#/schemas/CustomFieldOrder'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldFloat:
+    description: Float Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeFloat'
+      min:
+        $ref:  '#/schemas/CustomFieldFloatMin'
+      max:
+        $ref:  '#/schemas/CustomFieldFloatMax'
+      order:
+        $ref:  '#/schemas/CustomFieldOrder'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldSingleSelect:
+    description: Single Select Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeSingleSelect'
+      possible_values:
+        $ref:  '#/schemas/CustomFieldPossibleValues'
+      order:
+        $ref:  '#/schemas/CustomFieldOrder'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldMultipleSelect:
+    description: Multple Select Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeMultipleSelect'
+      possible_values:
+        $ref:  '#/schemas/CustomFieldPossibleValues'
+      order:
+        $ref:  '#/schemas/CustomFieldOrder'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldMultipleSelectImage:
+    description: Multiple Select Image Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeMultipleSelectImage'
+      possible_values:
+        $ref:  '#/schemas/CustomFieldPossibleValuesMSI'
+      possible_images_urls:
+        $ref:  '#/schemas/CustomFieldPossibleImagesUrls'
+      possible_images_labels:
+        $ref:  '#/schemas/CustomFieldPossibleImagesLabels'
+      order:
+        $ref:  '#/schemas/CustomFieldOrder'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldImagesUploader:
+    description: Images uploader Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeImagesUploader'
+      text_fields:
+        $ref:  '#/schemas/CustomFieldValuesImagesUploader'
+      order:
+        $ref:  '#/schemas/CustomFieldOrder'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldEditTypeBool:
+    description: Boolean Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeBool'
+      force:
+        $ref:  '#/schemas/CustomFieldForceUpdate'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldEditTypeText:
+    description: Text Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeText'
+      max_len:
+        $ref:  '#/schemas/CustomFieldMaxLen'
+      force:
+        $ref: '#/schemas/CustomFieldForceUpdate'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldEditTypeInteger:
+    description: Integer Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeInteger'
+      min:
+        $ref:  '#/schemas/CustomFieldMin'
+      max:
+        $ref:  '#/schemas/CustomFieldMax'
+      force:
+        $ref: '#/schemas/CustomFieldForceUpdate'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldEditTypeFloat:
+    description: Float Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeFloat'
+      min:
+        $ref:  '#/schemas/CustomFieldMin'
+      max:
+        $ref:  '#/schemas/CustomFieldMax'
+      force:
+        $ref: '#/schemas/CustomFieldForceUpdate'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldTypeEditSingleSelect:
+    description: Single Select Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeSingleSelect'
+      created_values:
+        $ref:  '#/schemas/CustomFieldCreatedValues'
+      deleted_values:
+        $ref:  '#/schemas/CustomFieldDeletedValues'
+      renamed_values:
+        $ref:  '#/schemas/CustomFieldRenamedValues'
+      force:
+        $ref: '#/schemas/CustomFieldForceUpdate'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldTypeEditMultipleSelect:
+    description: Multple Select Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeMultipleSelect'
+      created_values:
+        $ref:  '#/schemas/CustomFieldCreatedValues'
+      deleted_values:
+        $ref:  '#/schemas/CustomFieldDeletedValues'
+      renamed_values:
+        $ref:  '#/schemas/CustomFieldRenamedValues'
+      force:
+        $ref: '#/schemas/CustomFieldForceUpdate'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldTypeEditMultipleSelectImage:
+    description: Multiple Select Image Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeMultipleSelectImage'
+      created_values:
+        $ref:  '#/schemas/CustomFieldCreatedValuesMSI'
+      deleted_values:
+        $ref:  '#/schemas/CustomFieldDeletedValues'
+      renamed_values:
+        $ref:  '#/schemas/CustomFieldRenamedValuesMSI'
+      force:
+        $ref: '#/schemas/CustomFieldForceUpdate'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldTypeEditImagesUploader:
+    description: Images uploader Custom Field
+    type: object
+    properties:
+      name:
+        $ref:  '#/schemas/CustomFieldName'
+      type:
+        $ref:  '#/schemas/CustomFieldTypeImagesUploader'
+      created_values:
+        $ref:  '#/schemas/CustomFieldCreatedValuesImagesUploader'
+      deleted_values:
+        $ref:  '#/schemas/CustomFieldDeletedValuesImagesUploader'
+      edited_values:
+        $ref:  '#/schemas/CustomFieldEditedValuesImagesUploader'
+      force:
+        $ref: '#/schemas/CustomFieldForceUpdate'
+      section_id:
+        $ref: '#/schemas/CustomFieldSectionId'
+  CustomFieldId:
+    description: Id of the custom field
+    type: integer
+    example: 42
+  CustomFieldSectionId:
+    description: Id of the custom field section
+    type: integer
+    example: 6
+  CustomFieldBusinessesCount:
+    description: Number of businesses in error
+    type: integer
+    example: 2
+  CustomFieldSimpleDescription:
+    description: Error description
+    type: string
+    example:
+      "At least one business does not respect the new constraints, please send forced_update=true to force update."
+  CustomFieldTextConstraint:
+    description: constraints in error
+    type: array
+    items:
+      type: string
+    example:
+      ["max_len"]
+  CustomFieldNumberConstraint:
+    description: constraints in error
+    type: array
+    items:
+      type: string
+    example:
+      ["min", "max"]
+  CustomFieldSelectDescription:
+    description: Error description
+    type: string
+    example:
+      "At least one business had one of these values, please send forced_update=true to force update."
+  CustomFieldSelectConstraint:
+    description: options in error
+    type: array
+    items:
+      type: string
+    example:
+      ["free parking"]
+  CustomFieldDeleteDescription:
+    description: custom fields in error
+    type: array
+    items:
+      type: string
+    example:
+      "At least one business has this custom field, please send forced_update=true to force update."
+  CustomFieldTextError:
+    description: New max_len is not respected by some business
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              businesses_count:
+                $ref:  '#/schemas/CustomFieldBusinessesCount'
+              description:
+                $ref:  '#/schemas/CustomFieldSimpleDescription'
+              constraints:
+                $ref:  '#/schemas/CustomFieldTextConstraint'
+  CustomFieldNumberError:
+    description: New max or min is not respected by some business
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              businesses_count:
+                $ref:  '#/schemas/CustomFieldBusinessesCount'
+              description:
+                $ref:  '#/schemas/CustomFieldSimpleDescription'
+              constraints:
+                $ref:  '#/schemas/CustomFieldNumberConstraint'
+  CustomFieldSelectError:
+    description: Option deleted is used by a business
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              businesses_count:
+                $ref:  '#/schemas/CustomFieldBusinessesCount'
+              description:
+                $ref:  '#/schemas/CustomFieldSelectDescription'
+              options:
+                $ref:  '#/schemas/CustomFieldSelectConstraint'
+  CustomFieldDeleteError:
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              businesses_count:
+                $ref:  '#/schemas/CustomFieldBusinessesCount'
+              description:
+                $ref:  '#/schemas/CustomFieldDeleteDescription'
+  AttributeType:
+    description: Type of the Attribute
+    type: string
+    enum:
+      - URL
+      - REPEATABLE_URL
+      - BOOL
+      - ENUM
+      - REPEATABLE_ENUM
+  AttributeGmbId:
+    description: Google Id of the attribute
+    type: string
+    example: 'gcid:restaurant'
+  AttributeName:
+    description: Name of the attribute in the chosen language
+    type: string
+    example: 'Delivery'
+  AttributeOrder:
+    type: integer
+    example: 1
+  Attribute:
+    type: object
+    properties:
+      type:
+        $ref: '#/schemas/AttributeType'
+      gmb_id:
+        $ref: '#/schemas/AttributeGmbId'
+      name:
+        $ref: '#/schemas/AttributeName'
+      order:
+        $ref: '#/schemas/AttributeOrder'
+  AttributesGroupName:
+    type: string
+    description: Name of the attribute group
+    example: "Services disponibles"
+  AttributesGroupOrder:
+    type: integer
+    example: 5
+  AttributesGroup:
+    type: object
+    properties:
+      attributes:
+        type: array
+        description: List of Google Attributes
+        items:
+          $ref: '#/schemas/Attribute'
+      name:
+        $ref: '#/schemas/AttributesGroupName'
+      order:
+        $ref: '#/schemas/AttributesGroupOrder'
+  AttributesGroupList:
+    type: array
+    description: List of Google Groups
+    items:
+      $ref:  '#/schemas/AttributesGroup'
+  AttributesGroupResponse:
+    type: object
+    properties:
+      groups:
+        $ref:  '#/schemas/AttributesGroupList'
+  AttributesWrongCategoryError:
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: string
+            description: "Category name not found in DB"
+            example: "Category name not found in DB"
+  AttributesWrongLangError:
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              lang:
+                type: object
+                properties:
+                  explanation:
+                    description: "incorrect value inputed in lang parameter"
+                    type: string
+                    example: "xx is an incorrect value"
+                  choices:
+                    type: array
+                    items:
+                      type: string
+                    description: languages choices available
+                    example: ["DE", "EN", "ES", "FR", "IT", "PT", "PT_BR"]
+  AttributesMissingParametersError:
+    type: object
+    properties:
+      errors:
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              lang:
+                description: "lang parameter is required"
+                type: string
+                example: "is required"
+              category_name:
+                description: "category_name parameter is required"
+                type: string
+                example: "is required"
+  MoreHoursBusinessGetResponse:
+    properties:
+      more_hours:
+        type: array
+        items:
+          type: object
+          properties:
+            gmb_id:
+              description: More Hour ID.
+              type: string
+              example: BREAKFAST
+            value:
+              $ref: '#/schemas/MoreHoursGet'
+        example:
+          - gmb_id: KITCHEN
+            value:
+              monday:
+              - 08:00-15:00
+              - 18:00-23:00
+              tuesday:
+              - 08:00-15:00
+              - 18:00-23:00
+              wednesday:
+              - 08:00-15:00
+              - 18:00-23:00
+              thursday:
+              - 08:00-15:00
+              - 18:00-23:00
+              friday:
+              - 08:00-15:00
+              - 18:00-23:00
+              saturday:
+              - 08:00-15:00
+              - 18:00-23:00
+              sunday:
+              - 08:00-15:00
+              - 18:00-23:00
+          - gmb_id: LUNCH
+            value:
+              monday:
+              - 11:00-15:00
+              tuesday:
+              - 11:00-15:00
+              wednesday:
+              - 11:00-15:00
+              thursday:
+              - 11:00-15:00
+              friday:
+              - 11:00-15:00
+              saturday: []
+              sunday: []
+  MoreHoursBusinessPostBody:
+    properties:
+      more_hours:
+        description: Array containing the more hours values to update. Grouped by More Hour ID. Only More Hour IDs included in the body will be updated.
+        type: array
+        items:
+          type: object
+          properties:
+            gmb_id:
+              description: More Hour ID for which to update hours.
+              type: string
+            value:
+              $ref: '#/schemas/MoreHoursPost'
+        example:
+          - gmb_id: KITCHEN
+            value:
+              monday: []
+              tuesday: []
+              wednesday: []
+              thursday: []
+              friday: []
+              saturday:
+              - 08:00-15:00
+              - 18:00-23:00
+              sunday:
+              - 08:00-15:00
+              - 18:00-23:00
+          - gmb_id: BRUNCH
+            value: null
+  MoreHoursBusinessPostResponse:
+    properties:
+      status:
+        description: Status of the request. Should say "success" unless something unexpected went wrong.
+        type: string
+        example: success
+      id:
+        description: ID of the business that was just updated.
+        type: string
+        example: 545f7bf982efa41a496379d2
+  MoreHoursBusinessPostInvalidCategory:
+    properties:
+      errors:
+        description: Object containing all errors encountered.
+        type: object
+        properties:
+          json:
+            description: Object containing any errors related to the request JSON body.
+            type: object
+            properties:
+              more_hours:
+                description: Array containing any errors related to the `more_hours` property in the request JSON body.
+                type: array
+                items:
+                  type: string
+                example:
+                  - "'foo' is not a valid gmb_id"
+  MoreHoursBusinessPostOverlappingHours:
+    properties:
+      errors:
+        description: Object containing all errors encountered.
+        type: object
+        properties:
+          json:
+            description: Object containing any errors related to the request JSON body.
+            type: object
+            properties:
+              more_hours:
+                description: Object containing any errors related to the `more_hours` property in the request JSON body.
+                type: object
+                properties:
+                  '0':
+                    description: Each index contains the errors found at that index in the array of More Hours given in the request JSON body.
+                    type: object
+                    properties:
+                      value:
+                        description: Object that indicates value errors for each given weekday.
+                        type: object
+                        properties:
+                          saturday:
+                            description: Each weekday key indicates an error in the More Hours value given for that specific weekday.
+                            type: object
+                            properties:
+                              '0':
+                                description: Each index contains a string describing the errors found at that index in the array of More Hours time slots.
+                                type: string
+                                example: start time cannot be superior to end time
+  MoreHoursListResponse:
+    properties:
+      more_hours:
+        description: List of More Hour IDs for a given category and country.
+        type: array
+        items:
+          type: object
+          properties:
+            gmb_id:
+              description: The More Hour ID.
+              type: string
+              example: "BREAKFAST"
+            name:
+              description: The name of the More Hour translated to the specified language.
+              type: string
+              example: "Breakfast"
+        example:
+          - gmb_id: "BREAKFAST"
+            name: "Breakfast"
+          - gmb_id: "BRUNCH"
+            name: "Brunch"
+          - gmb_id: "DELIVERY"
+            name: "Delivery"
+          - gmb_id: "DINNER"
+            name: "Dinner"
+          - gmb_id: "DRIVE_THROUGH"
+            name: "Drive through"
+          - gmb_id: "HAPPY_HOUR"
+            name: "Happy hours"
+          - gmb_id: "KITCHEN"
+            name: "Kitchen"
+          - gmb_id: "LUNCH"
+            name: "Lunch"
+          - gmb_id: "ONLINE_SERVICE_HOURS"
+            name: "Online service hours"
+          - gmb_id: "PICKUP"
+            name: "Pickup"
+          - gmb_id: "TAKEOUT"
+            name: "Takeout"
+          - gmb_id: "SENIOR_HOURS"
+            name: "Senior hours"
+          - gmb_id: "ACCESS"
+            name: "Access"
+  MoreHoursListMissingParametersError:
+    properties:
+      errors:
+        description: The detail of the error encountered
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              category:
+                description: "category parameter is required"
+                type: string
+                example: "is required"
+              country:
+                description: "country parameter is required"
+                type: string
+                example: "is required"
+  MoreHoursListInvalidCategoryError:
+    properties:
+      errors:
+        description: The detail of the error encountered
+        type: object
+        properties:
+          json:
+            type: string
+            example: "Category with id foo does not exist"
+  MoreHoursListInvalidCountryError:
+    properties:
+      errors:
+        description: The detail of the error encountered
+        type: object
+        properties:
+          json:
+            type: object
+            properties:
+              country:
+                type: object
+                properties:
+                  explanation:
+                    description: "country paramter is invalid"
+                    type: string
+                    example: "abc is an incorrect value"
+                  choices:
+                    description: "available country codes"
+                    type: array
+                    items:
+                      type: string
+                    example: ["AF", "AL", "DZ", "AS", "AD", "AO", "AI", "AQ", "AG", "AR", "AM", "AW", "AU", "AT", "AZ", "BS", "BH", "BD", "BB", "BY", "BE", "BZ", "BJ", "BM", "BT", "BO", "BQ", "BA", "BW", "BV", "BR", "IO", "BN", "BG", "BF", "BI", "CV", "KH", "CM", "CA", "KY", "CF", "TD", "CL", "CN", "CX", "CC", "CO", "KM", "CD", "CG", "CK", "CR", "HR", "CU", "CW", "CY", "CZ", "CI", "DK", "DJ", "DM", "DO", "EC", "EG", "SV", "GQ", "ER", "EE", "SZ", "ET", "FK", "FO", "FJ", "FI", "FR", "GF", "PF", "TF", "GA", "GM", "GE", "DE", "GH", "GI", "GR", "GL", "GD", "GP", "GU", "GT", "GG", "GN", "GW", "GY", "HT", "HM", "VA", "HN", "HK", "HU", "IS", "IN", "ID", "IR", "IQ", "IE", "IM", "IL", "IT", "JM", "JP", "JE", "JO", "KZ", "KE", "KI", "KP", "KR", "KW", "KG", "LA", "LV", "LB", "LS", "LR", "LY", "LI", "LT", "LU", "MO", "MG", "MW", "MY", "MV", "ML", "MT", "MH", "MQ", "MR", "MU", "YT", "MX", "FM", "MD", "MC", "MN", "ME", "MS", "MA", "MZ", "MM", "NA", "NR", "NP", "NL", "NC", "NZ", "NI", "NE", "NG", "NU", "NF", "MP", "NO", "OM", "PK", "PW", "PS", "PA", "PG", "PY", "PE", "PH", "PN", "PL", "PT", "PR", "QA", "MK", "RO", "RU", "RW", "RE", "BL", "SH", "KN", "LC", "MF", "PM", "VC", "WS", "SM", "ST", "SA", "SN", "RS", "SC", "SL", "SG", "SX", "SK", "SI", "SB", "SO", "ZA", "GS", "SS", "ES", "LK", "SD", "SR", "SJ", "SE", "CH", "SY", "TW", "TJ", "TZ", "TH", "TL", "TG", "TK", "TO", "TT", "TN", "TR", "TM", "TC", "TV", "UG", "UA", "AE", "GB", "UM", "US", "UY", "UZ", "VU", "VE", "VN", "VG", "VI", "WF", "EH", "YE", "ZM", "ZW", "AX", "XK"]
+  ServiceId:
+    description: Id of the service (For creation you can get this id by calling <a href="#operation/getServicesSuggestions">get services suggestions endpoint</a>)
+    type: integer
+    example: 1
+  ServiceType:
+    description: Type of the service
+    type: string
+    enum: ['STRUCTURED_SERVICE_ITEM', 'FREE_FORM_SERVICE_ITEM']
+  ServiceName:
+    description: |
+      Name of the service.
+    type: string
+    example: "Salle d'escalade"
+  ServiceCategoryGmbName:
+    type: string
+    description: |
+      Google name of the category.
+    example: 'gcid:climbing_gym'
+  ServicesSuggestion:
+    type: object
+    properties:
+      service_id:
+        $ref: '#/schemas/ServiceId'
+      type:
+        $ref: '#/schemas/ServiceType'
+      name:
+        $ref: '#/schemas/ServiceName'
+      category_id:
+        $ref: '#/schemas/CategorySqlId'
+      category_gmb_name:
+        $ref: '#/schemas/ServiceCategoryGmbName'
+  ServicesSuggestionResponse:
+    type: object
+    properties:
+      services_suggestions:
+        type: array
+        items:
+          $ref: '#/schemas/ServicesSuggestion'
+  ServicePrice:
+    description: Price of the service.
+    type: number
+    example: 12.5
+  ServiceDescription:
+    description: Description of the service.
+    type: string
+    maxLength: 300
+  Services:
+    description: A Google Service.
+    type: object
+    properties:
+      service_id:
+        $ref: '#/schemas/ServiceId'
+      type:
+        $ref: '#/schemas/ServiceType'
+      name:
+        $ref: '#/schemas/ServiceName'
+      price:
+        $ref: '#/schemas/ServicePrice'
+      description:
+        $ref: '#/schemas/ServiceDescription'
+      category_gmb_name:
+        $ref: '#/schemas/ServiceCategoryGmbName'
+  BusinessServicesResponse:
+    type: object
+    description: List of Business Services.
+    properties:
+      services:
+        type: array
+        items:
+          $ref: '#/schemas/Services'
+        example: [
+          {
+            "service_id": 1,
+            "type": "STRUCTURED_SERVICE_ITEM",
+            "name": "Climbing Gym",
+            "price": 50.0,
+            "description": "Our climbing gym available for all",
+            "category_gmb_name": "gcid:climbing_gym"
+          },
+          {
+            "service_id": 2,
+            "type": "FREE_FORM_SERVICE_ITEM",
+            "name": "Random Name",
+            "price": 25.35,
+            "description": "This is our custom service",
+            "category_gmb_name": "gcid:climbing_gym"
+          },
+        ]
+  FreeFormServicesCreate:
+    description: A Google Service.
+    required:
+      - category_gmb_name
+      - name
+    type: object
+    properties:
+      category_gmb_name:
+        type: string
+        description: |
+          Google name of the category. The category must belong to your business.
+        example: 'gcid:climbing_gym'
+      name:
+        description: Name of the service.
+        type: string
+        example: "Random Name"
+      price:
+        description: Price of the service.
+        type: number
+        example: 25.35
+      description:
+        description: Description of the service.
+        type: string
+        example: "This is our custom service"
+        maxLength: 300
+  FreeFormServicesUpdate:
+    description: A Google Service.
+    required:
+      - service_id
+    type: object
+    properties:
+      service_id:
+        description: |
+          Id of the service.
+        type: integer
+        example: 2
+      category_gmb_name:
+        type: string
+        description: |
+          Google name of the category. The category must belong to your business.
+        example: 'gcid:climbing_gym'
+      name:
+        description: Name of the service.
+        type: string
+        example: "Random Name"
+      price:
+        description: Price of the service.
+        type: number
+        example: 25.35
+      description:
+        description: Description of the service.
+        type: string
+        example: "This is our custom service"
+        maxLength: 300
+  StructuredServicesCreateUpdate:
+    description: A Google Service.
+    required:
+      - service_id
+    type: object
+    properties:
+      service_id:
+        $ref: '#/schemas/ServiceId'
+      price:
+        $ref: '#/schemas/ServicePrice'
+      description:
+        $ref: '#/schemas/ServiceDescription'
+  FoodMenuItemPrice:
+    description: Price of the food menu item.
+    type: number
+    example: 12.5
+  FoodMenuItemName:
+    description: Name of the food menu item.
+    type: string
+    example: "Item name"
+    maxLength: 140
+  FoodMenuItemDescription:
+    description: Description of the food menu item.
+    type: string
+    maxLength: 1000
+  FoodMenuItemOrder:
+    description: Display order of the food menu item in the food menu section.
+    type: integer
+    example: 3
+  FoodMenuMediaSourceUrl:
+    description: User source url of the food menu item, mandatory to set/update media with food menu item
+    type: string
+  FoodMenuMediaPublicUrl:
+    description: Public url the food menu item provided by partoo, can be empty in set/update.
+    type: string
+  FoodMenuItemMedia:
+    description: Media of the food menu item.
+    properties:
+      sourceUrl:
+        $ref: '#/schemas/FoodMenuMediaSourceUrl'
+      publicUrl:
+        $ref: '#/schemas/FoodMenuMediaPublicUrl'
+      id:
+        type: string
+  FoodMenuItem:
+    description: A food menu item object.
+    properties:
+      name:
+        $ref: '#/schemas/FoodMenuItemName'
+      order:
+        $ref: '#/schemas/FoodMenuItemOrder'
+      description:
+        $ref: '#/schemas/FoodMenuItemDescription'
+      price:
+        $ref: '#/schemas/FoodMenuItemPrice'
+      media:
+        $ref: '#/schemas/FoodMenuItemMedia'
+  FoodMenuSectionName:
+    description: Name of the food menu section.
+    type: string
+  FoodMenuSectionOrder:
+    description: Display order of the food menu item in the food menu section.
+    type: integer
+    example: 3
+  FoodMenuSection:
+    description: A food menu item section.
+    properties:
+      name:
+        $ref: '#/schemas/FoodMenuSectionName'
+      order:
+        $ref: '#/schemas/FoodMenuSectionOrder'
+      items:
+        type: array
+        items:
+          $ref: '#/schemas/FoodMenuItem'
+    example: {
+      "name": "Starters",
+      "order": 1,
+      "items": [
+        {
+          "name": "Starter 1",
+          "order": 1,
+          "description": "First starter of the food menu",
+          "price": 1.0,
+        },
+        {
+          "name": "Starter 2",
+          "order": 2,
+          "description": "Second starter of the food menu",
+          "price": 5.0,
+          }
+      ],
+    }
+
+  BusinessFoodMenus:
+    description: A Google food menu for business.
+    properties:
+      menus:
+        type: array
+        items:
+          $ref: '#/schemas/FoodMenuSection'
+    example: {
+            "menus": [
+                {
+                    "name": "Starters",
+                    "order": 1,
+                    "items": [
+                        {
+                          "name": "Starter 1",
+                          "order": 1,
+                          "description": "First starter of the food menu",
+                          "price": 1.0,
+                          "media": {
+                            "source_url": "https://www.source_url.com/main_dishes",
+                            "public_url": "https://www.partoo_url.com/main_dishes",
+                          },
+                        },
+                        {
+                          "name": "Starter 2",
+                          "order": 2,
+                          "description": "Second starter of the food menu",
+                          "price": 5.0,
+                        }
+                    ],
+                },
+              {
+                "name": "Main dishes",
+                "order": 2,
+                "items": [
+                  {
+                    "name": "Today's special",
+                    "order": 1,
+                    "description": "Today's special description",
+                    "price": 25.0,
+                    "media": {
+                      "source_url": "https://www.source_url.com/main_dishes",
+                      "public_url": "https://www.partoo_url.com/main_dishes"
+                    },
+                  },
+                ],
+              }
+            ]
+        }
+  CustomFieldForceUpdate:
+    description: >
+      <p>The deletion of a custom field or the update of its metadata can have impacts on custom fields which are already set for businesses.
+      <ul>
+        <li>If <code>force</code> is set to false, updates/deletions will be performed only if they are non destructive.
+        If some businesses would be impacted by the update/deletion, an exception will be returned
+        <li>If <code>force</code> is set to true, destructive modification will be performed and businesses values will be deleted accordingly.
+
+    type: boolean
+    default: false
+  OrganizationForceDeletion:
+    description: Force the deletion of organization even if there are still users and business linked to it
+    type: boolean
+    default: false
+
+
+
+parameters:
+  business_id:
+    in: path
+    name: business_id
+    required: true
+    schema:
+      type: string
+    description: |
+      Business id.<br/>
+      It may be replaced by `c-{code}` where code is the store code, which should be unique per organization. This can be used only for `ORG_ADMIN`, `GROUP_MANAGER` and `BUSINESS_MANAGER` users.
+  path_service_id:
+    in: path
+    name: service_id
+    required: true
+    schema:
+      type: string
+    description: <p> Id of the service (For creation you can get this id by calling <a href="#operation/getServicesSuggestions">get services suggestions endpoint</a>)</p>
+  path_org_id:
+    in: path
+    name: org_id
+    required: true
+    schema:
+      type: integer
+    description: Organization id
+  path_section_id:
+    in: path
+    name: section_id
+    required: true
+    schema:
+      type: string
+    description: Section id
+  path_group_id:
+    in: path
+    name: group_id
+    required: true
+    schema:
+      type: integer
+    description: Group id
+  path_user_id:
+    in: path
+    required: true
+    name: user_id
+    schema:
+      type: string
+    description: User id
+  query_page:
+    in: query
+    name: page
+    schema:
+      type: integer
+      default: 0
+    description: Page number. 30 results per page
+  query_page_up_to_100:
+    in: query
+    name: page
+    schema:
+      type: integer
+      default: 1
+    description: Page number, Starts at 1. From 1 to 100 results per page (see `per_page`)
+  query_per_page_1_100:
+    in: query
+    name: per_page
+    schema:
+      type: integer
+      default: 30
+      minimum: 1
+      maximum: 100
+    description: Number of items to return per page. Currently limited to 100.
+  query_org_id:
+    in: query
+    name: org_id
+    schema:
+      type: integer
+    description: Organization id
+  query_category_lang:
+    in: query
+    name: lang
+    required: false
+    schema:
+      $ref: '#/schemas/Lang'
+    description: |
+      Language to get the category name. If not given, the user's language is used.
+  query_place_action_link_lang:
+    in: query
+    name: lang
+    required: false
+    schema:
+      $ref: '#/schemas/Lang'
+    description: Preferred language for place action links. If no language is provided, the user's default language will be used. If the user's default language is unavailable, the country's primary language will be used.
+  query_category_country:
+    in: query
+    name: country
+    required: false
+    description: |
+      Filters categories available for businesses in given country.
+
+      If no country is given, then the endpoint returns the list of all existing available categories.
+
+      Use country ISO 3166 alpha2 code.
+    schema:
+      type: string
+    example: "FR"
+  query_category_state:
+    in: query
+    name: state
+    required: false
+    schema:
+      type: string
+      enum: ['OK', 'DEPRECATED']
+  query_category_block_push_long:
+    in: query
+    name: block_push_long_description_on_gmb
+    description: Filter on `block_push_long_description_on_gmb` param (boolean indicating if the business long description can be pushed to Google when the business belongs to this category)
+    required: false
+    schema:
+      type: boolean
+  query_category_live__isnull:
+    in: query
+    name: live__isnull
+    description: |
+      Filter on `live_id` parameter value
+
+      True: Recover categories which `live_id` is null
+
+      False: Recover categories which `live_id` is not null
+
+      Null: Do not filter on `live_id`
+    schema:
+      type: boolean
+  query_category_search_query:
+    in: query
+    name: search_query
+    description: Fuzzy search on gmb_id and names translations
+    required: false
+    schema:
+      type: string
+  query_category_order_by:
+    in: query
+    name: order_by
+    description: |
+      Order results by colum. Add "-" before for ordering by descending order.
+    required: false
+    schema:
+      type: string
+      enum: ['gmb_id', '-gmb_id']
+  query_category_return_live:
+    in: query
+    name: return_live
+    description: Return the corresponding live category instead of the requested category
+    required: false
+    schema:
+      type: boolean
+      default: false
+  query_category_with_names:
+    in: query
+    name: with_names
+    description: |
+      Returns an object representing the list of translations in the available languages for the requested category. See example on the right.
+
+      If `with_names` is true, the translations will appear in the field __names__
+    required: false
+    schema:
+      type: boolean
+      default: false
+  query_category_with_names_categories:
+    in: query
+    name: with_names
+    description: |
+      Returns an object representing the list of translations in the available languages for the requested category. See example on the right.
+
+      If `with_names` is true, the translations will appear in the field __names__
+    required: false
+    schema:
+      type: boolean
+      default: false
+  query_category_with_countries:
+    in: query
+    name: with_countries
+    description: |
+      Returns an array of strings representing the list of country codes in which the requested category is available.
+
+      If `with_countries` is true, the country list will appear in the field __countries__
+    required: false
+    schema:
+      type: boolean
+      default: false
+  query_filter_by_org_id:
+    in: query
+    name: org_id
+    schema:
+      type: integer
+    required: false
+    description: Filter by organization id
+  query_filter_by_groups:
+    in: query
+    name: groups
+    schema:
+      type: array
+      items:
+        type: integer
+    required: false
+    description: |
+      Filter by groups, using the access logic with the and/or depending on the groups sections
+
+      See <a href="#tag/Groups-and-Sections">the Groups and Sections description</a>
+    example: 1,2,3
+  query_filter_by_fuzzy_query_on_business:
+    in: query
+    name: query
+    schema:
+      type: string
+    required: false
+    description: Parameter to fuzzy search businesses on city, zipcode and name
+  query_filter_by_business_status:
+    in: query
+    name: status
+    schema:
+      $ref: '#/schemas/BusinessStatusFilter'
+  query_filter_by_zipcode:
+    in: query
+    name: zipcode
+    schema:
+      type: string
+    required: false
+    description: Filter by zipcode
+  query_filter_by_city:
+    in: query
+    name: city
+    schema:
+      type: string
+    required: false
+    description: Filter by city
+  query_filter_by_business_code:
+    in: query
+    name: code
+    schema:
+      type: string
+    required: false
+    description: Filter by code
+  query_filter_by_business_name:
+    in: query
+    name: name
+    schema:
+      type: string
+    required: false
+    description: Filter by name
+  query_filter_by_country:
+    in: query
+    name: country
+    schema:
+      type: string
+    required: false
+    description: Filter by country - ISO 3166 alpha2 code (i.e. “FR” for France)
+  query_filter_by_business_promo:
+    in: query
+    name: has_promo
+    deprecated: true
+    schema:
+      type: string
+      enum: ["True", "False"]
+    required: false
+    description: Retrieve only businesses having promotional offers
+  query_filter_by_business_modification_timestamp:
+    in: query
+    name: modified__gte
+    deprecated: false
+    schema:
+      type: number
+    required: false
+    description: Filter by modified attribute (modified >= modified_gte)
+  query_filter_by_business_completion_rate__gte:
+    in: query
+    name: completion_rate__gte
+    deprecated: false
+    schema:
+      type: number
+    required: false
+    description: Filter by completion_rate attribute (completion_rate >= completion_rate__gte)
+  query_filter_by_business_completion_rate__lte:
+    in: query
+    name: completion_rate__lte
+    deprecated: false
+    schema:
+      type: number
+    required: false
+    description: Filter by completion_rate attribute (completion_rate <= completion_rate__lte)
+  query_filter_by_business_completion_rate:
+    in: query
+    name: completion_rate
+    deprecated: false
+    schema:
+      type: string
+      enum: [ 'low', 'mid', 'high' ]
+      example: low,mid
+    required: false
+    description: Filter by completion_rate attribute. You can separate the values by a comma, as done in the example.
+  query_filter_by_business_features__in:
+    in: query
+    name: features__in
+    schema:
+      allOf:
+        - $ref: '#/schemas/FeatureEnum'
+      description: |
+        Filter businesses that have all the features provided, separated by commas.
+      type: string
+      example: diffusion,review_management
+  query_filter_by_business_features__notin:
+    in: query
+    name: features__notin
+    schema:
+      allOf:
+        - $ref: '#/schemas/FeatureEnum'
+      description: |
+        Filter businesses that *do not* have all the features provided, separated by commas.
+      type: string
+      example: diffusion,review_management
+  query_filter_by_business_subscription_to_review_management:
+    in: query
+    deprecated: false
+    name: subscribed_to_rm
+    schema:
+      type: string
+      enum:
+        - "True"
+        - "False"
+    required: false
+    description: |
+      Filter by current subscription to `review_management`.
+      Equivalent to using `features__in=review_management`.
+  query_filter_by_business_subscription_to_presence_management:
+    in: query
+    deprecated: false
+    name: subscribed_to_pm
+    schema:
+      type: string
+      enum:
+        - "True"
+        - "False"
+    required: false
+    description: |
+      Filter by current subscription to `presence_management`.
+      Equivalent to using `features__in=diffusion`.
+  query_filter_by_business_subscription_to_review_booster:
+      in: query
+      deprecated: false
+      name: subscribed_to_rb
+      schema:
+        type: string
+        enum:
+          - "True"
+          - "False"
+      required: false
+      description: |
+        Filter by current subscription to `review_booster`.
+        Equivalent to using `features__in=review_invite`.
+  query_filter_by_business_subscription_to_messages:
+      in: query
+      deprecated: false
+      name: subscribed_to_bm
+      schema:
+        type: string
+        enum:
+          - "True"
+          - "False"
+      required: false
+      description: |
+        Filter by current subscription to `messages`
+        Equivalent to using `features__in=messages`
+  query_business__in:
+    in: query
+    name: business__in
+    description: Filter by business ids
+    schema:
+      type: array
+      items:
+        $ref: '#/schemas/BusinessId'
+  query_business__notin:
+    in: query
+    name: business__notin
+    description: Excludes from the request all businesses provided
+    schema:
+      type: array
+      items:
+        $ref: '#/schemas/BusinessId'
+  query_review_bucket:
+    in: query
+    name: bucket
+    schema:
+      type: string
+      default: 'week'
+      enum: ['day', 'week', 'month', 'year']
+    description: |
+      Defining the time range of a data bucket.
+
+      This will determine the precision of the returned data. For example, if you choose `day`, you will receive the
+      number of reviews for each day.
+  query_review_cumulative:
+    in: query
+    name: cumulative
+    schema:
+      type: string
+      default: 'true'
+      enum: ['true', 'false']
+    description: |
+      If `cumulative` = `false`, return the average rating of reviews from the current bucket only.
+
+      If `cumulative` = `true`, return the average rating of reviews from all the buckets until the current one
+      (included). The cumulative representation show the evolution of the average rating over time.
+  query_review_business__in:
+    in: query
+    name: business__in
+    description: |
+      Filter by business ids
+
+      Return the reviews of the businesses given in list.
+    schema:
+      type: array
+      items:
+        $ref: '#/schemas/BusinessId'
+  path_template_id:
+    in: path
+    name: template_id
+    required: true
+    schema:
+      type: number
+    description: Template id
+  query_positive_template:
+    in: query
+    name: positive
+    description: Filter on templates made to answer positive reviews (ex from 4 to 5 stars on gmb).
+    required: false
+    schema:
+      type: boolean
+  query_neutral_template:
+    in: query
+    name: neutral
+    description: Filter on templates made to answer neutral reviews (ex 3 stars on gmb).
+    required: false
+    schema:
+      type: boolean
+  query_negative_template:
+    in: query
+    name: negative
+    description: Filter on templates made to answer negative reviews (ex from 1 to 2 stars on gmb).
+    required: false
+    schema:
+      type: boolean
+  query_language__in:
+    in: query
+    name: language__in
+    description: Filter on templates in the specified languages.
+    required: false
+    schema:
+      type: array
+      items:
+        $ref: '#/schemas/TemplateLanguage'
+      example: fr,it
+  query_title_query:
+    in: query
+    name: title_query
+    schema:
+      type: string
+    required: false
+    description: Filter on templates based on their title
+  query_text_query:
+    in: query
+    name: text_query
+    schema:
+      type: string
+    required: false
+    description: Filter on templates based on their text
+  ### POST ###
+  path_post_id:
+    in: path
+    name: post_id
+    required: true
+    schema:
+      type: number
+    description: Post id
+  query_post_summary:
+    in: query
+    name: summary
+    schema:
+      type: string
+    required: false
+    description: |
+      Filter Posts based on their description.
+
+      It returns Posts that contain in their description the given string.
+      The text does not have to match perfectly.
+  query_post_start_datetime:
+    in: query
+    name: start_datetime
+    schema:
+      type: string
+      example: '2020-11-06T23:59:59'
+    required: false
+    description: |
+      Filters Posts based on their start datetime.
+
+      The start datetime represents the moment on which a Post of type <b>event/offer</b>
+      will become available. In case of Posts of type <b>news</b>, the `start_datetime`
+      it will be compare to the creation date of the Post, as the field is not
+      present in this context.
+  query_post_end_datetime:
+    in: query
+    name: end_datetime
+    schema:
+      type: string
+      example: '2020-11-06T23:59:59'
+    required: false
+    description: |
+      Filter Posts based on their end datetime.
+
+      The end datetime represents the date on which the Post of type <b>event/offer</b>
+      will expire. In case of Posts of type <b>news</b>, the `end_datetime`
+      it will be compare to exactly one week after the creation date of the Post,
+      as the field is not present in this context.
+  query_post_state_in:
+    in: query
+    name: state__in
+    schema:
+      type: string
+      enum: ['live','to_configure', 'pending', 'scheduled', 'error', 'expired', 'to_validate']
+    required: false
+    description: Filter Posts based on its state.
+  query_post_topic_type:
+    in: query
+    name: topic_type
+    schema:
+      type: string
+      enum: ['standard', 'event', 'offer', 'alert']
+    required: false
+    description: Filter Posts based on its type.
+  query_post_topic_type_in:
+    in: query
+    name: topic_type__in
+    schema:
+      type: string
+      enum: ['standard', 'event', 'offer', 'alert']
+    required: false
+    description: Filter Posts based on a list of different types.
+  ### END POST ###
+  custom_field_id:
+    in: path
+    name: custom_field_id
+    required: true
+    schema:
+      $ref: '#/schemas/CustomFieldId'
+  section_id:
+    in: path
+    name: section_id
+    required: true
+    schema:
+      $ref: '#/schemas/CustomFieldSectionId'
+  lang:
+    in: query
+    name: lang
+    required: false
+    schema:
+      type: string
+      enum: ['fr', 'es', 'it', 'en', 'de', 'pt', 'pt-BR']
+    description: >
+      <p> Language in which the attributes name and groups name will be translated.
+      <p> If language is not specified, by default we take the language of the user.
+  lang_more_hours:
+    in: query
+    name: lang
+    required: false
+    schema:
+      type: string
+      enum: ['fr', 'es', 'it', 'en', 'de', 'pt', 'pt-BR']
+    description: >
+      <p> Language in which the More Hours names will be translated.
+      <p> If language is not specified, by default we take the language of the user.
+  category_name:
+    in: query
+    name: category_name
+    required: true
+    schema:
+      type: string
+      example: 'gcid:restaurant'
+    description: Category for which availabe attributes will be fetched.
+  category_name_optional:
+    in: query
+    name: category_name
+    required: false
+    schema:
+      type: string
+      example: 'gcid:restaurant'
+    description: Category for which availabe attributes will be fetched.
+  category_more_hours_list:
+    in: query
+    name: category
+    required: true
+    schema:
+      type: string
+      example: 'gcid:restaurant'
+    description: Category for which availabe More Hour IDs will be fetched.
+  category_more_hours_business:
+    in: query
+    name: category
+    required: false
+    schema:
+      type: string
+      example: 'gcid:restaurant'
+    description: If supplied, will only return more hours that are available for the specified business category. If not supplied, the business' main category will be used.
+  country:
+    in: query
+    name: country
+    required: true
+    schema:
+      type: string
+    description: >
+      <p>Country for which available attributes will be fetched - use ISO 3166 alpha2 code ("FR", "EN", "IT").
+    example: "FR"
+  country_more_hours_list:
+    in: query
+    name: country
+    required: true
+    schema:
+      type: string
+    description: >
+      <p>Country for which available More Hour IDs will be fetched - use ISO 3166 alpha2 code ("FR", "EN", "IT").
+    example: "FR"
+  country_more_hours_business:
+    in: query
+    name: country
+    required: false
+    schema:
+      type: string
+    description: >
+      If supplied, will only return more hours that are available in the specified country. - use ISO 3166 alpha2 code ("FR", "EN", "IT"). If not supplied, the country from the business' address will be used.
+    example: "FR"
+  google_location_id:
+    in: path
+    name: google_location_id
+    required: true
+    schema:
+      type: string
+    description: Google location unique id on Partoo
+  custom_field_force_update:
+    in: query
+    name: force
+    required: false
+    schema:
+      $ref: '#/schemas/CustomFieldForceUpdate'
+  organization_force_delete:
+    in: query
+    name: force
+    required: false
+    schema:
+      $ref: '#/schemas/OrganizationForceDeletion'
+
+responses:
+  400:
+    description: Your request is incorrect
+    content:
+      application/json:
+        schema:
+          description: >
+            Error that occcurs when your request is incorrect
+          properties:
+            errors:
+              type: object
+              description: The detail of the error encountered
+              properties:
+                json:
+                  type: object
+  401:
+    description: You are not authenticated
+    content:
+      application/json:
+        schema:
+          description: Error that occurs when you are not authenticated
+          type: object
+          properties:
+            errors:
+              type: object
+              description: The detail of the error encountered
+              properties:
+                authentication:
+                  type: string
+                  default: "User not authenticated"
+  403:
+    description: >
+      You are not allowed to perform this action
+    content:
+      application/json:
+        schema:
+          description: >
+            Error that occurs when you are authenticated but you are trying to perform an action you are not
+            allowed to perform
+          type: object
+          properties:
+            errors:
+              type: object
+              description: The detail of the error encountered
+              properties:
+                authorization:
+                  type: string
+                  default: "Operation not allowed"
+  404:
+    description: Resource does not exist
+    content:
+      application/json:
+        schema:
+          description: Error that occcurs when you are trying to reach a resource that does not exist
+          type: object
+          properties:
+            errors:
+              type: object
+              description: The detail of the error encountered
+              properties:
+                json:
+                  type: string
+                  default: "Resource not found"

@@ -1,0 +1,27 @@
+operationId: createMessageTemplates
+tags:
+  - Message Reply Templates
+summary: Create message template
+description: |
+  This endpoint lets you create a new message template.
+
+  ⚠️ The content should be a valid __stringified JSON__ object. It has to include both the `"text"` key with the message content
+  and the pair `"_version": "0.1"`.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/messaging/message_reply_template/schemas.yml#/MessageTemplateCreateRequest'
+
+responses:
+  200:
+    description: The message template created
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/messaging/message_reply_template/types.yml#/MessageReplyTemplate'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

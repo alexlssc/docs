@@ -1,0 +1,35 @@
+summary: Set Google Services for your business
+description: >
+  This endpoint allows you to set or update Google Services for your business.
+  When you set a service of type STRUCTURED_SERVICE_ITEM for a category, every category that have this service available will also have it set for them.
+
+operationId: postBusinessStructuredServices
+
+tags:
+  - Businesses
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/index.yml#/schemas/StructuredServicesCreateUpdate'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/BusinessServicesResponse'
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

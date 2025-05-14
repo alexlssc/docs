@@ -1,0 +1,61 @@
+summary: Subscribe a business
+operationId: subscribeBusiness
+description: >
+  This endpoint lets you subscribe a business to one or several Partoo products.
+  You need to have `WRITE` access on the business you want to subscribe.
+  You need to have `PROVIDER` to be able to perform this action.
+tags:
+  - Businesses
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          subscription_date:
+            type: number
+            description: Timestamp representing the date on which the subscription will start
+            example: 1540628702
+          products:
+            type: array
+            description: List of products
+            items:
+              $ref: '../../components/index.yml#/schemas/Product'
+          plan:
+            type: string
+            description: Any string that define your offer
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            presence_management:
+              oneOf:
+                - $ref: '../../components/index.yml#/schemas/ProductSubscribeResponseObject'
+                - $ref: '../../components/index.yml#/schemas/ProductUnsubscribeResponseObject'
+            review_management:
+              oneOf:
+                - $ref: '../../components/index.yml#/schemas/ProductSubscribeResponseObject'
+                - $ref: '../../components/index.yml#/schemas/ProductUnsubscribeResponseObject'
+            review_booster:
+              oneOf:
+                - $ref: '../../components/index.yml#/schemas/ProductSubscribeResponseObject'
+                - $ref: '../../components/index.yml#/schemas/ProductUnsubscribeResponseObject'
+            messages:
+              oneOf:
+                - $ref: '../../components/index.yml#/schemas/ProductSubscribeResponseObject'
+                - $ref: '../../components/index.yml#/schemas/ProductUnsubscribeResponseObject'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

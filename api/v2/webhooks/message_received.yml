@@ -1,0 +1,28 @@
+operationId: message_received
+tags:
+  - Webhooks
+summary: New message received
+deprecated: True
+description: |
+  ⚠️ Deprecated, please use the [Message Created](#operation/message_created) webhook instead, and filter on
+   `sender_type=Consumer` and `status=Success` to reproduce this webhook comportement.
+
+  This event is triggered when a business receives a new message sent by a
+  Consumer.
+  It is not triggered for messages sent as the business by a User.
+
+  The event payload contains the event type, the content of the message
+  received, and additional information about the conversation.
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          event:
+            $ref: '../components/messaging/types.yml#/MessageReceivedEvent'
+
+responses:
+  $ref: ./webhook_responses.yml
+
+security: []

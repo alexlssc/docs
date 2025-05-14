@@ -1,0 +1,23 @@
+operationId: deleteMessageTemplate
+tags:
+  - Message Reply Templates
+summary: Delete message template
+description: |
+  This endpoint lets you delete a message template given its ID.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_template_id'
+
+responses:
+  200:
+    description: Template deleted successfully
+    content:
+      application/json:
+        schema:
+          type: boolean
+          example: true
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

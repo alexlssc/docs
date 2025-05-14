@@ -1,0 +1,36 @@
+tags:
+  - Custom Fields Section
+
+summary: Create custom field sections
+
+description: >
+  This endpoint enables you to create custom field sections for your organization as an ORG_ADMIN. If no order is provided, it will be set to -> max(all current sections orders) + 1.
+
+operationId: postCustomFieldsSection
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/index.yml#/schemas/CustomFieldSection'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            section_id:
+              $ref: '../../components/index.yml#/schemas/CustomFieldSectionId'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'
+

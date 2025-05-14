@@ -1,0 +1,14 @@
+BusinessID:
+  description: Business id
+  type: string
+  example: 5409c35a97bbc544d8e26737
+
+GroupID:
+  description: Business id
+  type: integer
+  example: 12312
+
+TagID:
+  description: Tag id
+  type: integer
+  example: 10,12,44

@@ -1,0 +1,23 @@
+query_page:
+  in: query
+  name: page
+  required: false
+  description: |
+    The page number you want to request.
+
+    The value defaults to 1, when it is not included.
+  schema:
+    type: integer
+    minimum: 1
+
+query_per_page:
+  in: query
+  name: per_page
+  required: false
+  description: |
+    The maximum number of result items to return in a page.
+
+    The value defaults to 500, when it is not included.
+  schema:
+    type: integer
+    maximum: 500

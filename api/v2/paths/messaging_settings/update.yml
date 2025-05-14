@@ -1,0 +1,42 @@
+tags:
+  - Messaging Settings
+summary: Update messaging settings
+operationId: updateMessagingSettings
+description: |
+  This endpoint lets you update a specific Messaging Settings.
+parameters:
+  - name: setting_id
+    in: path
+    required: true
+    schema:
+      type: integer
+      description: The id of the Messaging Settings to update
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to update a Post
+        type: object
+        properties:
+          welcome_message:
+            $ref: '../../components/messaging/types.yml#/MessagingSettingWelcomeMessage'
+          offline_message:
+            $ref: '../../components/messaging/types.yml#/MessagingSettingOfflineMessage'
+          uses_business_hours:
+            $ref: '../../components/messaging/types.yml#/MessagingSettingUsesBusinessHours'
+          custom_chat_hours:
+            $ref: '../../components/messaging/types.yml#/ChatHours'
+          is_launched:
+            $ref: '../../components/messaging/types.yml#/MessagingSettingIsLaunched'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/messaging/types.yml#/MessagingSetting'
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

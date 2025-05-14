@@ -1,0 +1,83 @@
+state__in:
+  in: query
+  name: state__in
+  schema:
+    type: array
+    items:
+      allOf:
+        - $ref: './types.yml#/feedback_result/state'
+    example: treated,not_treated
+  description: State of the feedback result
+
+created__lte:
+  in: query
+  name: created__lte
+  schema:
+    type: string
+    format: datetime
+    example: "2024-10-01T00:00:00Z"
+  description: Max date the feedback result was created on
+
+created__gte:
+  in: query
+  name: created__gte
+  schema:
+    type: string
+    format: datetime
+    example: "2024-11-01T00:00:00Z"
+  description: Min date the feedback result was created on
+
+nps__lte:
+  in: query
+  name: nps__lte
+  schema:
+    allOf:
+      - $ref: './types.yml#/feedback_result/nps'
+  description: Max NPS of the feedback result
+
+nps__gte:
+  in: query
+  name: nps__gte
+  schema:
+    allOf:
+      - $ref: './types.yml#/feedback_result/nps'
+  description: Min NPS of the feedback result
+
+nps__in:
+  in: query
+  name: nps__in
+  schema:
+    type: array
+    items:
+      allOf:
+        - $ref: './types.yml#/feedback_result/nps'
+    example: "0,1,2,8,9,10"
+  description: The possible NPS values of the feedback result
+
+search:
+  in: query
+  name: search
+  schema:
+    type: array
+    maxItems: 6
+    items:
+      type: string
+  description: The possible words contained in the text field of the feedback result
+
+optin:
+  in: query
+  name: optin
+  schema:
+    type: boolean
+    enum: [true, false]
+  description: Whether the respondent accepts to be contacted
+
+feedback_form_ids:
+  in: query
+  name: feedback_form_ids
+  schema:
+    type: array
+    items:
+      allOf:
+      - $ref: './types.yml#/feedback_form/id'
+  description: The forms for which the feedback result is for

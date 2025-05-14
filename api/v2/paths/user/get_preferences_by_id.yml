@@ -1,0 +1,51 @@
+tags:
+  - Users
+summary: User preferences
+description: >
+  This endpoint lets you retrieve all the information about a user's preferences on notifications.
+  You need to have `READ` access to this user.
+
+
+  Here are the default values for newly created users
+
+  ```json
+    {
+      "reports": {
+        "review_management_daily": true,
+        "review_management_weekly": true,
+        "review_management_monthly": true,
+        "daily_review_preferences": {
+          "partners": [
+            "google_my_business",
+            "facebook"
+          ],
+          "review_type": 2
+        }
+      },
+      "receive_negative_reviews_email_notifications": false
+    }
+  ```
+
+operationId: getUserPreferences
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_user_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            reports:
+              $ref: '../../components/index.yml#/schemas/UserReports'
+            receive_negative_reviews_email_notifications:
+              $ref: '../../components/index.yml#/schemas/ReceiveNegativeReviewsEmailNotifications'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

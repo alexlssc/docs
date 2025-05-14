@@ -1,0 +1,86 @@
+summary: Suggested additional categories
+tags:
+  - Categories
+description: >
+  This endpoint lets you retrieve Partoo's suggestions for additional categories, based on a given category.
+operationId: getSuggestedCategories
+parameters:
+  - in: path
+    required: true
+    name: category_id
+    schema:
+      $ref: '../../components/index.yml#/schemas/CategoryId'
+  - $ref: '../../components/index.yml#/parameters/query_category_lang'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          properties:
+            categories:
+              type: array
+              items:
+                $ref: '../../components/index.yml#/schemas/SuggestedAdditionalCategoriesObject'
+              example:
+                - id: 7984
+                  gmb_id: gcid:atm
+                  name: ATM
+                  state: OK
+                  block_push_long_description_on_gmb: false
+                  live_id:
+                - id: 4917
+                  gmb_id: gcid:savings_bank
+                  name: Savings bank
+                  state: OK
+                  block_push_long_description_on_gmb: false
+                  live_id:
+                - id: 5742
+                  gmb_id: gcid:home_insurance_agency
+                  name: Home insurance agency
+                  state: OK
+                  block_push_long_description_on_gmb: false
+                  live_id:
+                - id: 6678
+                  gmb_id: gcid:auto_insurance_agency
+                  name: Auto insurance agency
+                  state: OK
+                  block_push_long_description_on_gmb: false
+                  live_id:
+                - id: 5520
+                  gmb_id: gcid:life_insurance_agency
+                  name: Life insurance agency
+                  state: OK
+                  block_push_long_description_on_gmb: false
+                  live_id:
+                - id: 5339
+                  gmb_id: gcid:motorcycle_insurance_agency
+                  name: Motorcycle insurance agency
+                  state: OK
+                  block_push_long_description_on_gmb: false
+                  live_id:
+                - id: 7133
+                  gmb_id: gcid:insurance_agency
+                  name: Insurance agency
+                  state: OK
+                  block_push_long_description_on_gmb: false
+                  live_id:
+                - id: 7012
+                  gmb_id: gcid:investment_service
+                  name: Investment service
+                  state: OK
+                  block_push_long_description_on_gmb: false
+                  live_id:
+                - id: 6026
+                  gmb_id: gcid:financial_consultant
+                  name: Financial consultant
+                  state: OK
+                  block_push_long_description_on_gmb: false
+                  live_id:
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

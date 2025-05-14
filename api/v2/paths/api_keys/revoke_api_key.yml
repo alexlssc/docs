@@ -1,0 +1,32 @@
+summary: Revoke API key
+description: This endpoint lets you revoke an API key you have access to.
+operationId: revokeApiKey
+tags:
+  - ApiKeys
+parameters:
+  - in: path
+    name: api_key_id
+    required: true
+    schema:
+      $ref: '../../components/api_keys/types.yml#/types/id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              $ref: '../../components/api_keys/types.yml#/types/id'
+            status:
+              type: string
+              example: "success"
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

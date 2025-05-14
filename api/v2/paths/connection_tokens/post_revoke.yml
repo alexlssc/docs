@@ -1,0 +1,39 @@
+tags:
+  - Connection Tokens
+summary: Revoke connection token
+description: >
+  This endpoint lets you revoke a connection token.
+  To be able to revoke a connection token for a user, you need to have `WRITE` access on that user and the connection
+  token must be valid (not expired, not revoked and not consumed).
+operationId: revokeConnectionToken
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - user_id
+        properties:
+          user_id:
+            $ref: '../../components/index.yml#/schemas/UserId'
+          token:
+            type: string
+            example: \xaf3e8951c1f4c42f9cc53116b3fc855bd44bce01cf27604b
+            description: Token to revoke
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

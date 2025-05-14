@@ -1,0 +1,43 @@
+tags:
+  - Webhooks
+operationId: postWebhookTryout
+summary: Send test webhook payloads
+description: >
+  This endpoint let you try webhook configurations by sending test payloads. This currently supports only one webhook configuration per request, entries after the first one will be ignored. Payloads are created by the latest data of the specified event type, or if not available a default payload will be sent. The request is similar to a regular webhook, but also contains an additional `X-Partoo-Webhook-Tryout` header.
+
+x-badges:
+  - name: 'Beta'
+    position: after
+
+parameters:
+  - $ref: '../../components/webhooks/parameters.yml#/org_id'
+
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/webhooks/parameters.yml#/CreateWebhooksPayload'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - type: object
+              properties:
+                items:
+                  type: array
+                  description: Result of the tests.
+                  items:
+                    $ref: '../../components/webhooks/schemas.yml#/WebhookTryoutResult'
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

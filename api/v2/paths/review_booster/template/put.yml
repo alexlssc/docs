@@ -1,0 +1,41 @@
+tags:
+  - Review Booster
+summary: Update the template of a user
+operationId: setInvitationTemplate
+description: >
+  This endpoint lets you update the template associated to the user.
+  <p> 3 placeholders are available for the template: ${client_name}, ${business_name} and ${url}
+  <p>There is 2 mains constraints: `${url}` must be present in the template send and the text should not contains more than 250 characters (without placeholders).
+  The template must exist before the request is send.
+  <p>You need to be subscribed to Review Booster product.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - template
+        properties:
+          template:
+            description: the template content, with placeholder(s) not filled
+            type: string
+            example: Hello ${client_name}, please leave a review ${url}
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              $ref: '../../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../../components/index.yml#/responses/404'

@@ -1,0 +1,59 @@
+tags:
+  - Messages
+summary: Update conversation
+operationId: updateConversation
+description:  |
+  This endpoint lets you change the status of the conversation to "open" or "closed" and assign it to a user.
+parameters:
+  - name: conversation_id
+    in: path
+    required: true
+    schema:
+      type: integer
+      description: The id of the conversation to update
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to update a Conversation
+        type: object
+        properties:
+          status:
+            type: string
+            enum:
+              - open
+              - closed
+            description: |
+              You can close or re-open the conversation.
+              It will change the "is_solved" boolean of the conversation but it won't change the
+              "is_expired". If the conversation is expired we can't re-open it.
+          assigned_user_id:
+            type: string
+            enum:
+              - USER_ID
+              - unassigned
+            description: |
+              Only for enterprise organizations.
+              The user will be assigned to the conversation.
+              
+              You can only assign a conversation to a user that:
+              - is active
+              - is of type human (not bot)
+              - has access to the conversation
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: 
+                - success
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

@@ -1,0 +1,113 @@
+PostMessage:
+  required:
+    - conversation_id
+    - content_type
+    - date
+  properties:
+    conversation_id:
+      type: integer
+      description: The id of the conversation
+    # date:
+    #   type: string
+    #   description: |
+    #     The date at which the message was sent or received, in the ISO 8601 
+    #     format (ex: "2023-01-31 16:22:17.327878+00:00").
+    #   example: '2023-01-31 16:22:17.327878+00:00'
+
+PostTextMessage:
+  required:
+    - content
+  title: Text
+  allOf:
+    - $ref: '#/PostMessage'
+    - properties:
+        content_type:
+          type: string
+          enum:
+            - Text
+        content:
+          type: string
+          description: The text to send
+
+PostImageUrlMessage:
+  required:
+    - url
+  title: Image Url
+  allOf:
+    - $ref: '#/PostMessage'
+    - properties:
+        content_type:
+          type: string
+          enum:
+            - Image
+        url:
+          type: string
+          description: The url of the image to send
+
+PostVideoMessage:
+  required:
+    - url
+  title: Video
+  allOf:
+    - $ref: '#/PostMessage'
+    - properties:
+        content_type:
+          type: string
+          enum:
+            - Video
+        content:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The url of the video to send
+
+PostAudioMessage:
+  required:
+    - url
+  title: Audio
+  allOf:
+    - $ref: '#/PostMessage'
+    - properties:
+        content_type:
+          type: string
+          enum:
+            - Audio
+        content:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The url of the audio to send
+
+PostDocumentMessage:
+  required:
+    - url
+  title: Document
+  allOf:
+    - $ref: '#/PostMessage'
+    - properties:
+        content_type:
+          type: string
+          enum:
+            - Document
+        content:
+          type: object
+          properties:
+            url:
+              type: string
+              description: The url of the document to send
+
+PostImageMessage:
+  required:
+    - image
+  allOf:
+    - $ref: '#/PostMessage'
+    - properties:
+        content_type:
+          type: string
+          enum:
+            - Image
+        image:
+          type: string
+          description: The image to send

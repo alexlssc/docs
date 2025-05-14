@@ -1,0 +1,65 @@
+summary: Reply to a feedback result
+description: |
+  This endpoint lets you reply to a feedback result.
+
+  In order to be able to reply to a feedback result:
+  - The `optin` property of the corresponding feedback result must be true
+  - The `email_reply_source` of the corresponding feedback form must be set
+  - The `email_reply_subject` of the corresponding feedback form must be set
+operationId: replyFeedbackResult
+tags:
+  - Feedback Management
+
+x-badges:
+  - name: 'Beta'
+    position: after
+
+parameters:
+  - in: path
+    name: feedback_result_id
+    required: true
+    schema:
+      type: integer
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to post a reply
+        type: object
+        required:
+          - content
+        properties:
+          content:
+            description: Content of your reply
+            type: string
+            format: text
+            example: Merci ❤️
+          reply_suggestion:
+            description: Suggestion details for the reply
+            type: object
+            properties:
+              reply_suggestion_id:
+                type: integer
+                description: ID of the reply suggestion
+                example: 123
+              reply_suggestion_modified:
+                type: boolean
+                description: Indicates if the reply suggestion was modified
+                example: true
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/feedback_management/schemas/feedback_result_reply.yml'
+
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'

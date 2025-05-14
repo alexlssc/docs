@@ -1,0 +1,22 @@
+tags:
+  - Organizations
+summary: Get Organization's plans
+operationId: organizationPlans
+description: >
+  This endpoint lets you retrieve the organization's plans.<br />
+  You need to be a Provider to access this endpoint.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_org_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/OrgPlans'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

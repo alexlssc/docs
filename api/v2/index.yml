@@ -1,0 +1,39 @@
+openapi: "3.1.0"
+
+info:
+  title: Partoo Rest API
+  version: "v2"
+  license:
+    name: © Copyright Partoo
+    url: https://www.partoo.co/en/gtu-api/
+  x-logo:
+    url: 'https://partoo-client-images.s3.amazonaws.com/logo-partoo-restapi-white.png'
+  description: |
+    ## Introduction
+    The Partoo Rest API allows you to automate all the actions that are possible to do in the Partoo Web Application.
+
+    The Partoo Rest API can be used for many different purposes:
+      - Create/update/delete your businesses & users if you are a client.
+      - Create/subscribe/manage organizations, businesses & users if you are a reseller.
+      - Retrieve data on businesses you have access to if you are a publisher.
+      - ...
+
+servers:
+  - url: https://api.partoo.co/v2
+    description: Production server
+  - url: https://api.sandbox.partoo.co/v2
+    description: Sandbox server (dev environment for clients & partners)
+
+tags:
+  $ref: ./tags/index.yml
+
+paths:
+  $ref: ./paths/index.yml
+
+components:
+  $ref: ./components/index.yml
+
+webhooks:
+  $ref: ./webhooks/index.yml
+security:
+  - ApiKeyAuth: []

@@ -1,0 +1,26 @@
+operationId: message_created
+tags:
+  - Webhooks
+summary: Message Created
+description: |
+  This event is triggered when a conversation has a new message.
+
+  The event payload contains the event type, the content of the message
+  created, and additional information about the conversation.
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - message_created
+          payload:
+            $ref: '../components/messaging/types.yml#/MessageCreatedEvent'
+
+responses:
+  $ref: ./webhook_responses.yml
+
+security: []

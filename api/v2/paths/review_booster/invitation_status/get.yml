@@ -1,0 +1,31 @@
+tags:
+  - Review Booster
+summary: The status of a review invitation
+operationId: getReviewInvitationStatus
+description: >
+  This endpoint allows to get the status about an invitation sent through the Review Booster.
+  Your access token must be for a user subscribed to the Review Booster.
+  The invitation id must be for a business for which the user has access to.
+parameters:
+  - in: query
+    name: invitation_id
+    schema:
+      $ref: '../../../components/index.yml#/schemas/InvitationId'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            invitation_id:
+              $ref: '../../../components/index.yml#/schemas/InvitationId'
+            status:
+              type: string
+              description: 'the current state of the SMS'
+              enum: ["CREATED", "SENT", "FAILED_SEND", "DELIVERED", "FAILED_DELIVERY"]
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  404:
+    $ref: '../../../components/index.yml#/responses/404'

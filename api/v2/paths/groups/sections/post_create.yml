@@ -1,0 +1,41 @@
+tags:
+  - Groups and Sections
+operationId: createGroupSection
+summary: Create Section
+description: >
+  Create a new section.<br>
+  This endpoint endpoint let's you create a new section. Only Group Managers and above can use this endpoint. Business Managers are restricted from accessing this endpoint.
+  For more information about the group system, see <a href="#tag/Groups-and-Sections">the Groups and Sections description</a>.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to create a section
+        type: object
+        required:
+          - name
+        properties:
+          name:
+            $ref: '../../../components/index.yml#/schemas/SectionName'
+          org_id:
+            $ref: '../../../components/index.yml#/schemas/SectionCreateOrgId'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/index.yml#/schemas/SectionCreateSuccessResponse'
+  400:
+    description: Section name already exists
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../../components/index.yml#/schemas/SectionCreateNameConflictResponse'
+            - $ref: '../../../components/index.yml#/schemas/SectionCreateForbiddenCharactersResponse'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'

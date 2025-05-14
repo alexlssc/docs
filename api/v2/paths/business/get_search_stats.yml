@@ -1,0 +1,85 @@
+operationId: searchBusinessesStats
+tags:
+  - Businesses
+summary: Get completion rate stats from your businesses
+description: >
+  This endpoint works in the same way as the [operation/searchBusinesses](https://developers.partoo.co/rest_api/v2/#operation/searchBusinesses) endpoint, but instead of returning data on all returned businesses,
+  this endpoint returns completion rate statistics aggregated across all businesses.
+
+
+  The statistics returned are the average completion rate for all businesses that fit the given filters, as well as the count of businesses with a low, medium, and high respectively.
+  The thresholds for low, medium, and high can be found below in the response details.
+
+
+  Note that this endpoint works in the exact same way as [operation/searchBusinesses](https://developers.partoo.co/rest_api/v2/#operation/searchBusinesses) (with the exception of parameters that format the output, such as <code>order_by</code> and pagination), but the return value is different.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_fuzzy_query_on_business'
+  - $ref: '../../components/index.yml#/parameters/query_business__in'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_org_id'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_groups'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_country'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_name'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_status'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_zipcode'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_city'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_code'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_modification_timestamp'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_features__in'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_features__notin'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_subscription_to_review_management'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_subscription_to_presence_management'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_subscription_to_review_booster'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_subscription_to_messages'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_completion_rate__gte'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_completion_rate__lte'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_completion_rate'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_promo'
+  - in: query
+    name: connected_to_gmb_location
+    schema:
+      type: string
+      enum:
+        - "True"
+        - "False"
+    required: false
+    description: Filter by current link to a Google location
+  - in: query
+    name: connected_to_facebook_location
+    schema:
+      type: string
+      enum:
+        - "True"
+        - "False"
+    required: false
+    description: Filter by current link to a Facebook location
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            average_completion_rate:
+              description: The average completion rate of all businesses that fit the filters given in paramers.
+              type: integer
+              example: 72
+            counts:
+              type: object
+              properties:
+                low:
+                  type: integer
+                  example: 2
+                  description: The number of businesses that fit the filters given in paramers with a completion score of <=33.
+                mid:
+                  type: integer
+                  example: 10
+                  description: The number of businesses that fit the filters given in paramers with a completion score of >33 and <=66.
+                high:
+                  type: integer
+                  example: 22
+                  description: The number of businesses that fit the filters given in paramers with a completion score of >66.
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'

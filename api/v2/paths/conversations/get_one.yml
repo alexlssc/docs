@@ -1,0 +1,26 @@
+tags:
+  - Messages
+summary: Conversation information
+operationId: getConversation
+description:  |
+  This endpoint returns all information on a specific Conversation.
+parameters:
+  - name: conversation_id
+    in: path
+    required: true
+    schema:
+      type: integer
+      description: The id of the conversation to fetch
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - description: The detail of a conversation.
+            - $ref: '../../components/messaging/types.yml#/Conversation'
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

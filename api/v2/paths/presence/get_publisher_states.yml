@@ -1,0 +1,45 @@
+summary: PublisherStates
+description: |
+  Method to retrieve businesses diffusions states on publishers.
+
+  Can be filtered by:
+  - Business IDs
+  - Publishers
+  - States
+
+operationId: getPublisherStates
+tags:
+  - Presence
+parameters:
+  $ref: '../../components/presence/parameters.yml#/getPublisherStatesParams'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/presence/schemas.yml#/getPublisherStatesResponse'
+        examples:
+          publishers=[facebook, apple_direct]&states=[success,to_configure,pending]&page=1&per_page=1:
+            value:
+              businesses:
+                56465qz56d4q65zd4:
+                  business_formatted_address: 1 Rue du Général de Gaulle, 52330 Colombey-les-Deux-Églises
+                  business_id: 56465qz56d4q65zd4
+                  business_name: La Boisserie
+                  publishers:
+                    apple_direct:
+                      error_type: null
+                      state: success
+                      url_on_publisher: null
+                    facebook:
+                      error_type: PUBLISHER_CONNEXION
+                      state: to_configure
+                      url_on_publisher: http://facebook/boisserie
+              count: 1
+
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

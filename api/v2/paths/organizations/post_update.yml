@@ -1,0 +1,44 @@
+tags:
+  - Organizations
+summary: Update organization
+operationId: updateOrganization
+description: >
+  This endpoint lets you update the information of an organization.
+  You need to have `WRITE` access on the organization.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_org_id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        description: The object to send to update an organization
+        properties:
+          name:
+            $ref: '../../components/index.yml#/schemas/OrgName'
+          alias:
+            $ref: '../../components/index.yml#/schemas/OrgAlias'
+          max_businesses:
+            $ref: '../../components/index.yml#/schemas/OrgMaxBusinesses'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          description: Result object
+          properties:
+            org_id:
+              $ref: '../../components/index.yml#/schemas/OrgId'
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

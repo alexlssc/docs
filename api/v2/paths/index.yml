@@ -1,0 +1,434 @@
+# APIKEYS endpoint
+/api_keys:
+  get:
+    $ref: ./api_keys/get_api_keys.yml
+/api_keys/{api_key_id}:
+  get:
+    $ref: ./api_keys/get_api_key.yml
+  put:
+    $ref: ./api_keys/update_api_keys.yml
+/api_keys/revoke/{api_key_id}:
+  post:
+    $ref: ./api_keys/revoke_api_key.yml
+
+# BUSINESS endpoints
+/business/search:
+  get:
+    $ref: ./business/get_search.yml
+/business/search/stats:
+  get:
+    $ref: ./business/get_search_stats.yml
+/business/connections_stats:
+  get:
+    $ref: ./business/get_connections_stats.yml
+/business:
+  post:
+    $ref: ./business/post_create.yml
+
+/business/{business_id}:
+  get:
+    $ref: ./business/get_by_id.yml
+  post:
+    $ref: ./business/post_update.yml
+  delete:
+    $ref: ./business/delete.yml
+
+/business/{business_id}/subscription:
+  get:
+    $ref: ./business/get_subscription.yml
+/business/{business_id}/subscribe:
+  post:
+    $ref: ./business/post_subscribe.yml
+/business/{business_id}/unsubscribe:
+  post:
+    $ref: ./business/post_unsubscribe.yml
+
+/business/{business_id}/additional_data:
+  get:
+    $ref: ./business/get_additional_data.yml
+  post:
+    $ref: ./business/post_additional_data.yml
+/business/{business_id}/attributes:
+  get:
+    $ref: ./business/get_attributes.yml
+  post:
+    $ref: ./business/post_attributes.yml
+/business/{business_id}/more_hours:
+  get:
+    $ref: ./business/get_more_hours.yml
+  post:
+    $ref: ./business/post_more_hours.yml
+/business/{business_id}/services:
+  get:
+    $ref: ./business/get_services.yml
+/business/{business_id}/services/{service_id}:
+  delete:
+    $ref: ./business/delete_service.yml
+/business/{business_id}/structured_services:
+  post:
+    $ref: ./business/post_structured_services.yml
+/business/{business_id}/free_form_services:
+  post:
+    $ref: ./business/post_free_form_services.yml
+/business/{business_id}/food_menus:
+  get:
+    $ref: ./business/get_food_menus.yml
+  delete:
+    $ref: ./business/delete_food_menus.yml
+  post:
+    $ref: ./business/post_food_menus.yml
+/business/{business_id}/place_action_links:
+  get:
+    $ref: ./business/get_place_action_links.yml
+  post:
+    $ref: ./business/post_place_action_links.yml
+
+# Business Fields endpoint
+/business/{business_id}/business_fields:
+  get:
+    $ref: ./business_fields/get_business_fields_permissions_for_business.yml
+/org/{org_id}/business_fields:
+  get:
+    $ref: ./business_fields/get_business_fields_permissions_for_org.yml
+
+# CATEGORIES endpoints
+/categories:
+  get:
+    $ref: ./category/get_categories.yml
+/categories/{category_id}:
+  get:
+    $ref: ./category/get_by_id.yml
+/categories/{category_id}/suggestions:
+  get:
+    $ref: ./category/get_suggested_categories.yml
+
+# CONNECTION TOKEN endpoints
+/connection/generate_token:
+  post:
+    $ref: ./connection_tokens/post_create.yml
+/connection/revoke_token:
+  post:
+    $ref: ./connection_tokens/post_revoke.yml
+/connection/check_token:
+  get:
+    $ref: ./connection_tokens/get_check.yml
+
+# CONVERSATION endpoints
+/conversations:
+  get:
+    $ref: ./conversations/list.yml
+/conversations/{conversation_id}:
+  get:
+    $ref: ./conversations/get_one.yml
+  post:
+    $ref: ./conversations/update.yml
+  patch:
+    $ref: ./conversations/update_patch.yml
+/conversations/{conversation_id}/read:
+  post:
+    $ref: ./conversations/read.yml
+# Conversation Messages
+/messages:
+  get:
+    $ref: ./conversation_messages/get_messages.yml
+  post:
+    $ref: ./conversation_messages/post_messages.yml
+/messages/{message_id}/retry:
+  post:
+    $ref: ./conversation_messages/retry_send_message.yml
+# Message Reply Templates
+/messaging/templates:
+  get:
+    $ref: ./message_reply_templates/list_templates.yml
+  post:
+    $ref: ./message_reply_templates/create_template.yml
+/messaging/templates/{template_id}:
+  put:
+    $ref: ./message_reply_templates/update_template.yml
+  delete:
+    $ref: ./message_reply_templates/delete_template.yml
+# Messaging Settings
+/messaging/settings:
+  get:
+    $ref: ./messaging_settings/list.yml
+/messaging/settings/{setting_id}:
+  post:
+    $ref: ./messaging_settings/update.yml
+
+# CUSTOM FIELDS endpoints
+/custom_fields:
+  post:
+    $ref: ./custom_fields/post_create.yml
+/custom_fields/{custom_field_id}:
+  put:
+    $ref: ./custom_fields/put_update.yml
+  delete:
+    $ref: ./custom_fields/delete.yml
+/custom_fields/order:
+  post:
+    $ref: ./custom_fields/post_order.yml
+
+# CUSTOM FIELDS SECTION endpoints
+/custom_fields/section:
+  get:
+    $ref: ./custom_fields_section/get_custom_fields_sections.yml
+  post:
+    $ref: ./custom_fields_section/post_custom_fields_sections.yml
+/custom_fields/section/{section_id}:
+  put:
+    $ref: ./custom_fields_section/put_custom_fields_sections.yml
+  delete:
+    $ref: ./custom_fields_section/delete_custom_fields_sections.yml
+
+
+# Google endpoint
+/attributes/list:
+  get:
+    $ref: ./attributes/get.yml
+/more_hours/list:
+  get:
+    $ref: ./more_hours/get.yml
+/services/suggestions:
+  get:
+    $ref: ./service/get_services_suggestions.yml
+
+# GOOGLE LOCATION endpoints
+/google-oauth-accounts/locations/{google_location_id}:
+  get:
+    $ref: ./google_location/get.yml
+
+/google-oauth-accounts/locations/search:
+    get:
+        $ref: ./google_location/get_google_locations.yml
+
+# VERIFICATIONS GOOGLE LOCATION endpoints
+/verifications/google-locations/{google_location_id}/options:
+  get:
+    $ref: ./verifications_google_location/options_get.yml
+
+/verifications/google-locations/{google_location_id}/start:
+  post:
+    $ref: ./verifications_google_location/start_post.yml
+
+/verifications/google-locations/{google_location_id}/complete:
+  post:
+    $ref: ./verifications_google_location/complete_post.yml
+
+# GROUPS endpoints
+/sections:
+  post:
+    $ref: ./groups/sections/post_create.yml
+  get:
+    $ref: ./groups/sections/get_sections.yml
+/sections/{section_id}:
+  delete:
+    $ref: ./groups/sections/delete.yml
+  post:
+    $ref: ./groups/sections/post_update.yml
+  get:
+    $ref: ./groups/sections/get_by_id.yml
+
+/sections/{section_id}/groups:
+  post:
+    $ref: ./groups/groups/post_create.yml
+/sections/{section_id}/groups/{group_id}:
+  post:
+    $ref: ./groups/groups/post_update.yml
+  get:
+    $ref: ./groups/groups/get.yml
+  delete:
+    $ref: ./groups/groups/delete.yml
+
+# HOLIDAYS endpoint
+/holidays/{country}:
+  get:
+    $ref: ./holidays/get_holidays.yml
+
+# ORGANIZATIONS  endpoints
+/org/search:
+  get:
+    $ref: ./organizations/get_search.yml
+/org:
+  post:
+    $ref: ./organizations/post_create.yml
+/org/{org_id}:
+  get:
+    $ref: ./organizations/get_by_id.yml
+  post:
+    $ref: ./organizations/post_update.yml
+  delete:
+    $ref: ./organizations/delete.yml
+/org/{org_id}/plans:
+  get:
+    $ref: ./organizations/get_plans.yml
+  post:
+    $ref: ./organizations/post_plans.yml
+
+# POST endpoints
+/posts:
+  get:
+    $ref: ./post/search.yml
+  post:
+    $ref: ./post/create.yml
+/posts/{post_id}:
+  # get:
+  #   $ref: ./post/get.yml
+  put:
+    $ref: ./post/update.yml
+  delete:
+    $ref: ./post/delete.yml
+
+# Place Action Links
+/place_action_links:
+  get:
+    $ref: ./place_action_links//get_place_action_links.yml
+
+# PRESENCE endpoints
+/publisher_states:
+  get:
+    $ref: ./presence/get_publisher_states.yml
+/publisher_errors/{business_id}:
+  post:
+    $ref: ./presence/post_publisher_errors.yml
+
+# REVIEWS endpoints
+/reviews:
+  get:
+    $ref: ./reviews/get.yml
+/reviews/{review_id}:
+  put:
+    $ref: ./reviews/update.yml
+/comments:
+  post:
+    $ref: ./reviews/post_reply.yml
+/comments/{comment_id}:
+  put:
+    $ref: ./reviews/modify_reply.yml
+  delete:
+    $ref: ./reviews/delete_reply.yml
+# REVIEWS REPLY TEMPLATE
+/reviews/templates/search:
+  get:
+    $ref: ./reply_templates/search.yml
+/reviews/templates/placeholders:
+  get:
+    $ref: ./reply_templates/placeholders.yml
+/reviews/template:
+  post:
+    $ref: ./reply_templates/post.yml
+/reviews/template/{template_id}:
+  delete:
+    $ref: ./reply_templates/delete.yml
+# REVIEWS REPLY SUGGESTION
+/reviews/fetch-suggestion/{review_id}/{index}:
+  get:
+    $ref: ./reviews/get_reply_suggestion.yml
+
+# REVIEWS & PRESENCE ANALYTICS endpoints
+# PRESENCE ANALYTICS
+/presence_analytics/metrics:
+  get:
+    $ref: ./presence_analytics/get_metrics.yml
+/presence_analytics/keywords:
+  get:
+    $ref: ./presence_analytics/get_keywords.yml
+# REVIEWS ANALYTICS
+/review_analytics/metrics:
+  get:
+    $ref: ./reviews_analytics/get_metrics.yml
+/reviews/stats:
+  get:
+    $ref: ./reviews_analytics/get_stats.yml
+/reviews/qualitative-evolution:
+  get:
+    $ref: ./reviews_analytics/get_qualitative_evolution.yml
+/reviews/quantitative-evolution:
+  get:
+    $ref: ./reviews_analytics/get_quantitative_evolution.yml
+
+# REVIEW BOOSTER endpoint
+/review_booster/send_invitation:
+  post:
+    $ref: ./review_booster/send_invitation/post.yml
+/review_booster/search-invitation:
+  get:
+    $ref: ./review_booster/search-invitation/get.yml
+/review_booster/invitation_status:
+  get:
+    $ref: ./review_booster/invitation_status/get.yml
+/review_booster/template:
+  get:
+    $ref: ./review_booster/template/get.yml
+  put:
+    $ref: ./review_booster/template/put.yml
+/review_booster/expeditor:
+  post:
+    $ref: ./review_booster/expeditor/post.yml
+  get:
+    $ref: ./review_booster/expeditor/get.yml
+
+# USER endpoints
+/user/search:
+  get:
+    $ref: ./user/get_search.yml
+/user/me:
+  get:
+    $ref: ./user/get_me.yml
+/user:
+  post:
+    $ref: ./user/post.yml
+/user/{user_id}:
+  get:
+    $ref: ./user/get_by_id.yml
+  post:
+    $ref: ./user/post_update.yml
+  delete:
+    $ref: ./user/delete.yml
+/user/{user_id}/preferences:
+  get:
+    $ref: ./user/get_preferences_by_id.yml
+  post:
+    $ref: ./user/post_preferences_by_id.yml
+/user/{user_id}/invite:
+  post:
+    $ref: ./user/post_invite.yml
+/user/{user_id}/businesses:
+  get:
+    $ref: ./user/get_businesses.yml
+
+# Feedback Management
+/feedback/feedback_form:
+  get:
+    $ref: ./feedback_management/feedback_form/get.yml
+/feedback/feedback_form/{feedback_form_id}:
+  put:
+    $ref: ./feedback_management/feedback_form/update.yml
+/feedback/feedback_result:
+  get:
+    $ref: ./feedback_management/feedback_result/get.yml
+/feedback/feedback_result/{feedback_result_id}/reply:
+  post:
+    $ref: ./feedback_management/feedback_result/reply.yml
+/feedback/feedback_result/fetch-suggestion/{feedback_result_id}/{index}:
+  get:
+    $ref: ./feedback_management/feedback_result/get_reply_suggestion.yml
+
+# WEBHOOKS endpoints
+/webhooks:
+  get:
+    $ref: ./webhooks/get_webhooks.yml
+  post:
+    $ref: ./webhooks/post_webhooks.yml
+/webhooks/{webhook_id}:
+  get:
+    $ref: ./webhooks/get_webhook.yml
+  patch:
+    $ref: ./webhooks/patch_webhook.yml
+  delete:
+    $ref: ./webhooks/delete_webhook.yml
+/webhooks/tryout:
+  post:
+    $ref: ./webhooks/post_tryout.yml
+/webhooks/events:
+  get:
+    $ref: ./webhooks/get_events.yml

@@ -1,0 +1,22 @@
+tags:
+  - Businesses
+operationId: getBusiness
+summary: Business information
+description: >
+  This endpoint lets you access to the information of a business.
+  You need to have `READ`access on this business.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/BusinessWithCustomFields'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

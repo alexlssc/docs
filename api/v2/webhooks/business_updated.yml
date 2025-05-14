@@ -1,0 +1,29 @@
+operationId: business_updated
+tags:
+  - Webhooks
+summary: Business Updated
+description: |
+  This event is triggered when a Business is updated in Partoo Database.
+
+  The event payload contains the event type and the business contents.
+
+  Attention, the hook may be triggered on internal changes that may not reflect on the contents sent.
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - business_updated
+          payload:
+            type: object
+            properties:
+              business:
+                $ref: '../components/index.yml#/schemas/Business'
+responses:
+  $ref: ./webhook_responses.yml
+
+security: []

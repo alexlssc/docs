@@ -1,0 +1,26 @@
+summary: Details on a specific Google Location
+description: >
+  Returns a Google location object that corresponds to the given google_location_id. The google_location_id is a unique identifier on Partoo for each location. This endpoint requires authentication, and only authorized users with the appropriate permissions can access it.
+
+operationId: getGoogleLocation
+tags:
+  - Google
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/google_location_id'
+  
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/GoogleLocation'
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

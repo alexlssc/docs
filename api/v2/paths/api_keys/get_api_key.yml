@@ -1,0 +1,28 @@
+summary: API key information
+deprecated: false
+description: Given an API key ID, this endpoint gives you information about one key.
+operationId: getApiKey
+tags:
+  - ApiKeys
+parameters:
+  - in: path
+    name: api_key_id
+    required: true
+    schema:
+      $ref: '../../components/api_keys/types.yml#/types/id'
+    description: Key ID
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/api_keys/types.yml#/schemas/ApiKey'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

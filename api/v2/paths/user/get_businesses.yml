@@ -1,0 +1,31 @@
+tags:
+- Users
+summary: User businesses
+description: >
+  This endpoint lets you retrieve the list of businesses which the selected user has `READ` access to.
+operationId: getUserBusinesses
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_user_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                businesses:
+                  description: User businesses
+                  type: array
+                  items:
+                    $ref: '../../components/index.yml#/schemas/Business'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

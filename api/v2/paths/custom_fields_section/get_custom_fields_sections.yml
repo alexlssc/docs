@@ -1,0 +1,54 @@
+tags:
+  - Custom Fields Section
+
+summary: Get custom field sections
+
+description: >
+  Retrieve list of custom fields sections for a given org_id.
+
+operationId: getCustomFieldsSection
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_org_id'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+          schema:
+            type: object
+            properties:
+              sections:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Id of custom field section
+                    name:
+                      type: string
+                      description: Name of custom field section
+                    order:
+                      type: integer
+                      description: Order of custom field section
+            example:
+              sections:
+                - id: 1
+                  name: 'Section A'
+                  order: 3
+                - id: 2
+                  name: 'Section B'
+                  order: 4
+                - id: 3
+                  name: 'Section C'
+                  order: 5
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

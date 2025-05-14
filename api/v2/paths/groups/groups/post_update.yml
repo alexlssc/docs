@@ -1,0 +1,50 @@
+tags:
+  - Groups and Sections
+operationId: updateGroup
+summary: Update Group and set businesses
+description: >
+  Update a group.<br>
+  This endpoint endpoint let's you modify existing group details within the system. Only Group Managers and above can use this endpoint. Business Managers are restricted from accessing this endpoint.
+  For more information about the group system, see <a href="#tag/Groups-and-Sections">the Groups and Sections description</a>.
+  
+  <p>
+    ⚠️ You need to precise which businesses are part of the group when updating it using the <code>business__in</code> parameter.
+    If don't precise any business, the group will be updated with all the businesses. If you want to update a group to be empty, you can just put an empty array in the <code>business__in</code> parameter.
+  </p>
+parameters:
+  - $ref: "../../../components/index.yml#/parameters/path_section_id"
+  - $ref: "../../../components/index.yml#/parameters/path_group_id"
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to update a group
+        type: object
+        required:
+          - name
+          - business__in
+        properties:
+          name:
+            $ref: '../../../components/index.yml#/schemas/GroupV2Name'
+          business__in:
+            $ref: '../../../components/index.yml#/schemas/business_ids'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/index.yml#/schemas/GroupCreateSuccessResponse'
+  400:
+    description: Group name already exists
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../../components/index.yml#/schemas/SectionCreateNameConflictResponse'
+            - $ref: '../../../components/index.yml#/schemas/SectionCreateForbiddenCharactersResponse'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'

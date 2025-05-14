@@ -1,0 +1,36 @@
+summary: Set Google Food Menus for your business
+description: >
+  This endpoint allows you to set or update Google Food Menus for your business.
+
+operationId: postBusinessFoodMenus
+
+tags:
+  - Businesses
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/index.yml#/schemas/BusinessFoodMenus'
+
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/BusinessFoodMenus'
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

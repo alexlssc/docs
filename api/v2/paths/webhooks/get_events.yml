@@ -1,0 +1,28 @@
+tags:
+  - Webhooks
+operationId: getWebhooksEvents
+summary: List available webhook events
+description: >
+  This endpoint returns the list of the webhook events available to the organization, depending on the subscribed products.
+
+x-badges:
+  - name: 'Beta'
+    position: after
+
+parameters:
+  - $ref: '../../components/webhooks/parameters.yml#/org_id'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+          schema:
+            $ref: '../../components/webhooks/schemas.yml#/WebhookEventTypes'
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

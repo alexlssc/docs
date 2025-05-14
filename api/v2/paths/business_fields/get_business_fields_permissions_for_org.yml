@@ -1,0 +1,26 @@
+tags:
+  - Business Fields
+operationId: getBusinessFieldsForOrg
+summary: Business fields configuration for an organization
+description: >
+  This endpoint gives you the list of all the fields that are available for a given Organization.
+  <p> Also tells you, for each field:
+  <li> If you have the permission to edit it or not, depending of the permission configured by PROVIDER.
+  <li> If you gave the persission to edit it or not for the BUSINESS_MANAGER and GROUP_MANAGER who have access to the businesses of the organization.
+  <p>Only User roles ORG_ADMIN or PROVIDER can access this information.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_org_id'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/BusinessFields.SectionArray'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

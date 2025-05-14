@@ -1,0 +1,36 @@
+tags:
+  - Custom Fields
+summary: Order custom fields
+description: >
+  This endpoint enables you to reorganize the order of the custom fields of your organization
+operationId: postOrderCustomFields
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request object
+        type: object
+        required:
+          - orders
+        properties:
+          orders:
+            $ref: '../../components/index.yml#/schemas/CustomFieldOrders'
+          section_orders:
+            $ref: '../../components/index.yml#/schemas/CustomFieldSectionOrders'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

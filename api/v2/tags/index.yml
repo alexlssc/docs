@@ -1,0 +1,217 @@
+- name: Change Log
+  $ref: ./changeLogs.yml
+
+- name: Getting started
+  $ref: '../info/index.yml'
+
+# - name: Tutorials
+#   $ref: './tutorials.yml'
+
+- name: ApiKeys
+  description: >
+    In this section you will have all the operation to list/information/revoke/update api keys
+    that can be used to authenticate user either on the REST API or on the JS API.
+    A user has access to it's own api keys. Only ORG_ADMIN and PROVIDER users can access api keys type BOT.
+
+- name: Businesses
+  description: >
+    <p>A <code>business</code> object contains all the details related to a local store. All the businesses created will be grouped under your <code>organization</code>. The organization is created at the onboarding phase, by Partoo.
+    <p>In this section, is explained how a business can be created, updated or retrieved.
+
+- name: Business Fields
+  description: >
+    These endpoints give you the list of all the fields that are available for the business / organization / provider, grouped by section.
+    <p>A `section` corresponds to the tabs in the Business Edit view of    Partoo UI. **Examples:** *Coordinates, Description, Custom Fields...*
+    <p>Each section contains an array of fields that are displayed within it. **Examples:** *Name, Country, Email...*
+    <p>**For each field**, these endpoints give you the `permissions` for each fields, depending on your role:
+    <li>`enabled` Your right to write on a field, given by roles less restricitves than yours.
+    <li>`enabled_for_subroles` The right to write on a field you give to roles more restrictives than yours.
+    <p>**For example**:
+    <li>If the user is **ORG_ADMIN**, `enabled_for_subroles` describes the permissions of the field for all the GROUP_MANAGER and BUSINESS_MANAGER of the given organization.
+    <li>If the user is **PROVIDER**, `enabled_for_subroles` describes the permissions of the field for all the ORG_ADMIN, GROUP_MANAGER and BUSINESS_MANAGER of the given provider.
+    <p>**For each `custom_fields`**, these endpoints also give you their `metadata`:
+    <li>Type, id and order for all of them
+    <li>Constraints such as minimum and maximum for a number or list of values for a select.
+    <p>See the response schema below for more details about each type metadata.
+
+- name: Categories
+  description: |
+    Categories describe your business and has a huge impact on its discoverability on directories.
+    For each business, you will need to pass at least one category id (example: <i>"gcid:restaurant"</i>) and up to 10.
+    Please note that the order you pass to business.categories array is important: <b>the first category id</b> should correspond to <b>the most relevant category</b> for your business.
+
+    You can find below all available operations that will let you get more information about categories you can use on Partoo.
+
+- name: Connection Tokens
+  description: >
+    In this section you will have all the operations to create/check/revoke connection tokens
+    that can be used to authenticate users on the JS SDK or to build a SSO.</br>
+  
+- name: Custom Fields
+  description: >
+    <p>All operations available on Custom Fields metadata : creation, update and deletion of custom fields.
+    <p>⚠️ <b>What are Custom fields ?</b>
+    <p>Custom Fields allow Enterprise Administrators to add custom data fields to businesses in Partoo / Localoo under different formats (List, Text, Number…)
+    in order to create a central datahub for local information. These fields can be used to:
+    <li>Automatically feed other tools (Store locator, website, CRM, Chatbot...) from Partoo / Localoo.
+    <li>Allow local users to fill custom fields in order to transmit data from local to central.
+    <p>Once created, Custom Fields values can be updated like any other business field.
+    <p>To handle custom fields values for businesses, <a href="#tag/Businesses">see business endpoints</a>.
+    <p>To recover the list of custom fields available for a business <a href="#operation/getBusinessFieldsForOrg">see GET business fields endpoint</a>.
+
+- name: Custom Fields Section
+  description: >
+    <p>All operations on <b>Custom Field Sections</b>: retrieval, creation, update, and deletion of custom field sections. 
+    <p>⚠️ <b>What are Custom Field Sections ?</b>
+    <p>Custom Field Sections are used to group related custom fields together for better organization and management. Each section can contain multiple custom fields, allowing you to structure, order and categorize your custom fields effectively.
+
+- $ref: ./feedback_management.yml
+
+- name: Google
+  description: >
+    All the operations you can perform on Google. 
+
+# New Groups and Sections
+- $ref: ./groups.yml
+
+- name: Holidays
+  description: >
+    **Holidays** Retrieve a list of upcoming holidays for the specified country
+
+- name: Messages
+  description: |
+    <b>⚠️ This feature is available only for businesses subscribed to the Messages Product. ⚠️</b>
+    All the operations you can perform on Messages and Conversations.
+
+    Conversations happens between a Business and a consumer that wants to get
+    in touch with the business.
+
+    A Consumer can reach out to the business on one of the supported messaging
+    channels (Google, Facebook, Instagram, SMS). It will then create a new
+    Conversation.
+
+    ⚠️ When dealing with `Instagram` conversations, there are some requirements that you have to follow :
+    - You must not store consumer media (images, stories, ...). You can store
+    the media URL, but not it's content.
+    - If you store conversation messages, you must also implement the
+    [Message Deleted](#operation/message_deleted) webhook. When a
+    Message Deleted event is received, you
+    must delete the stored content of the message.
+
+- name: Message Reply Templates
+  description: |
+    <b>⚠️ This feature is available only for businesses subscribed to the Messages Product. ⚠️</b>
+
+    ↳ Perform all operations on Message Reply Templates setup.
+
+    Reply Templates for Messages allow users to send pre-made messages to customers, ensuring quicker responses while maintaining the brand’s tone of voice.
+
+    ℹ️ The message content can be dynamically changed using placeholders.<br/>
+    Example: "Hello {{client_full_name}}, how can I help you today?"<br/>
+
+    Available placeholders are: `client_full_name`, `client_first_name`, `business_name`, `my_first_name`, `rb_link`, `address`, `website_url`, and `phone_number`.
+
+- name: Messaging Settings
+  description: |
+    All the operations you can perform on Messaging Settings.
+
+    Messaging settings encapsulates all options available to customize the
+    Partoo messaging experience, for a specific Business.
+    
+    - welcome message
+    - offline messages
+    - chat hours
+    - launch status
+
+    Messaging Settings are automatically created for businesses subscribed to
+    the Messages Product.
+  
+    ⚠️ This feature is available only for businesses subscribed to the Messages
+    product. ⚠️
+
+- name: Organizations
+  description: >
+    All the operations you can perform on organization.
+    An organization is an entreprise that owns businesses.
+
+- name: Posts
+  description: |
+    Post is a feature that allows businesses to create and share announcements, offers,
+    new or popular items in stock, or event details directly with the customers.
+    The post will appear on the specified partner, which will boost the results for the business.
+
+    When a business is connected to a Google location (action performed in Partoo app on
+    <a href="https://app.partoo.co/settings/platforms/connection">Partner Connection</a> page),
+    all the Google Posts will be automatically imported.
+    When a business is disconnected the Google Posts published on Google will be deleted from Partoo database.
+    </br></br></br>
+
+    <b>⚠️ -- Google Post -- ⚠️<br />
+    ⚠️ Feature only available for small and midsize businesses (SMBs) ⚠️</b>
+
+    Google Posts is a feature that allows businesses to create and share announcements, offers,
+    new or popular items in stock, or event details directly with the customers.
+    The post will appear on Google Search and Maps, which will boost the results for the business.
+
+    When a business is connected to a Google location (action performed in Partoo app on
+    <a href="https://app.partoo.co/settings/platforms/connection">Partner Connection</a> page),
+    all the Google Posts will be automatically imported.
+    When a business is disconnected the Google Posts published on Google will be deleted from Partoo database.
+
+- name: Place Action Links
+  description: |
+    Endpoint to retrieve available place action links from the Google Places API
+
+- name: Presence analytics
+  description: |
+    All the operations to perform analytics on Presence Management.
+
+- name: Reviews
+  description: |
+    <b>⚠️ This feature is available only for businesses subscribed to Review Management. ⚠️</b>
+
+    Partoo centralises all businesses reviews from Google, Facebook and TripAdvisor platforms.
+
+    The reviews are fetched once per day (over night), therefore a it is expected to have a delay of maximum 24h.
+    The Partoo APIs enable a simple way of replying to any new reviews, update an existing reply or delete a reply.
+    A review can have one of the following status:
+    - `treated`: has a reply/comment or it was manually marked as treated in the Partoo UI
+    - `not-treated`: it doesn't have a reply/comment and it was not manually marked as treated in the Partoo UI
+    - `deleted`: the review was removed by the user on the original platfrom.
+
+    **Note:** the review itself cannot be altered nor deleted via the APIs.
+
+    Reply templates allow business managers to gain time in replying to the reviews,
+    via a predefined answer which can be easily selected and sent.
+
+    Reply templates are not meant to be used outside the Partoo application.
+    For this reason it is not possible to access a _formatted_ template, with prefilled placeholders from the API.
+
+    However it is still possible to browse through, create or delete reply templates from the Partoo API.
+
+- name: Review analytics
+  description: |
+    <b>⚠️ This feature is available only for businesses subscribed to Review Management. ⚠️</b>
+
+    All the operations to perform Reviews analytics.
+
+- name: Review Booster
+  description: >
+    All operations related to the Review Booster product.
+    <p>⚠️ SMS send functionality cannot be tested in Sandbox env.
+
+    All operations related to the Review Booster product.
+    <p>⚠️ SMS send functionality cannot be tested in Sandbox env.
+
+- name: Users
+  description: All operations available on users
+
+- name: Webhooks
+  description:
+    $ref: webhooks.md
+
+- name: JS SDK
+  description: >
+    <p>To know how to integrate Partoo in a white label mode using our JS SDK, please check our <a href="/js_sdk/">JS SDK documentation</a>.
+
+- $ref: ./sso.yml

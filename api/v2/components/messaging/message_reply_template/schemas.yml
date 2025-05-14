@@ -1,0 +1,37 @@
+MessageTemplateCreateRequest:
+  required:
+      - title
+      - content
+  properties:
+    title:
+      type: string
+      description: The title of the template
+      example: "Quote request"
+    icon:
+      type: string
+      description: The icon linked to the template
+      example: "📝"
+    content:
+      type: string
+      description: |
+        The template content as a __stringified JSON__ object with `"_version": "0.1"` inside
+      example: '{"text": "Hello, thank you for your request. For a quote, please contact us at 0123456789."
+                "_version": "0.1"}'
+              
+
+MessageTemplateUpdateRequest:
+  properties:
+    title:
+      type: string
+      description: The new title of the template
+      example: "Quote request"
+    icon:
+      type: string
+      description: The new icon linked to the template
+      example: "📝"
+    content:
+      type: string
+      description: |
+        The new template content as a __stringified JSON__ object with `"_version": "0.1"` inside
+      example: '{"text": "Hello, thank you for your request. For a quote, please contact us at 0123456789."
+                "_version": "0.1"}'

@@ -1,0 +1,43 @@
+tags:
+  - Custom Fields Section
+summary: Update custom field sections
+
+description: >
+  <p>This endpoint enables an ORG_ADMIN to update the name of a specific custom field section of his organization by specifying its id.
+
+operationId: putCustomFieldsSection
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/section_id'
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Update name of custom field section
+        type: object
+        required:
+          - name
+        properties:
+          name:
+            $ref: '../../components/index.yml#/schemas/CustomFieldSectionName'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

@@ -1,0 +1,10 @@
+name: Rate Limit
+description: |
+  <h2>Rate Limiting</h2>
+  In order to keep service available for everyone, our APIs are protected using a Rate Limit.
+
+  Each organization is limited to <b>300 calls per minute</b> by default.
+  If your integration requires more calls for any reason, get in touch with your customer success to update this limit, with review from our Tech team.
+
+  Any call beyond the reached limit will result in an error with <a href="https://developer.mozilla.org/fr/docs/Web/HTTP/Status/429">status code 429</a>.
+  A http header <code>Retry-After</code> is added to the response to hint when a query can be retried (60s later).

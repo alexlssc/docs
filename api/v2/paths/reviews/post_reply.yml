@@ -1,0 +1,63 @@
+tags:
+  - Reviews
+summary: Post a reply to a review
+description: This endpoint lets you reply to a given review.
+operationId: ReplyToReview
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to post a reply
+        type: object
+        required:
+          - review_id
+          - content
+        properties:
+          review_id:
+            description: ID of the review you want to reply
+            type: number
+            example: 34
+          parent_id:
+            description: |
+              The id of the parent comment you want to reply
+
+              Works only for Facebook comments, since it's possible to reply to a comment (depth max is 2).
+              Google and TripAdvisor don't accept this behaviour.
+            type: number
+            example: 1234
+          content:
+            description: Content of your reply
+            type: string
+            format: text
+            example: Merci ❤️
+          reply_template_id:
+            description: ID of the reply template to use
+            type: number
+            example: 5678
+          reply_suggestion:
+            description: Suggestion details for the reply
+            type: object
+            properties:
+              reply_suggestion_id:
+                description: ID of the reply suggestion
+                type: number
+                example: 91011
+              reply_suggestion_modified:
+                description: Indicates if the suggestion was modified
+                type: boolean
+                example: true
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/Comment'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

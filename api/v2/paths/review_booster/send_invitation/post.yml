@@ -1,0 +1,76 @@
+tags:
+  - Review Booster
+summary: Send a review invitation
+operationId: sendReviewInvitation
+description: >
+  This endpoint lets you send a SMS to a costumer to help him leave a message on Google.
+  You need to have `WRITE` access on the business.
+  You can add "invite_content" in your payload to customize the SMS content that will be received by the recipient. Else, the template associated with the user will be used (see <a href="#tag/Review-Booster/paths/~1review_booster~1template/get">/v2/review_booster/template</a> for more info).
+  If no template exist, a new one will be generated.
+  <p>Your business needs to be connected to a Google location and to be subscribed to Review Booster product.
+  So this cannot be tested in Sandbox Env.
+  To prevent spamming, a new SMS can be sent to a specific phone number only after 10 days since the last SMS sent.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - business_id
+          - target_phone
+        properties:
+          business_id:
+            $ref: '../../../components/index.yml#/schemas/BusinessId'
+          target_phone:
+            type: string
+            description: "Customer phone number, with the country calling code. Eg: +33601020304"
+          target_name:
+            type: string
+            description: Customer fullname
+            maxLength: 255
+          template_id:
+            type: integer
+            description: Id of the SMS template you want to use
+            deprecated: true
+          invite_content:
+            type: string
+            description: To customize SMS content instead of using the SMS template associated with the user. Cannot be used in combination with template_id. @link must be included in your payload (corresponds to the dynamic link that will allow the SMS recipient to leave a review on the business). Max 286 characters (unicode characters are not accepted - will be removed)
+          force:
+            type: string
+            description: To force invitation sending when a SMS has already been sent to the customer
+            enum: ['True', "False"]
+            default: "False"
+      examples:
+        Using template:
+          value:
+            business_id: '5409c35a97bbc544d8e26737'
+            target_phone: '+33647385968'
+            target_name: 'John Doe'
+            template_id: 31
+        Using invite content:
+          value:
+            business_id: '5409c35a97bbc544d8e26737'
+            target_phone: '+33647385968'
+            target_name: 'John Doe'
+            invite_content: Hello, thank you for you visit ! Leave a review and tell us more about your experience ! @link Thank you!
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            invitation_id:
+              $ref: '../../../components/index.yml#/schemas/InvitationId'
+            status:
+              $ref: '../../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../../components/index.yml#/responses/404'

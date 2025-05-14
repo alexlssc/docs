@@ -1,0 +1,48 @@
+summary: Create a review reply template
+description: >
+  This endpoint lets you create a review reply template.
+operationId: createTemplate
+tags:
+  - Reviews
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to post/edit a reply
+        type: object
+        required:
+          - language
+          - negative
+          - neutral
+          - positive
+          - text
+          - title
+        properties:
+          language:
+            $ref: '../../components/index.yml#/schemas/TemplateLanguage'
+          negative:
+            $ref: '../../components/index.yml#/schemas/TemplateNegative'
+          neutral:
+            $ref: '../../components/index.yml#/schemas/TemplateNeutral'
+          positive:
+            $ref: '../../components/index.yml#/schemas/TemplatePositive'
+          text:
+            $ref: '../../components/index.yml#/schemas/TemplateText'
+          title:
+            $ref: '../../components/index.yml#/schemas/TemplateTitle'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/Template'
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

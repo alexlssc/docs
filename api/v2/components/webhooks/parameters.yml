@@ -1,0 +1,60 @@
+webhook_url:
+  type: string
+  description: The URL receiving the webhook's data. Only HTTPS URLs are supported.
+  example: https://example.com/webhook
+
+
+webhook_event_type:
+  type: string
+  description: The webhook event type.
+  example: business_created
+
+
+webhook_id:
+  name: webhook_id
+  in: path
+  required: true
+  schema:
+    type: integer
+  description: The webhook object identifier.
+
+org_id:
+  name: org_id
+  in: query
+  schema:
+    type: integer
+  description: Organization identifier, only required for `PROVIDER` users.
+  example: 1
+  required: false
+
+
+UpdateWebhookPayload:
+  type: object
+  required:
+      - url
+  properties:
+   url:
+    $ref: '#/webhook_url'
+
+
+CreateWebhookPayloadItem:
+  type: object
+  required:
+      - url
+      - event_type
+  properties:
+   url:
+    $ref: '#/webhook_url'
+   event_type:
+    $ref: '#/webhook_event_type'
+
+CreateWebhooksPayload:
+  type: object
+  required:
+      - items
+  properties:
+    items:
+      type: array
+      items:
+        $ref: '#/CreateWebhookPayloadItem'
+      description: The list of webhook configurations to create.

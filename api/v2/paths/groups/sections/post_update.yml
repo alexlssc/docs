@@ -1,0 +1,43 @@
+tags:
+  - Groups and Sections
+operationId: updateGroupSection
+summary: Update Section
+description: >
+  Update the name of a section.<br>
+  This endpoint endpoint let's you update an existing section. Only Group Managers and above can use this endpoint. Business Managers are restricted from accessing this endpoint.
+  For more information about the group system, see <a href="#tag/Groups-and-Sections">the Groups and Sections description</a>.
+parameters:
+  - $ref: "../../../components/index.yml#/parameters/path_section_id"
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to update a section
+        type: object
+        required:
+          - name
+        properties:
+          name:
+            $ref: '../../../components/index.yml#/schemas/SectionName'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/index.yml#/schemas/SectionUpdateSuccessResponse'
+  400:
+    description: Section name already exists
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../../components/index.yml#/schemas/SectionCreateNameConflictResponse'
+            - $ref: '../../../components/index.yml#/schemas/SectionCreateForbiddenCharactersResponse'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../../components/index.yml#/responses/404'

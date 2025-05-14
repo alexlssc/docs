@@ -1,0 +1,37 @@
+operationId: settings
+tags:
+  - Messaging Settings
+summary: List messaging settings
+description: |
+  This endpoint lets you list all the Messaging Settings you have access to.
+
+  You can filter the Messaging Settings based on the Organization or the
+  Business that they are related to.
+parameters:
+  - $ref: '../../components/messaging/parameters.yml#/Page'
+  - $ref: '../../components/messaging/parameters.yml#/PerPage'
+  - $ref: '../../components/index.yml#/parameters/query_business__in'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          description: Response object
+          type: object
+          properties:
+            settings:
+              type: array
+              description: The list of Messaging Settings, paginated.
+              items:
+                $ref: '../../components/messaging/types.yml#/MessagingSetting'
+            page:
+              $ref: "../../components/messaging/pagination.yml#/Page"
+            count:
+              $ref: "../../components/messaging/pagination.yml#/Count"
+            max_page:
+              $ref: "../../components/messaging/pagination.yml#/MaxPage"
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

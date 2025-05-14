@@ -1,0 +1,69 @@
+summary:  Search for Google locations
+description: >
+  Performs a search for Google locations based on the provided query parameters. This endpoint requires authentication, and only authorized users with the appropriate permissions can access it.
+
+operationId: searchGoogleLocations
+tags:
+  - Google
+
+parameters:
+  - name: query
+    in: query
+    description: >
+      The search query string. It searches on the following fields of the Google location: 
+        - `locality` (e.g., https://api.partoo.co/v2/google-oauth-accounts/locations/search?query=Paris)
+        - `postal_code` (e.g., https://api.partoo.co/v2/google-oauth-accounts/locations/search?query=75018)
+        - `location_name` (e.g., https://api.partoo.co/v2/google-oauth-accounts/locations/search?query=Annie%20-%20HQ)
+        - `address_details` (e.g., https://api.partoo.co/v2/google-oauth-accounts/locations/search?query=130%20rue%20mont%20cenis)
+        - `store_code` (e.g., https://api.partoo.co/v2/google-oauth-accounts/locations/search?query=annie-hq)
+
+    required: false
+    schema:
+      type: string
+  - name: google_location_id
+    in: query
+    description: The ID of the Google location stored in Partoo.
+    required: false
+    schema:
+      type: string
+  - name: oauth_account_id
+    in: query
+    description: The ID of the OAuth account stored in Partoo.
+    required: false
+    schema:
+      type: string
+  - name: not_connected_only
+    in: query
+    description: Filter for locations not connected to any business.
+    required: false
+    schema:
+      type: boolean
+  - name: verification_status
+    in: query
+    description: Filter by verification status.
+    required: false
+    schema:
+      type: string
+  - name: page
+    in: query
+    description: The page number for pagination.
+    required: false
+    schema:
+      type: integer
+      default: 1
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/GoogleLocations'
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'
+

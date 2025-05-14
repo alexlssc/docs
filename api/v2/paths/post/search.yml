@@ -1,0 +1,38 @@
+summary: Search for post
+description: >
+  This endpoint lets you browse through all your posts.
+operationId: searchPost
+tags:
+  - Posts
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_business__in'
+  - $ref: '../../components/index.yml#/parameters/query_post_start_datetime'
+  - $ref: '../../components/index.yml#/parameters/query_post_end_datetime'
+  - $ref: '../../components/index.yml#/parameters/query_post_summary'
+  - $ref: '../../components/index.yml#/parameters/query_post_state_in'
+  - $ref: '../../components/index.yml#/parameters/query_post_topic_type'
+  - $ref: '../../components/index.yml#/parameters/query_post_topic_type_in'
+  - $ref: '../../components/index.yml#/parameters/query_page_up_to_100'
+  - $ref: '../../components/index.yml#/parameters/query_per_page_1_100'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                posts:
+                  type: array
+                  description: List of Post
+                  items:
+                    $ref: '../../components/index.yml#/schemas/Post'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

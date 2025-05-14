@@ -1,0 +1,55 @@
+summary: Create a post
+description: |
+  This endpoint lets you create a post or a draft post on Google / Facebook / Instagram.
+  
+  The creation of a post will not happen in real time and might take a few minutes.
+  
+  A draft post can only be created by Org Admins and is not immediately published. 
+  An expiration date must be specified when creating a draft post.
+  In order to be published, a draft needs to be updated by a BM/GM user before the expiration date.
+operationId: createPost
+tags:
+  - Posts
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to create a Post
+        type: object
+        required:
+          - business_search
+          - data
+          - publishers
+        properties:
+          business_search:
+            $ref: '../../components/index.yml#/schemas/PostBusinessSearch'
+          publishers:
+            $ref: '../../components/index.yml#/schemas/PostPublishers'
+          data:
+            $ref: '../../components/index.yml#/schemas/PostData'
+          is_draft:
+            description: If true, the post will be created as a draft. 
+              You must then also specify an `expiration_time` in the body's data.
+            type: boolean
+            default: false
+          send_notifications:
+            description: If true, a notification email will be sent to all BM/GM users
+              that have access to this draft post
+            type: boolean
+            default: false
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/requestResponsePost'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

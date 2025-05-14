@@ -1,0 +1,63 @@
+getPublisherStatesResponse:
+  type: object
+  properties:
+    businesses:
+      type: object
+      additionalProperties:
+          $ref: '#/publisher_state_type'
+    count:
+      type: integer
+      description: number of businesses returned in response
+      example: 1
+
+publisher_state_state:
+  type: object
+  properties:
+    error_type:
+      $ref: '#/error_type'
+    state:
+      type: string
+    url_on_publisher:
+      type:
+        - string
+        - "null"
+
+publisher_state_type:
+  type: object
+  properties:
+    business_formatted_address:
+      type: string
+    business_id:
+      type: string
+    business_name:
+      type: string
+    publishers:
+      type: object
+      additionalProperties: # publisher_name
+        $ref: "#/publisher_state_state"
+
+
+error_type:
+  type:
+      - string
+      - "null"
+  enum: [ 'PUBLISHER_CONNEXION','USER_INPUT' , 'EXTERNAL', null ]
+
+
+
+postPublisherErrorsResponse:
+  type: object
+  description: |
+    This response structure identifies and details errors detected by publishers in specific sections and fields of business information edits. It is organized to clearly indicate which publisher reported an error for a particular piece of business information, along with a specific error code or message identifier.
+  additionalProperties:
+    type: object
+    description: |
+      Denotes a particular section of the business edit process, such as 'hours' or 'description', where a publisher has identified an error. Each section can contain one or more fields.
+    additionalProperties:
+      type: object
+      description: |
+        Specifies the exact field within a business section, like 'open_hours' or 'description_short', where the error was detected. This allows for pinpointing specific areas within business information that require attention.
+      additionalProperties:
+        type: string
+        description: |
+          A mapping of publisher names to their corresponding error identifiers for the given field. Each key in this object is a publisher's name, and its value is a string representing a unique error code or message key, such as 'name_has_more_than_90_char' for overly long names or 'description_short_too_long' for descriptions exceeding allowable length. This structure supports detailing multiple errors across various publishers for a single business information field.

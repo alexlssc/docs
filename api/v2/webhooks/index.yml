@@ -1,0 +1,21 @@
+businessCreated:
+  post:
+    $ref: './business_created.yml'
+businessUpdated:
+  post:
+    $ref: './business_updated.yml'
+businessDeleted:
+  post:
+    $ref: './business_deleted.yml'
+messageCreated:
+  post:
+    $ref: './message_created.yml'
+messageReceived:
+  post:
+    $ref: './message_received.yml'
+messageUpdated:
+  post:
+    $ref: './message_updated.yml'
+leadReceived:
+  post:
+    $ref: './lead_received.yml'

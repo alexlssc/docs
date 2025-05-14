@@ -1,0 +1,33 @@
+type: object
+properties:
+  rating:
+    type:
+      - integer
+      - "null"
+    description: |
+      Rating assigned by the respondent, if any
+
+      Is set for CSAT and NPS fields
+    example: 4
+  content:
+    type:
+      - string
+      - "null"
+    description: |
+      Text content written by the respondent, if any
+
+      Is set for FREE_FORM fields
+    example: null
+  choices:
+    type:
+      - array
+      - "null"
+    items:
+      type: string
+    description: |
+      Choices selected by the respondent
+
+      Is set for MULTIPLE_CHOICE fields
+    example: null
+  feedback_form_field:
+    $ref: './feedback_form_field.yml'

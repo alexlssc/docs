@@ -1,0 +1,57 @@
+tags:
+  - Businesses
+
+summary: Set Place Action Links
+
+description: >
+  This endpoint enables you to manage place action links for a given business. 
+  Create, update, or delete place action links by modifying the urls array for each gmb_id.
+
+  - Create: Include a place action link in urls without an id.
+  
+  - Update: Include the given place action link in urls with an existing id.
+  
+  - Delete: Omit the specific link object from urls or provide an empty urls array to remove all for the gmb_id .
+  
+  For the POST method, ensure you send the complete list of desired links to retain or update per gmb_id.
+
+operationId: postPlaceActionLink
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/index.yml#/schemas/PlaceActionLinksPostBody'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  400:
+    description: Wrong request Body
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../components/index.yml#/schemas/PlaceActionLinksNonExistingGmbIdsError'
+            - $ref: '../../components/index.yml#/schemas/PlaceActionLinksNonUniqueGmbIdsError'
+            - $ref: '../../components/index.yml#/schemas/PlaceActionLinksNonUniqueUrlsError'
+            - $ref: '../../components/index.yml#/schemas/PlaceActionLinksMultiplePreferredUrlsError'
+            - $ref: '../../components/index.yml#/schemas/PlaceActionLinksMissingIdsError'
+            - $ref: '../../components/index.yml#/schemas/PlaceActionLinksNonUniqueIdsError'
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

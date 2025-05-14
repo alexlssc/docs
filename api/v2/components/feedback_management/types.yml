@@ -1,0 +1,18 @@
+feedback_result:
+  state:
+    type: string
+    enum: [ "treated", "not_treated" ]
+    description: State of the feedback result
+
+  nps:
+    type: integer
+    minimum: 0
+    maximum: 10
+    description: NPS of the feedback result
+    example: 9
+
+feedback_form:
+  id:
+    type: string
+    description: The unique identifier of the form
+    example: 674d791c13c9d976e20001b1

@@ -1,0 +1,35 @@
+tags:
+  - Review Booster
+summary: Template for a user
+operationId: getInvitationTemplate
+description: >
+  This endpoint lets you get your corresponding template.
+  If no template exist for the user, a template is created and send back.
+  <p>You need to be subscribed to Review Booster product.
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            template_id:
+              description: the id associated to the template
+              type: string
+              example: 3462
+            template:
+              description: the template content, with placeholder(s) not filled
+              type: string
+              example: Hello ${client_name}, please leave a review ${url}
+            status:
+              $ref: '../../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../../components/index.yml#/responses/404'

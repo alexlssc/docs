@@ -1,0 +1,114 @@
+tags:
+  - Messages
+summary: Send message
+operationId: postMessage
+description:  |
+  This endpoint allows you to send a message as a business, in an existing
+  conversation.
+
+  The supported content types when sending messages are :
+  - Text
+  - Image
+  - Video
+  - Audio
+  - Document
+
+  ⚠️ Due to underlying channel limitations, some media content_types are not
+  supported on all channels :
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Channel</th>
+        <th scope="col">Image</th>
+        <th scope="col">Video</th>
+        <th scope="col">Audio</th>
+        <th scope="col">Document</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Facebook</th>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+      </tr>
+      <tr>
+        <th scope="row">Instagram</th>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+        <td>❌</td>
+      </tr>
+      <tr>
+        <th scope="row">SMS</th>
+        <td>❌</td>
+        <td>❌</td>
+        <td>❌</td>
+        <td>❌</td>
+      </tr>
+      <tr>
+        <th scope="row">Whatsapp</th>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+        <td>✅</td>
+      </tr>
+    </tbody>
+  </table>
+
+  When dealing with media messages (`Image`, `Video`, `Audio`, `Document`), there are some
+  additionnal file type and file size limitations.
+  - Image size should not exceed <strong>5 MB</strong>.
+  - Video size should not exceed <strong>16 MB</strong>.
+  - Audio size should not exceed <strong>16 MB</strong>.
+  - Document size should not exceed <strong>100 MB</strong>.
+  
+  For optimal support, you should target the following file types :
+  - Image : `jpeg`, `png`.
+  - Video : `mp4`.
+  - Audio : `aac`, `mp4`.
+  - Document : `xls`, `xlsx`, `docx`, `pdf`, `ppt`, `pptx`.
+  </br>
+
+  A successful HTTP response to this endpoint (code 200) does not necessarily mean that the
+  message has been correctly delivered to the consumer, only that it has been created on
+  Partoo.
+  To ensure that the message has been delivered successfully, we recommend subscribing to the
+  [Message Updated](#operation/message_updated) Webhook, and checking that the `status` field
+  of the message has switched to `Success`.
+
+  If the answer has failed to be sent, you can send it again by using the
+  [/retry endpoint](#operation/retrySendMessage)
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema: 
+        anyOf:
+          - $ref: '../../components/messaging/schemas.yml#/PostTextMessage'
+          - $ref: '../../components/messaging/schemas.yml#/PostImageUrlMessage'
+          - $ref: '../../components/messaging/schemas.yml#/PostAudioMessage'
+          - $ref: '../../components/messaging/schemas.yml#/PostVideoMessage'
+          - $ref: '../../components/messaging/schemas.yml#/PostDocumentMessage'
+    multipart/form-data:
+      schema: 
+        $ref: '../../components/messaging/schemas.yml#/PostImageMessage'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: 
+                - success
+            message_id:
+              type: integer
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

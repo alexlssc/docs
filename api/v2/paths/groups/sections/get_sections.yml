@@ -1,0 +1,23 @@
+tags:
+  - Groups and Sections
+operationId: getGroupSections
+summary: Get Sections
+description: >
+  Get all the sections for an organization.<br>
+  For more information about the group system, see <a href="#tag/Groups-and-Sections">the Groups and Sections description</a>.
+parameters:
+  - $ref: '../../../components/index.yml#/parameters/query_page'
+  - $ref: '../../../components/index.yml#/parameters/query_org_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/index.yml#/schemas/SectionsGetSuccessResponse'
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'

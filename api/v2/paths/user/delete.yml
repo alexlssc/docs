@@ -1,0 +1,28 @@
+summary: Delete user
+description: >
+  This endpoint lets you delete a user.
+  You need to have `WRITE` access to this user.
+operationId: deleteUser
+tags:
+  - Users
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_user_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              $ref: '../../components/index.yml#/schemas/UserId'
+            status:
+              type: string
+              enum: ["success"]
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

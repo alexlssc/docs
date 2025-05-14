@@ -1,0 +1,103 @@
+summary: Start Google Location Verification Process
+description: >
+  This endpoint initiates the verification process for a specific Google location identified by `google_location_id`. It
+  requires authentication and authorization to access. The user must have at least the role of a `BUSINESS_MANAGER` to use this
+  endpoint.
+  
+  
+  The endpoint ensures that the chosen verification method has all the necessary information for the specific method
+  chosen. If any required information is missing, it raises an error with the associated error message.
+
+operationId: startGoogleLocationVerification
+tags:
+  - Google
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/google_location_id'
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          method:
+            type: string
+            enum:
+              - SMS
+              - PHONE_CALL
+              - EMAIL
+              - ADDRESS
+          phone_number:
+            type: string
+            description: >
+              **REQUIRED** for `SMS` and `PHONE_CALL` methods. The phone number to which the code will be send.
+            example: "+33187662490"
+          email:
+            type: string
+            description: >
+                **REQUIRED** for `EMAIL` method. The email address to which the code will be send.
+            example: "email.api@partoo.fr"
+          full_name:
+            type: string
+            description: >
+                **REQUIRED** for `ADDRESS` method. The full name to which the postcard will be send.
+            example: "John Doe"
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              description: The status of the response `success` or `error`.
+              example: "success"
+            message:
+              type: string
+              example:
+              description: >
+                *OPTIONAL* Details of the error encountered. Can be one of the following:
+                  - `start_no_verification_found`: No verification request has been started.
+                  - `start_error`: An error occured during the start of the verification process.
+              enum:
+                - start_no_verification_found
+                - start_error
+  400:
+    description: Your request is incorrect
+    content:
+      application/json:
+        schema:
+          description: >
+            Error that occcurs when your request is incorrect
+          properties:
+            errors:
+              type: object
+              description: The detail of the error encountered.
+              properties:
+                json:
+                  type: object
+                  properties:
+                    method:
+                      type: string
+                      description: >
+                        Details of the error encountered. Can be one of the following:
+                          - `sms_phone_call_method_without_phone_number`: The phone number is required for `SMS` and `PHONE_CALL` methods.
+                          - `email_method_without_email`: The email address is required for `EMAIL` method.
+                          - `address_method_without_full_name`: The full name is required for `ADDRESS` method.
+                          - `not_supported`: The method is not supported.
+                      example: "sms_phone_call_method_without_phone_number"
+                      enum:
+                        - sms_phone_call_method_without_phone_number
+                        - email_method_without_email
+                        - address_method_without_full_name
+                        - not_supported
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

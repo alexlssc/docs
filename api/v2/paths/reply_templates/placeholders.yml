@@ -1,0 +1,23 @@
+summary: All available placeholders
+description: |
+  This endpoint lets you access available placeholders for reply review templates.
+  A template placeholder is a dynamically updated word within the Partoo app depending on the context.
+
+  Ex: Once used to answer a review, if a template has a `client_first_name` placeholder, the placeholder will take the value of the reviewer's first name.
+operationId: getTemplatePlaceholders
+tags:
+  - Reviews
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/TemplatePlaceholder'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

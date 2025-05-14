@@ -1,0 +1,36 @@
+summary: Set more hours for your business
+description: >
+  This endpoint allows you to set the **More Hours** for your business.
+
+operationId: postBusinessMoreHours
+tags:
+  - Businesses
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/index.yml#/schemas/MoreHoursBusinessPostBody'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/MoreHoursBusinessPostResponse'
+  400:
+    description: Wrong or missing parameters
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../components/index.yml#/schemas/MoreHoursBusinessPostInvalidCategory'
+            - $ref: '../../components/index.yml#/schemas/MoreHoursBusinessPostOverlappingHours'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

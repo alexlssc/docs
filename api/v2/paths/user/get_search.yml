@@ -1,0 +1,87 @@
+tags:
+  - Users
+summary: Search for users
+description: This endpoint lets you search for users using filters
+operationId: searchUser
+parameters:
+  - in: query
+    name: email
+    schema:
+      type: string
+      format: email
+    description: Filter by email
+    required: false
+  - in: query
+    name: org_id
+    schema:
+      type: integer
+    description: Filter by org id
+  - in: query
+    name: query
+    schema:
+      type: string
+    description: To perform a fuzzy search on user
+  - in: query
+    name: status
+    schema:
+      $ref: '../../components/index.yml#/schemas/UserStatus'
+    description: Filter users by status
+  - in: query
+    name: display_business_ids
+    schema:
+      type: string
+      enum: ["True", "False"]
+      default: "True"
+    description: The endpoint won’t return the `business_ids` when the value is `False`
+  - in: query
+    name: business_id
+    schema:
+      type: string
+      description: |
+        Filter by users having access to the business with the provided id.
+      example: 5409c35a97bbc544d8e26737u
+  - $ref: '../../components/index.yml#/parameters/query_page_up_to_100'
+  - $ref: '../../components/index.yml#/parameters/query_per_page_1_100'
+  - in: query
+    name: order_by
+    schema:
+      type: string
+      enum:
+        - "email"
+        - "first_name"
+        - "last_name"
+        - "role"
+        - "org_id"
+        - "group_id"
+        - "status"
+        - "-email"
+        - "-first_name"
+        - "-last_name"
+        - "-role"
+        - "-org_id"
+        - "-group_id"
+        - "-status"
+      default: "id"  
+    required: false
+    description: |
+      Order result by given attribute.
+      Reverse order can as well be obtained by using a `-` (minus sign) before the attribute name, e.g. `order_by=-name`
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                users:
+                  type: array
+                  description: List of users
+                  items:
+                    $ref: '../../components/index.yml#/schemas/User'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'

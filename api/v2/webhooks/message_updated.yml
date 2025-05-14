@@ -1,0 +1,30 @@
+operationId: message_updated
+tags:
+  - Webhooks
+summary: Message Updated
+description: |
+  This event is triggered if the field of a message is updated (example: `status`, `is_deleted`).
+
+  Messages send via Partoo are created with the status `Sending`, and
+  propagated to the messaging channel.
+  If the message is sent successfully, the status is changed to `Success`.
+  If the messaging channel fails to send the message, the status changed to
+  `Failed`. A failed message can be retried using the [/retry endpoint](#operation/retrySendMessage).
+
+  The event payload contains the event type, the content of the updated message and additional information about the conversation.
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - message_updated
+          payload:
+            $ref: '../components/messaging/types.yml#/MessageCreatedEvent'
+responses:
+  $ref: ./webhook_responses.yml
+
+security: []

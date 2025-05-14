@@ -1,0 +1,29 @@
+Page:
+  in: query
+  name: page
+  schema:
+    type: integer
+    default: 1
+    minimum: 1
+  description: Current page number.
+
+PerPage:
+  in: query
+  name: per_page
+  schema:
+    type: integer
+    default: 30
+    minimum: 1
+    maximum: 100
+  description: Number of items to return per page.
+
+Cursor:
+    in: query
+    name: cursor
+    schema:
+      type: string
+    description: |
+      The cursor identifiying the page of data to fetch.
+      If no cursor is provided, the query will return the first page of data.
+      A cursor for the next page of data is provided in the response of this
+      request.

@@ -1,0 +1,40 @@
+tags:
+  - Reviews
+summary: Modify a reply to a review
+description: This endpoint lets you modify a given reply to a review.
+operationId: ModifyReplyOfReview
+parameters:
+  - in: path
+    name: comment_id
+    required: true
+    schema:
+      $ref: '../../components/index.yml#/schemas/CommentId'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to modify a reply
+        type: object
+        required:
+          - content
+        properties:
+            content:
+              description: Content of your Reply
+              type: string
+              format: text
+              example: Merci ❤️
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/Comment'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

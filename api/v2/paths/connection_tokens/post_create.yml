@@ -1,0 +1,52 @@
+tags:
+  - Connection Tokens
+summary: Generate connection token
+description: >
+  This endpoint lets you generate a connection token to authenticate a user without having to indicate its credentials.
+  To be able to generate a connection token for a user, you need to have `WRITE` access on that user and that user
+  cannot have `PROVIDER` role.
+  A connection token is valid only once and has a time to live of maximum one day.
+operationId: generateConnectionToken
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - user_id
+        properties:
+          user_id:
+            $ref: '../../components/index.yml#/schemas/UserId'
+          ttl:
+            type: integer
+            maximum: 86400
+            default: 86400
+            example: 3600
+            description: Token time to live in seconds. It can be maximum 1 day.
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            token:
+              description: New connection token
+              type: string
+              example: \xaf3e8951c1f4c42f9cc53116b3fc855bd44bce01cf27604b
+            expiration_date:
+              type: string
+              description: Expiration date of the newly created token
+              format: date-time
+              example: 2019-08-01T19:15:54.256000+02:00
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

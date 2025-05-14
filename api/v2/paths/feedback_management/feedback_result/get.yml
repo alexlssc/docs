@@ -1,0 +1,47 @@
+summary: Search for feedback results
+description: |
+  This endpoint lets you search for the feedback results of your businesses.
+
+  The response is paginated (30 results per page).
+operationId: searchFeedbackResults
+tags:
+  - Feedback Management
+
+x-badges:
+  - name: 'Beta'
+    position: after
+
+parameters:
+  - $ref: '../../../components/index.yml#/parameters/query_business__in'
+  - $ref: '../../../components/index.yml#/parameters/query_business__notin'
+  - $ref: '../../../components/feedback_management/parameters.yml#/state__in'
+  - $ref: '../../../components/feedback_management/parameters.yml#/created__lte'
+  - $ref: '../../../components/feedback_management/parameters.yml#/created__gte'
+  - $ref: '../../../components/feedback_management/parameters.yml#/nps__lte'
+  - $ref: '../../../components/feedback_management/parameters.yml#/nps__gte'
+  - $ref: '../../../components/feedback_management/parameters.yml#/nps__in'
+  - $ref: '../../../components/feedback_management/parameters.yml#/search'
+  - $ref: '../../../components/feedback_management/parameters.yml#/optin'
+  - $ref: '../../../components/feedback_management/parameters.yml#/feedback_form_ids'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                items:
+                  description: Filtered feedback results
+                  type: array
+                  items:
+                    $ref: '../../../components/feedback_management/schemas/feedback_result.yml'
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'

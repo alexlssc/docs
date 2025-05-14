@@ -1,0 +1,677 @@
+name: Change Log
+description: >
+    <h2>Upcoming changes</h2>
+    <h2>2025-07-15</h2>
+    <ul>
+      <li>
+        <h3>Review analytics V1 API endpoints deprecation</h3>
+        <p>The impacted endpoints are:</p>
+        <ul>
+          <li>GET <a href="#operation/getReviewAnalytics">/v2/reviews/stats</a></li>
+          <li>GET <a href="#operation/getQualitativeEvolution">/v2/reviews/qualitative-evolution</a></li>
+          <li>GET <a href="#operation/getQuantitativeEvolution">/v2/reviews/quantitative-evolution</a></li>
+        </ul>
+        <p>
+          You can use the new GET <a href="#operation/getReviewAnalyticsMetrics">/v2/review_analytics/metrics</a>
+          endpoint to get the same data:
+        </p>
+        <ul>
+          <li>
+            <code>/v2/reviews/stats</code>
+            ➡ <code>/v2/review_analytics/metrics?metrics=average_rating,rating_distribution,reply_time,reviews_count</code>
+            <br/>⚠ The properties treated, not_treated and answer_time are no longer available<br/><br/>
+          </li>
+          <li>
+            <code>/v2/reviews/quantitative-evolution</code>
+            ➡ <code>/v2/review_analytics/metrics?dimensions={dimension}&metrics=reviews_count</code>
+            <br/>where dimension = <code>day</code> | <code>week</code> | <code>month</code> | <code>year</code>
+            <br/><br/>
+          </li>
+          <li>
+            <code>/v2/reviews/qualitative-evolution</code>
+            ➡ <code>/v2/review_analytics/metrics?dimensions={dimension}&metrics=reviews_count,average_rating</code>
+            <br/>where dimension = <code>day</code> | <code>week</code> | <code>month</code> | <code>year</code>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h3>Deprecation of products for features</h3>
+        <p>
+          We're replacing our products for a new system with features.<br />
+          This will allow to have a more fine-grained control over the features available to organizations, businesses and users.<br />
+        </p>
+        <h4>Impacts</h4>
+          <h5>Organization</h5>
+            <p>
+              You can now retrieve the list of features your org has access to with its subscribed plans through the <code>org_features</code> field.<br />
+              You can also retrieve the list of all available features from the org subscribed plans as well as the plans only some businesses may have subscribed to, through the <code>features</code> field.
+            <p>
+            <p>Deprecated fields: </p>
+            <ul>
+              <li><code>has_google_post</code></li>
+              <li><code>display_google_post</code></li>
+            </ul>
+          <h5>Business</h5>
+            <p>
+              You can now retrieve the list of features your business has access to with its organization and its own subscribed plans through the <code>features</code> field. This field does not appear in the GET <a href="#operation/searchBusinesses">/v2/business/search</a> endpoint. <br />
+              You can now search businesses by features using the <code>features__in</code> and <code>features__notin</code> query parameters.
+            </p>
+          <h5>User</h5>
+            <p>
+              We're replacing the <code>sidebar_products</code> field with <code>sidebar_pages</code> field.<br />
+              This will allow you to control which pages a user can access to in a more granular way.<br />
+              You can find the correspondence between products and features in the table below, this will be used during the transition period.<br />
+              ⚠ Warning: during the deprecation time, if you update a user's <code>sidebar_product</code> field and give them <code>presence_management</code>, it will give them the <code>available_features</code> <code>diffusion</code> and <code>presence_analytics</code>.<br />
+              ⚠ Warning: during the depreciation time, if you update a user's <code>sidebar_product</code> field with any value, it will give them the <code>posts</code> and <code>bulk_modification</code> features if their organization have the feature. <br />
+              ⚠ Warning: during the deprecation time, a user having the product <code>presence_management</code> returned in the <code>sidebar_product</code> field may have only one of the features <code>diffusion</code> and <code>presence_analytics</code>.
+            </p>
+            <p>Deprecated field: </p>
+            <ul>
+              <li><code>sidebar_products</code></li>
+            </ul>
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Feature</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>presence_management</code></td>
+                  <td><code>diffusion</code> and <code>presence_analytics</code></td>
+                </tr>
+                <tr>
+                  <td><code>review_management</code></td>
+                  <td><code>review_management</code> and <code>review_analytics</code></td>
+                </tr>
+                <tr>
+                  <td><code>review_booster</code></td>
+                  <td><code>review_invite</code></td>
+                </tr>
+                <tr>
+                <tr>
+                  <td><code>messages</code></td>
+                  <td><code>messages</code></td>
+                </tr>
+                <tr>
+                  <td>Managed at Organization level if the Organization has subscribed to Google Posts</td>
+                  <td><code>posts</code></td>
+                </tr>
+                <tr>
+                  <td>Managed at Organization level if the Organization has subscribed to Bulk Modification</td>
+                  <td><code>bulk_modification</code></td>
+                </tr>
+              </tbody>
+            </table>
+        <p>
+          The impacted endpoints are:
+        </p>
+        <ul>
+          <li>GET <a href="#operation/getOrganization">/v2/org/{org_id}</a></li>
+          <li>GET <a href="#operation/searchOrganizations">/v2/org/search</a></li>
+          <li>GET <a href="#operation/searchUser">/v2/user/search</a></li>
+          <li>GET <a href="#operation/getMyUser">/v2/user/me</a></li>
+          <li>GET <a href="#operation/getUser">/v2/user/{user_id}</a></li>
+          <li>POST <a href="#operation/createUser">/v2/user</a></li>
+          <li>POST <a href="#operation/updateUser">/v2/user/{user_id}</a></li>
+          <li>GET <a href="#operation/searchBusinesses">/v2/business/search</a></li>
+          <li>GET <a href="#operation/searchBusinessesStats">/v2/business/search/stats</a></li>
+          <li>GET <a href="#operation/getBusiness">/v2/business/{business_id}</a></li>
+        </ul>
+      </li>
+    </ul>
+    <h2>2025-04-22</h2>
+    <ul>
+      <li><h3>Adding media support to messaging</h3></li>
+      <p>
+        We added support for 3 new message content_types : <code>Audio</code>, <code>Video</code> and <code>Document</code>.
+      </p>
+      <p>
+        This means that you will now be able to receive media messages in your conversations, and also send them.
+      </p>
+      <p>
+      </p>
+      <table>
+        <caption>
+          ⚠️ Due to channel limitations, some media types are not supported on all channels.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Channel</th>
+            <th scope="col">Image</th>
+            <th scope="col">Video</th>
+            <th scope="col">Audio</th>
+            <th scope="col">Document</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Facebook</th>
+            <td>✅</td>
+            <td>✅</td>
+            <td>✅</td>
+            <td>✅</td>
+          </tr>
+          <tr>
+            <th scope="row">Instagram</th>
+            <td>✅</td>
+            <td>✅</td>
+            <td>✅</td>
+            <td>❌</td>
+          </tr>
+          <tr>
+            <th scope="row">SMS</th>
+            <td>❌</td>
+            <td>❌</td>
+            <td>❌</td>
+            <td>❌</td>
+          </tr>
+          <tr>
+            <th scope="row">Whatsapp</th>
+            <td>✅</td>
+            <td>✅</td>
+            <td>✅</td>
+            <td>✅</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        This changes will reflect in all endpoints that deal with messages :
+      </p>
+      <ul>
+        <li><a href="#operation/listConversations">GET /v2/conversations</a></li>
+        <li><a href="#operation/getConversation">GET /v2/conversations/{conversation_id}</a></li>
+        <li><a href="#operation/listMessages">GET /v2/messages</a></li>
+        <li><a href="#operation/postMessage">POST /v2/messages</a></li>
+      </ul>
+      <p>
+        And message webhooks events :
+      </p>
+      <ul>
+        <li><a href="#operation/message_created">EVENT message_created</a></li>
+        <li><a href="#operation/message_updated">EVENT message_updated</a></li>
+      </ul>
+    </ul>
+    <h2>2025-02-14</h2>
+    <ul>
+      <li>Webhook configuration API</li>
+      <p>
+        Customers with access to the webhook feature can now configure their webhooks directly from the API.
+        You can also set webhooks on our website in the settings > integrations > webhooks.
+      </p>
+    </ul>
+    <h2>2025-01-15</h2>
+    <ul>
+      <li>
+        <h3><code>Content-Type</code> validation</h3>
+        <p>
+          Following an upgrade on our webservers, we now enforce a validation of <code>Content-Type</code> on all the requests to avoid guessing.
+          The default value expected is <code>application/json</code>, unless specified on an endpoint.
+          All endpoints with method <code>POST</code>, <code>PATCH</code> and <code>PUT</code> are affected.
+        </p>
+      </li>
+      <li>
+        <h3>Removing category_gmb_id usage for <a href="#tag/Google-Services">GmbServices</a> endpoints</h3>
+        <p>
+            <b>category_gmb_id</b> is definitely removed, use <b>category_gmb_name</b> for the <a href="#tag/Google-Services">GmbServices</a> endpoints
+        </p>
+      </li>
+      <li>
+        <h3>Removing <a href="#tag/Presence-analytics">Presence analytics</a> endpoints</h3>
+          <p>
+              Presence analytics endpoints are removed and replaced by <a href="#tag/Presence-analytics/operation/getPresenceAnalyticsMetrics">Profile metrics</a> and <a href="#tag/Presence-analytics/operation/getPresenceAnalyticsKeywords">Profile keywords</a> endpoints.
+          </p>
+      </li>
+    </ul>
+    <h2>2024-10-15</h2>
+    <ul>
+      <li>
+        <h3>Store Code identification</h3>
+        <p>
+          It is now possible to replace business id by business code as path parameter, only for users inside the same organization.
+          To do so, you may replace <code>/{business_id}</code> by <code>/c-{code}</code>
+          <br/>
+        </p>
+        <p>
+          For example, you can now update a business directly from its code using
+          <p>
+          <pre>curl -H "x-APIKey: ${API_KEY}" --json '{"address_full": "221b Baker Street"}' https://api.partoo.co/v2/business/c-LON-HQ</pre>
+          </p>
+        </p>
+        <p>
+          The following endpoints are affected:<br/>
+          <code>
+            /business/{business_id}<br/>
+            /business/{business_id}/subscription<br/>
+            /business/{business_id}/additional_data<br/>
+            /business/{business_id}/attributes<br/>
+            /business/{business_id}/more_hours<br/>
+            /business/{business_id}/services<br/>
+            /business/{business_id}/services/{service_id}<br/>
+            /business/{business_id}/structured_services<br/>
+            /business/{business_id}/free_form_services<br/>
+            /business/{business_id}/food_menus<br/>
+            /business/{business_id}/place_action_links<br/>
+            /business/{business_id}/business_fields<br/>
+            /publisher_errors/{business_id}<br/>
+          </code>
+        </p>
+        <h4>Explanations</h4>
+        <p>
+          Since the rate limit has been put in place, it has become harder to integrate our API while complying with this limit.
+          Enabling the search by store code will simplify integrations which required business search just to map our internal ids with codes which are ids in external.
+        </p>
+        <p>
+          <b>Why the <code>/c-</code> prefix?</b><br/>
+          We believe it is best for an integration to be explicit about requesting with a code rather than an id and we don't want to make guess.
+        </p>
+      </li>
+    </ul>
+    <h2>2024-10-15</h2>
+    <ul>
+     <li>
+       <h3>Repeatable URL</h3>
+       <p>
+        Following an update on Google's API, <code>REPEATABLE_URL</code> attributes will no longer be supported.
+        The impacted endpoints are:
+       </p>
+         <ul>
+           <li>GET <a href="#operation/getBusinessAttributes">/v2/business/{business_id}/attributes</a></li>
+           <li>POST <a href="#operation/postBusinessAttributes">/v2/business/{business_id}/attributes</a></li>
+         </ul>
+        <p>
+        Replace any usage of <code>REPEATABLE_URL</code> with Place Action Links:
+        </p>
+          <ul>
+            <li>GET: <a href="#operation/getPlaceActionLinks">/business/{business_id}/place_action_links</a></li>
+            <li>POST: <a href="#operation/postPlaceActionLink">/business/{business_id}/place_action_links</a></li>
+          </ul>
+     </li>
+    </ul>
+    <h2>2024-07-15</h2>
+    <ul>
+      <li>
+        <h3>Business address fields are nullable</h3>
+        <p>
+          Address-related fields within the Business object (<b>address</b>, <b>address_full</b>, <b>address2</b>, <b>zipcode</b>, <b>city</b>, <b>long</b>, <b>lat</b>) can now be <b>null</b> if the business does not have an address filled out.<br/>
+          The impacted endpoints are :
+          <ul>
+          <li>GET <a href="#operation/searchBusinesses">/v2/business/search</a></li>
+          <li>GET <a href="#operation/getBusiness">/v2/business/{business_id}</a></li>
+          </ul>
+        </p>
+      </li>
+      <li>
+        <h3>Deprecation of body parameters on DELETE endpoints</h3>
+        <p>These body parameters are moved to query parameters for these endpoints:<p>
+        <ul>
+          <li>
+            <p>
+              <a href="#tag/Organizations/operation/deleteOrganization">DELETE Organization</a>: <code>force</code>
+            </p>
+          </li>
+          <li>
+            <p>
+              <a href="#tag/Custom-Fields/operation/deleteCustomFields">DELETE Custom Field</a>: <code>forced_update</code> becomes <code>force</code>
+            </p>
+          </li>
+        </ul>
+        <p>This route with body parameter is replaced by new route with path parameters:<p>
+        <ul>
+          <li>
+            <p>
+              <a href="#tag/Businesses/operation/deprecatedDeleteBusinessServices">DELETE Google Services with body parameter route</a> is deprecated and replaced with <a href="#tag/Businesses/operation/deleteBusinessServices">DELETE Google Services with path parameter route</a>
+            </p>
+          </li>
+        </ul>
+        <p>All these body parameters will be removed on January 15th 2025, please update your integrations by then.</p>
+      </li>
+      <li>
+        <h3>Renamed <code>forced_update</code> parameter</h3>
+        <p>
+          The <code>forced_update</code> parameter in the <a href="#tag/Custom-Fields/operation/putUpdateCustomFields">PUT Custom Field</a> endpoint has been renamed to <code>force</code>.
+        </p>
+      </li>
+      <li>
+        <h3>Webhooks are now signed</h3>
+        In order to increase security and enable you to verify that incoming traffic comes from Partoo, we have enabled signatures on webhooks.
+        You may find a dedicated section on <a href="#tag/Webhooks/Webhook-security" title="webhook security">Webhook Security</a>
+      </li>
+    </ul>
+    <h2>2024-06-24</h2>
+    <ul>
+      <li>
+        <h3>Swagger Corrections 🎉</h3>
+        <p>
+          Our Swagger file has been cleaned to make it compliant with standard OpenAPI 3.0.<br/>
+          No change in API is to expect and no change is required in your existing integrations. <br/>
+          New integrations can now leverage on tools to automate boilerplate code.
+        </p>
+      </li>
+    </ul>
+    <h2>2024-02-29</h2>
+    <ul>
+      <li>
+          <h3>Publisher Errors Reporting Endpoint</h3>
+          <p>
+            Introduced a new endpoint to report and detail errors detected by publishers in specific sections and fields of business information edits. This feature allows users to receive targeted feedback on errors identified by different publishers, enabling more precise and efficient corrections. You can find it <a href="#tag/Presence/operation/postPublisherErrors">here</a>
+          </p>
+        </li>
+    </ul>
+    <h2>2023-07-15</h2>
+    <ul>
+        <li>
+          <h3>Rate limiting</h3>
+          <p>
+              Due to recent incidents with faulty integrations consuming too much resources from our API and causing unavailability for others, we’ve decided to put a <a href="#section/Rate-Limiting">rate limit</a> for each organization on API integrations.
+              All organizations will be limited to <b>300 API calls per minute</b>.
+          </p>
+        </li>
+        <li>
+            <h3>Presence Analytics Endpoints (DEPRECATION)</h3>
+            <ul>
+                <li>
+                    Google will discontinue its current analytics API endpoint <strong>on 20/02/2023</strong> in favour of their new analytics API.
+                    The endpoints mentioned below will be deprecated in response to this change.
+                </li>
+                <ul>
+                    <li>GET <a href="#operation/getPresenceAnalytics">/v2/presence_analytics</a></li>
+                    <li>GET <a href="#operation/exportPresenceAnalytics">/v2/presence_analytics/export</a></li>
+                </ul>
+            </ul>
+            <ul>
+              <li>
+                Partoo will release new endpoints soon to provide access to the new Google analytics.
+              </li>
+            </ul>
+        </li>
+        <li>
+            <h3>Posts Endpoints</h3>
+            <ul>
+                <li>
+                    Google will discontinue its current analytics API endpoint <strong>on 20/02/2023</strong>.
+                    The insights related to Google Local Posts will be totally removed from their API.
+                    Therefore views and clicks on Google Local Posts will no longer be available on Partoo.
+                    Facebook insights are still available.
+                </li>
+                    <li>GET <a href="#operation/searchPost">/v2/posts</a></li>
+                </ul>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>2023-04-17</h2>
+    <ul>
+        <li>
+            <h3>Messaging Endpoints</h3>
+            <ul>
+                <li>
+                Release of the endpoints related to the Business Messages product
+                </li>
+                <ul>
+                    <li>Conversations</li>
+                    <li>Messaging Settings</li>
+                    <li>Messages</li>
+                    <li>Webhooks</li>
+                </ul>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>2023-04-15</h2>
+    <ul>
+        <li>
+            <h3>Google Post endpoints (DEPRECATION)</h3>
+            <ul>
+                <li>
+                    Due to the possibility to create Post on Google + Facebook on <a href="#tag/Posts">/posts</a> endpoints.
+                    The following endpoint will be deleted :
+                </li>
+            </ul>
+        </li>
+        <li>
+            <h3>Google Services endpoints (BREAKING CHANGES)</h3>
+            <ul>
+                <li>
+                    Changes occurrences of <b>category_gmb_id</b> to <b>category_gmb_name</b> for the <a href="#tag/Google-Services">GmbServices</a> endpoints in :
+                        <ul>
+                            <li>request body</li>
+                            <li>response body</li>
+                        </ul>
+                    The following endpoint will be impacted :
+                </li>
+                <ul>
+                    <li>GET <a href="#operation/getServicesSuggestions">/v2/services/suggestions</a></li>
+                    <li>GET <a href="#operation/getBusinessServices">/v2/business/{business_id}/services</a></li>
+                    <li>POST <a href="#operation/postBusinessFreeFormServices">/v2/business/{business_id}/free_form_services</a></li>
+                    <li>POST <a href="#operation/postBusinessStructuredServices">/v2/business/{business_id}/structured_services</a></li>
+                </ul>
+            </ul>
+        </li>
+    </ul>
+    <h2>2022-10-15</h2>
+    <ul>
+        <li>
+            <h3>Categories endpoints (DEPRECATION)</h3>
+            <ul>
+                <li>
+                    We are changing our categories endpoints to better reflect their use.
+                    There are now 2 new parameters for both endpoints :
+                    <ul>
+                        <li>with_names: adds in the return payload the list of translations in each available language</li>
+                        <li>with_countries: adds in the return payload the list of countries in which the category is available</li>
+                    </ul>
+                </li>
+                <h3>Deprecated endpoint</h3>
+                <ul>
+                    <li>GET <a href="#operation/getCategoryDeprecated">/v2/category/{category_id}</a> replaced by GET <a href="#operation/getCategory">/v2/categories/{category_id}</a></li>
+                </ul>
+                <h3>Changed endpoint</h3>
+                <ul>
+                    <li>
+                        GET <a href="#operation/getCategories">/v2/categories</a>
+                        <ul>
+                            <li><code>country</code> will not appear in the field <code>names</code> after 2022-10-15
+                            <li>The countries list in which a category is available is now in the <code>countries</code> field, use the parameter <code>with_countries</code></li>
+                            <li><code>names</code> will not appear in the returned payload by default, use the parameter <code>with_names</code> to get it</li>
+                        </ul>
+                    </li>
+                </ul>
+            </ul>
+        </li>
+        <li>
+            <h3>Business integration data (DEPRECATION)</h3>
+            <ul>
+                <li>
+                    The following endpoint will be deleted :
+                </li>
+                <ul>
+                    <li>GET <a href="#operation/getBusinessIntegrationStatus">/v2/business/{business_id}/integration_status</a></li>
+                    <li>GET <a href="#operation/getBusinessPartnerUrls">/v2/business/{business_id}/partner_urls</a></li>
+                </ul>
+            </ul>
+        </li>
+        <li>
+          <h3>Presence (DEPRECATION)</h3>
+            <ul>
+              <li>The following endpoint will be deleted : </li>
+                <ul>
+                    <li>GET <a href="#operation/getBusinessInfo">/v2/publisher_states/business_info</a></li>
+                    <li>GET <a href="#operation/getBusinessesInfo">/v2/publisher_states/businesses_info</a></li>
+                </ul>
+                <li>All deleted information are now available on following endpoint :</li>
+                <ul>
+                    <li>GET <a href="#operation/getPublisherStates">/v2/publisher_states</a></li>
+                </ul>
+            </ul>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <h3>Review Booster (DEPRECATION)</h3>
+          <ul>
+            <li>The parameter template_id will be deleted from endpoint : </li>
+            <ul>
+                <li>POST <a href="#tag/Review-Booster/paths/~1review_booster~1send_invitation/post">/v2/review_booster/send_invitation</a></li>
+                <li>There will be no impact on template already used by users.</li>
+            </ul>
+          </ul>
+        </li>
+    </ul>
+
+    <h2>2022-07-15</h2>
+    <ul>
+      <li><h3>Ordering of search results</h3>
+        <ul>
+          <li>We are aligning our ways of sorting paginated results across all endpoints.
+          All search operations offering ordering now provide a <code>order_by</code> parameter.
+          </li>
+          <h3>Changed endpoints</h3>
+          <ul>
+              <li>GET <a href="#operation/searchReviews">/v2/reviews</a></li>
+              <li>GET <a href="#operation/getCategories">/v2/categories</a></li>
+              <li>GET <a href="#operation/getPresenceAnalytics">/v2/presence_analytics</a></li>
+          </ul>
+          <h3>Endpoints now providing ordering</h3>
+          <ul>
+              <li>GET <a href="#operation/searchBusinesses">/v2/business/search</a></li>
+              <li>GET <a href="#operation/searchUser">/v2/user/search</a></li>
+          </ul>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li>
+          <h3>Address details (DEPRECATION)</h3>
+          <ul>
+              <li>
+              The new field <code>address_full</code> will replace <strong>deprecated</strong> <code>address_details</code> that <b>will be deleted from July, 2022</b> :
+              </li>
+              <ul>
+                  <li>
+                      <code>address_full</code> <i>(string)</i> is the <b>new unique address field</b> allowing not to split address in several fields :<br />
+                      For example : <i>130 Rue du Mont-Cenis.</i>
+                  </li>
+                  <li>
+                      <code>address_details</code> will be <b>deleted</b> from following endpoints :
+                  </li>
+                  <ul>
+                      <li>POST <a href="#operation/createBusiness">/v2/business</a></li>
+                      <li>GET <a href="#operation/getBusiness">/v2/business/{business_id}</a></li>
+                      <li>POST <a href="#operation/updateBusiness">/v2/business/{business_id}</a></li>
+                      <li>GET <a href="#operation/searchBusinesses">/v2/business/search</a></li>
+                  </ul>
+              </ul>
+          </ul>
+          <blockquote>
+              <p>⚠️ It's <b>not possible</b> to use <code>address_full</code> with <code>address_details</code></p>
+          </blockquote>
+      </li>
+    </ul>
+    <h2>2022-01-15</h2>
+    <ul>
+      <li><h3>Pagination of search results</h3>
+        <ul>
+          <li>We are currently implementing a possibility to extend pagination.
+          Following search operations now offer a pagination extension up to 100 items per page using <code>per_page</code> parameter.
+          </li>
+          <ul>
+              <li>GET <a href="#operation/searchReviews">/v2/reviews</a></li>
+              <li>GET <a href="#operation/searchBusinesses">/v2/business/search</a></li>
+              <li>GET <a href="#operation/searchUser">/v2/user/search</a></li>
+          </ul>
+        </ul>
+      </li>
+    </ul>
+    <ul>
+      <li><h3>API URLs changes (DEPRECATION)</h3>
+        <ul>
+          <li>Sandbox's API is now accessible at <a href="https://api.sandbox.partoo.co">api.sandbox.partoo.co</a>. There is a redirection from <a href="https://api.sandbox.partoo.co">sandbox.api.partoo.co</a> to <a href="https://api.sandbox.partoo.co">api.sandbox.partoo.co</a> that <b>will be deprecated</b> on <b>January 15th, 2022</b>.</li>
+        </ul>
+      <li><h3>Address (DEPRECATION)</h3>
+        <ul>
+          <li>
+            The following endpoints will be deleted on <b>January 15th, 2022</b>:
+            <ul>
+              <li>GET <a href="https://developers.partoo.co/rest_api/v2/#operation/getStreetTypes">/v2/GET street types</a></li>
+              <li>GET <a href="https://developers.partoo.co/rest_api/v2/#operation/getNumberSupplements">/v2/GET number supplements</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><h3>Categories (DEPRECATION)</h3>
+        <ul>
+          <li>
+            To improve consistency against v2/categories endpoint, following changes have been made on GET /v2/category/{category_id}:
+            <ul>
+              <li><i>gmb_id</i> field has been added to response
+              <li><i>id</i> in response now return an integer</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <h2>2021-12-14</h2>
+    <ul>
+      <li><h3>Categories (DEPRECATION)</h3>
+        <ul>
+          <li>Old category ids (format: ‘5109c3a237zdc544d8e267378’) are not accepted anymore when creating/updating businesses or in Categories endpoints requests. Please use new category ids (format: ’gcid:climbing_gym’). Available categories can be found using this <a href="https://developers.partoo.co/rest_api/v2/#operation/getCategories">endpoint</a>.</li>
+        </ul>
+      </li>
+    </ul>
+    <h2>2021-07-15</h2>
+    <ul>
+      <li><h3>Categories (DEPRECATION)</h3>
+        <ul>
+          <li>GET /v2/category/search has been deprecated. In order to search through Partoo categories, you can use <a href="https://developers.partoo.co/rest_api/v2/#operation/getCategories">/v2/categories</a> offering more advanced filtering options.</li>
+        </ul>
+      <li><h3>API keys used to login users (DEPRECATION)</h3>
+        <ul>
+          <li>For security reasons, the following routes have been deprecated:</li>
+          <ul>
+            <li>POST <a href="https://developers.partoo.co/rest_api/v2/#operation/generateAPIKey">/v2/authorize</a></li>
+            <li>GET <a href="https://developers.partoo.co/rest_api/v2/#operation/listAPIKeys">/v2/authorize/list</a></li>
+            <li>POST <a href="https://developers.partoo.co/rest_api/v2/#operation/revokeAPIKey">/v2/authorize/revoke</a></li>
+          </ul>
+          <li>If you are still using them, you need to migrate to <a href="https://developers.partoo.co/rest_api/v2/#tag/Connection-Tokens">/v2/connection/generate_token</a> route,
+          which has a similar signature than the deprecated authorization endpoints.</li>
+        </ul>
+      </li>
+      <li><h3>Business endpoints (UPDATES AND DEPRECATION)</h3>
+        <ul>
+          <li>To improve business data consistency and its diffusion on directories, changes below have been made on the following endpoints:
+          <ul>
+            <li>GET <a href="https://developers.partoo.co/rest_api/v2/#operation/searchBusinesses">/v2/business</a></li>
+            <li>POST <a href="https://developers.partoo.co/rest_api/v2/#operation/createBusiness">/v2/business</a></li>
+            <li>GET <a href="https://developers.partoo.co/rest_api/v2/#operation/getBusiness">/v2/business/{business_id}</a></li>
+            <li>POST <a href="https://developers.partoo.co/rest_api/v2/#operation/updateBusiness">/v2/business/{business_id}</a></li>
+          </ul>
+          </li>
+          <li>
+            Impacted fields:
+            <ul>
+              <li>‘clean_name’, ‘video’, ‘siret’ and ‘news’ fields have been removed from params and from response</li>
+              <li>‘country’ standardized code format</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+
+    <!-- TEMPLATE
+
+      <ul>
+        <li><h3>Title</h3>
+          <ul>
+            <li>Description</li>
+            <ul>
+              <li>Change ...</li>
+              <li>Change ...</li>
+              <li>Change ...</li>
+            </ul>
+          </ul>
+        </li>
+      </ul>
+    -->

@@ -1,0 +1,202 @@
+name: SSO
+description: >
+    <h2>What is SSO?</h2>
+
+    <p>
+    <b>Single sign-on (SSO)</b> is an authentication method that allows users to
+    access multiple applications with a single set of credentials.
+    </p>
+
+
+    <p>
+    For Partoo, this means users can access the Partoo app directly from your
+    application directory.
+    </p>
+
+    <p>
+    SSO involves two parts:
+    </p>
+
+    <ul>
+        <li>
+        The <b>Service</b> (the application you're connecting to, in this case,
+        Partoo).
+        </li>
+        <li>
+        The <b>Identity Provider</b> (the system managing users and logins, in
+        this case, your system).
+        </li>
+    </ul>
+
+    <p>
+    Partoo, as a <b>Service</b>, supports SSO connections using two protocols
+    commonly supported by most Identity Providers (such as Google, Microsoft
+    Azure Active Directory, Okta, etc.):
+    </p>
+
+    <ul>
+        <li><b>SAML</b></li>
+        <li><b>OIDC</b> (OpenID Connect) with <b>PKCE flow</b></li>
+    </ul>
+
+    <p>
+    ⚠️ <b>Important: Our SSO functionality only allows connections to existing
+    Partoo accounts.  It does not automatically create accounts.  You must
+    create users beforehand, either through the Partoo API or the Partoo
+    interface.</b>
+    </p>
+
+    <h2>How to set up SSO with Partoo?</h2>
+
+    <h3>Step 1 – Enable the SSO features for your organization</h3>
+
+    <p>
+    To enable SSO for your organization on Partoo, first contact your Customer
+    Success Manager.
+    </p>
+
+    <h3>Step 2 – Retrieve required information from the Partoo App</h3>
+
+    <p>
+    After our team enables SSO for your organization, you can access the
+    information needed to configure the connection with your identity provider.
+    </p>
+
+    <p>
+    In the Partoo app, navigate to the SSO configuration page: <b>Settings</b> >
+    <b>Integrations</b> > <b>SSO Connection</b> > <b>OIDC</b> or <b>SAML</b>,
+    depending on your chosen protocol.
+    </p>
+
+    <p>
+    This page will also be used in Step 4 to enter information from your
+    identity provider.
+    </p>
+
+    <p>
+    For the next step, you'll need the following information from this page:
+    </p>
+
+    <h4>For SAML</h4>
+    <ul>
+      <li>ACS URL</li>
+      <li>Metadata URL</li>
+    </ul>
+
+    <h4>For OIDC</h4>
+    <il>
+      <li>Redirect URL</li>
+    </il>
+
+    <h3>Step 3 – Add a Partoo application to your identity provider</h3>
+
+    <p>
+    In the endpoints below, <code>{identifier}</code> is a placeholder for the
+    unique identifier of your SSO configuration. Newer configurations use UUIDs,
+    while older ones may use a name like "your_enterprise_name". The formatted
+    URLs can be found on the configuration page mentioned at the previous step.
+    </p>
+
+    <p>
+    You will need to create a Partoo application in your Identity Provider using
+    the following parameters:
+    </p>
+
+    <h4>For SAML</h4>
+    <ul>
+        <li>ACS URL: <code>https://app.partoo.co/api/v2/saml/{identifier}/acs</code>
+        <li>Entity Id: <code>https://app.partoo.co/api/v2/saml/{identifier}/metadata/</code>
+        <li>Attribute mapping: email => <code>email</code> or <code>urn:oid:0.9.2342.19200300.100.1.3</code>
+        <li>[optional] Allowed callback url: <code>https://app.partoo.co/api/v2/saml/{identifier}/acs</code>
+    </ul>
+
+    <h4>For OIDC</h4>
+    <ul>
+        <li>Redirect URL: <code>https://app.partoo.co/connection?sso_alias={identifier}</code>
+    </ul>
+
+    <h3>Step 4 – Add the connection information in the Partoo app</h3>
+
+    <p>
+    Once you've created the Partoo application in your Identity Provider,
+    you'll need to configure the connection information in Partoo to finalise
+    the setup.
+    </p>
+
+    <h4>For SAML</h4>
+    <ul>
+        <li>
+          Click the <b>Prefill</b> button in the banner and upload your
+          <code>metadata.xml</code> file. The configuration will be extracted
+          automatically.
+        </li>
+        <li>
+          Alternatively, you can manually fill in the following fields:
+          <ul>
+            <li>Entity ID</li>
+            <li>Single Sign-on service</li>
+            <li>X509 Certificate</li>
+          </ul>
+        </li>
+        <li>Regardless of which method you choose, you can also set:
+          <ul>
+            <li>An expiration date for your certificate or configuration.</li>
+            <li>A technical contact email address.</li>
+          </ul>
+        </li>
+    </ul>
+
+    <h4>For OIDC</h4>
+    <ul>
+        <li>
+          Click the <b>Prefill</b> button in the banner and enter your
+          <code>.well-known</code> URL. Most of the configuration will be
+          extracted automatically.
+        </li>
+        <li>
+          Alternatively, you can manually fill in the following fields:
+          <ul>
+            <li>Issuer</li>
+            <li>Single Sign-on service</li>
+            <li>Token endpoint</li>
+            <li>JWKS URI</li>
+          </ul>
+        </li>
+        <li>
+         Regardless of the method you choose, you must enter your
+         <code>client_id</code> and, if required by your identity provider, your
+         <code>client_secret</code>.
+        </li>
+    </ul>
+
+    <h3>Step 5 – Test the connection</h3>
+
+    <p>
+    Once the configuration is complete on both sides, you can test the login
+    endpoint to initiate the SSO connection:
+    </p>
+
+    <ul>
+        <li>For SAML: <code>https://app.partoo.co/api/v2/saml/{identifier}/login</code>
+        <li>For OIDC: <code>https://app.partoo.co/api/v2/oidc/{identifier}/login</code>
+    </ul>
+
+    <p>
+    You can also log in via SSO from the
+    <a href="https://app.partoo.co/connection/sso">Partoo connection page</a>.
+    </p>
+
+    <h2>FAQ</h2>
+      <h3>How can we create users?</h3>
+        Users cannot be created automatically with the SSO. They need to be created manually through the app or the API.
+        See <a href="https://developers.partoo.co/rest_api/v2/#operation/createUser">API User creation</a>
+      <h3>How to create an SSO only user?</h3>
+        To create a user with SSO only, you need to send <code>sso_only = True</code>, <code>send_invitation=False</code> and no <code>password</code> in the creation call.
+      <h3>What should I do when my certificate expires?</h3>
+        Your generated certificates have an expiration date.
+        You will be reminded to update them by email (on the technical contact provided) before the certificate expires.
+        You can follow the email instructions, which will ask you to send a new certificate to the given email address.
+      <h3>Can I use other methods to log in on the connection page?</h3>
+        Sure, for example, if you use Google as an Identity Provider, you can use the Google login.
+      <h3>For any other question</h3>
+        See <a href="https://developers.partoo.co/rest_api/v2/#tag/Technical-Support">Technical support</a>

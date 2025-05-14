@@ -1,0 +1,26 @@
+tags:
+  - Users
+summary: Invite user
+description: >
+  This endpoint lets you trigger a new invitation email to an `invited` user.
+  You need to have `WRITE` access to this user.
+  The email can only be sent once every 5 minutes.
+operationId: reinviteUser
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_user_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

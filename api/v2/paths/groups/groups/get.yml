@@ -1,0 +1,23 @@
+tags:
+  - Groups and Sections
+operationId: getGroup
+summary: Get Group
+description: >
+  Get a group and it's associated business IDs.<br>
+  For more information about the group system, see <a href="#tag/Groups-and-Sections">the Groups and Sections description</a>.
+parameters:
+  - $ref: '../../../components/index.yml#/parameters/path_section_id'
+  - $ref: '../../../components/index.yml#/parameters/path_group_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/index.yml#/schemas/GetGroupItem'
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'

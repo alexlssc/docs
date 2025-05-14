@@ -1,0 +1,29 @@
+PresenceAnalyticsKeywordsResults:
+  type: array
+  items:
+    type: object
+    properties:
+      keyword:
+        $ref: "./types.yml#/Keyword"
+      count:
+        $ref: "./types.yml#/Count"
+      threshold:
+        $ref: "./types.yml#/Threshold"
+      date:
+        $ref: "./types.yml#/AnalyticsDate"
+      bucket:
+        $ref: "./types.yml#/AnalyticsBucket"
+      business_id:
+        $ref: "./types.yml#/BusinessID"
+
+PresenceAnalyticsKeywordsResponse:
+  type: object
+  properties:
+    page:
+      $ref: "../pagination/types.yml#/Page"
+    count:
+      $ref: "../pagination/types.yml#/TotalItemsCount"
+    max_page:
+      $ref: "../pagination/types.yml#/MaxPage"
+    keywords:
+      $ref: "#/PresenceAnalyticsKeywordsResults"

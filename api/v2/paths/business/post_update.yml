@@ -1,0 +1,116 @@
+tags:
+  - Businesses
+operationId: updateBusiness
+summary: Update business
+description: >
+  This endpoint lets you access to the information of a business.
+  You need to have `WRITE` access on this business.
+  Only indicated values are taken into account (it works like a `PATCH`).
+  You cannot push fields disabled for your org.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request object
+        type: object
+        properties:
+          name:
+            $ref: '../../components/index.yml#/schemas/BusinessName'
+          org_id:
+            $ref: '../../components/index.yml#/schemas/BusinessOrgId'
+          groups:
+            $ref: '../../components/index.yml#/schemas/groups'
+          country:
+            $ref: '../../components/index.yml#/schemas/BusinessCountry'
+          zipcode:
+            $ref: '../../components/index.yml#/schemas/BusinessZipcode'
+          city:
+            $ref: '../../components/index.yml#/schemas/BusinessCity'
+          region:
+            $ref: '../../components/index.yml#/schemas/BusinessRegion'
+          categories:
+            $ref: '../../components/index.yml#/schemas/BusinessCategories'
+          code:
+            $ref: '../../components/index.yml#/schemas/BusinessCode'
+          status:
+            $ref: '../../components/index.yml#/schemas/BusinessStatus'
+          opening_date:
+            $ref: '../../components/index.yml#/schemas/BusinessOpeningDate'
+          address2:
+            description: Row address string
+            type: string
+          address_full:
+            $ref: '../../components/index.yml#/schemas/AddressFull'
+          lat:
+            $ref: '../../components/index.yml#/schemas/BusinessLatitude'
+          long:
+            $ref: '../../components/index.yml#/schemas/BusinessLongitude'
+          website_url:
+            $ref: '../../components/index.yml#/schemas/BusinessWebsite'
+          facebook_url:
+            $ref: '../../components/index.yml#/schemas/BusinessFacebookPage'
+          twitter_url:
+            $ref: '../../components/index.yml#/schemas/BusinessTwitter'
+          description_short:
+            $ref: '../../components/index.yml#/schemas/BusinessShortDescription'
+          description_long:
+            $ref: '../../components/index.yml#/schemas/BusinessLongDescription'
+          open_hours:
+            $ref: '../../components/index.yml#/schemas/OpenHours'
+          specific_hours:
+            $ref: '../../components/index.yml#/schemas/SpecificHours'
+          contacts:
+            $ref: '../../components/index.yml#/schemas/BusinessContacts'
+          photos:
+            $ref: '../../components/index.yml#/schemas/Photos'
+          national_identification_number:
+            $ref: '../../components/index.yml#/schemas/BusinessNationalIdentificationNumber'
+          custom_fields:
+            $ref: '../../components/index.yml#/schemas/CustomFields.Update'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+            id:
+              $ref: '../../components/index.yml#/schemas/BusinessId'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    description: >
+      You are not allowed to perform this action
+    content:
+      application/json:
+        schema:
+          description: >
+            Error that occurs when you are authenticated but you are trying to perform an action you are not
+            allowed to perform
+          type: object
+          properties:
+            errors:
+              type: object
+              description: The detail of the error encountered
+              properties:
+                authorization:
+                  additionalProperties:
+                    type: string
+                    default: "Operation not allowed"
+        example:
+          errors:
+            authorization:
+              name: "edit_not_allowed"
+              open_hours: "edit_not_allowed"
+              photos.primary: "edit_not_allowed"
+              photos.secondary: "edit_not_allowed"
+  404:
+    $ref: '../../components/index.yml#/responses/404'

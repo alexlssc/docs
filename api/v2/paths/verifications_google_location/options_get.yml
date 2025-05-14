@@ -1,0 +1,98 @@
+summary: Fetch Google Location Verification Options
+description: >
+  This endpoint retrieves verification options for a specific Google location identified by `google_location_id`. It 
+  requires authentication and authorization to access. The user must have at least the role of a `BUSINESS_MANAGER` to use this
+  endpoint.
+  
+  
+  Note that the response can return an empty options list, this can mean two things:
+     - There are really no verification options available for this location.
+     - Video verification is possible but not implemented through the API. In this case, you should ask the user to manually verify.
+
+operationId: fetchGoogleLocationVerificationOptions
+tags:
+  - Google
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/google_location_id'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          properties:
+            status:
+              description: The status of the response `success`, `warning` or `error`.
+              type: string
+              example: "success"
+            options:
+              description: List of available verification options returned.
+              type: array
+              items:
+                type: object
+                properties:
+                  method:
+                    type: string
+                    description: The method of verification, can be `PHONE_CALL`, `SMS`, `EMAIL` or `ADDRESS`.
+                    example: "PHONE_CALL"
+                  phone_number:
+                    type: string
+                    description: >
+                      *OPTIONAL* Depending on the status: 
+                        - `AVAILABLE`: The phone number to which the code will be sent, either through an automated call or a text message.
+                        - `PENDING`: The phone number where the code has been sent in case of `PENDING` status.
+                      Note that this attribute is only returned for `PHONE_CALL` and `SMS` methods.
+                    example: "+33187662490"
+                  email:
+                    type: string
+                    description: >
+                      *OPTIONAL* The email address to which the code will be or has been sent.
+                      Note that this attribute is only returned for `EMAIL` method.
+                    example: "email.api@partoo.fr"
+                  full_name:
+                    type: string
+                    description: > 
+                      **OPTIONAL and only with `PENDING` status:** The full name to which the postcard has been sent to.
+                      Note that this attribute is only returned for `ADDRESS` method.
+                    example: "John Doe"
+                  full_address:
+                    type: string
+                    description: >
+                      *OPTIONAL* The full address to which the postcard will be or has been sent to.
+                      Note that this attribute is only returned for `ADDRESS` method.
+                    example: "190 Rue Championnet, 75018 Paris"
+                  expected_delivery_days:
+                    type: integer
+                    description: >
+                      *OPTIONAL* The expected of business days it will take for the postcard to be delivered.
+                      Note that this attribute is only returned for `ADDRESS` method.
+                    example: 2
+                  status:
+                    type: string
+                    description: The status of the verification option, can be `PENDING` or `AVAILABLE`.
+                    example: "AVAILABLE"
+            message:
+              type: string
+              description: >
+                *OPTIONAL* Details of the message. Can be one of the following:
+                  - `listing_verified`: The location is already verified (returned with a `success` status).
+                  - `listing_in_review`: The location is already in review for verification (returned with a `warning` status).
+                  - `listing_disabled`: The location is disabled (returned with a `error` status).
+                  - `listing_suspended`: The location is suspended (returned with a `error` status).
+                  - `listing_status_not_found`: The location is not found (returned with a `error` status).
+              example:
+              enum:
+                - listing_verified
+                - listing_in_review
+                - listing_disabled
+                - listing_suspended
+                - listing_status_not_found
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

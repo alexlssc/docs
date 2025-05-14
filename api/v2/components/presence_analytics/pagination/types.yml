@@ -1,0 +1,15 @@
+Page:
+  description: The current page number.
+  type: integer
+  example: 1
+
+TotalItemsCount:
+  description: |
+    Total number of results available for the filters and dimensions requested.
+  type: integer
+  example: 1
+
+MaxPage:
+  description: Total number of pages available for this request.
+  type: integer
+  example: 1

@@ -1,0 +1,38 @@
+Count:
+  type: integer
+  description: |
+    An aggregation of mountly keyword search count values.
+
+    The count values indicates the number of unique users that used the keyword in a month.
+  example: 123
+
+Keyword:
+  type: string
+  description: |
+    The lower-cased string that the user entered.
+
+    This is present only if the “keyword” dimension is in the request.
+  example: 123
+
+Threshold:
+  type: integer
+  description: |
+    An aggregation of monthly threshold values.
+
+    The threshold value indicates that the real count of unique users that used the keyword is below this value.
+  example: 123
+
+AnalyticsDate:
+  type: string
+  description: First day of the aggregation
+  example: "2019-11-01"
+
+AnalyticsBucket:
+  type: string
+  description: Time aggregation requested
+  example: "month"
+
+BusinessID:
+  description: Business id
+  type: string
+  example: 5409c35a97bbc544d8e26737

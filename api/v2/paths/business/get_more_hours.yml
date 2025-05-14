@@ -1,0 +1,32 @@
+summary: More hours for your business
+description: >
+  This endpoint allows you to view the **More Hours** set for your business.
+
+operationId: getBusinessMoreHours
+tags:
+  - Businesses
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+  - $ref: '../../components/index.yml#/parameters/category_more_hours_business'
+  - $ref: '../../components/index.yml#/parameters/country_more_hours_business'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/MoreHoursBusinessGetResponse'
+  400:
+    description: Wrong or missing parameters
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../components/index.yml#/schemas/MoreHoursListInvalidCategoryError'
+            - $ref: '../../components/index.yml#/schemas/MoreHoursListInvalidCountryError'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

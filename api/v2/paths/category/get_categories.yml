@@ -1,0 +1,103 @@
+summary: List Partoo categories
+tags:
+  - Categories
+description: >
+  This endpoint lets you read and filter through Partoo categories.
+operationId: getCategories
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_category_country'
+  - $ref: '../../components/index.yml#/parameters/query_category_lang'
+  - $ref: '../../components/index.yml#/parameters/query_category_state'
+  - $ref: '../../components/index.yml#/parameters/query_category_block_push_long'
+  - $ref: '../../components/index.yml#/parameters/query_category_search_query'
+  - $ref: '../../components/index.yml#/parameters/query_category_order_by'
+  - $ref: '../../components/index.yml#/parameters/query_category_live__isnull'
+  - $ref: '../../components/index.yml#/parameters/query_page'
+  - $ref: '../../components/index.yml#/parameters/query_per_page_1_100'
+  - $ref: '../../components/index.yml#/parameters/query_category_with_names_categories'
+  - $ref: '../../components/index.yml#/parameters/query_category_with_countries'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                categories:
+                  type: array
+                  description: List of categories
+                  items:
+                    $ref: '../../components/index.yml#/schemas/DeprecatedCategorySql'
+        examples:
+          with default parameters:
+            value:
+              {
+                "page": 1,
+                "max_page": 10,
+                "count": 287,
+                "categories": [
+                  {
+                    "id": 4018,
+                    "gmb_id": "gcid:wood_industry",
+                    "name": "Industrie du bois",
+                    "state": "OK",
+                    "block_push_long_description_on_gmb": false,
+                    "live_id": null
+                  }
+                ]
+              }
+          with_countries=true:
+            value:
+              {
+                "page": 1,
+                "max_page": 10,
+                "count": 287,
+                "categories": [
+                  {
+                    "id": 4018,
+                    "gmb_id": "gcid:wood_industry",
+                    "name": "Industrie du bois",
+                    "state": "OK",
+                    "block_push_long_description_on_gmb": false,
+                    "countries": [
+                      "RU",
+                      "FR"
+                    ],
+                    "live_id": null
+                  }
+                ]
+              }
+          with_names=true:
+            value:
+              {
+                "page": 1,
+                "max_page": 10,
+                "count": 287,
+                "categories": [
+                  {
+                    "id": 4018,
+                    "gmb_id": "gcid:wood_industry",
+                    "name": "Industrie du bois",
+                    "state": "OK",
+                    "block_push_long_description_on_gmb": false,
+                    "names": [
+                      {
+                        "name": "Wood industry",
+                        "lang": "de",
+                      },
+                      {
+                        "name": "Wood industry",
+                        "lang": "es",
+                      },
+                    ],
+                    "live_id": null
+                  }
+                ]
+              }
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'

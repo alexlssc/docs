@@ -1,0 +1,40 @@
+summary: List Google more hours
+description: >
+  <p>⚠️ <b>What are Google More Hours ?</b>
+  <p>More Hours is a feature in <i>Google</i> that allows the business owner to display hours for specific services available.
+  <p>Examples of such services include opening hours for the kitchen, for breakfast, for happy hour, etc.
+  <p>Notice that the available More Hour IDs vary between both business categories and countries. For example, a restaurant will have different More Hour IDs available than a bank, and a restaurant in France will have different IDs available than a restaurant in the USA.
+  <p>To recover More Hours set for a business, <a href="#operation/getBusinessMoreHours">see Get More Hours for your Business endpoints</a>.
+  <p>To handle More Hours for businesses, <a href="#operation/postBusinessMoreHours">see Update More Hours for your Business endpoints</a>.
+  <p>This endpoint allows you to get all the different **More Hour IDs** available for a given business category, including their translated names for the given language.
+
+operationId: moreHours
+tags:
+  - Google
+parameters:
+  - $ref: '../../components/index.yml#/parameters/category_more_hours_list'
+  - $ref: '../../components/index.yml#/parameters/country_more_hours_list'
+  - $ref: '../../components/index.yml#/parameters/lang_more_hours'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/MoreHoursListResponse'
+  400:
+    description: Wrong or missing parameters
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../components/index.yml#/schemas/MoreHoursListMissingParametersError'
+            - $ref: '../../components/index.yml#/schemas/MoreHoursListInvalidCategoryError'
+            - $ref: '../../components/index.yml#/schemas/MoreHoursListInvalidCountryError'
+            - $ref: '../../components/index.yml#/schemas/AttributesWrongLangError'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

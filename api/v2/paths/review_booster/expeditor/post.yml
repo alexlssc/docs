@@ -1,0 +1,49 @@
+tags:
+  - Review Booster
+summary: Set the expeditor name of a business
+operationId: setExpeditorName
+description: >
+  This endpoint lets you set the expeditor name of a business. 
+  <p>An expeditor name is the name of the sender used to send the message.
+  It will be seen instead of the phone number on the destination phone.
+  <p>An expeditor name lenght's must be contain between 3 and 11 characters. No special characters are allowed.
+
+  <p>Your business must be subscribed to Review Booster product.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - business_id
+          - expeditor_name
+        properties:
+          business_id:
+            $ref: '../../../components/index.yml#/schemas/BusinessId'
+          expeditor_name:
+            description: the new expeditor name
+            type: string
+            example: "Partoo"
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            expeditor_name:
+              description: the updated expeditor name, with no special characters and between 3 and 11 characters
+              type: string
+              example: "Partoo"
+            status:
+              $ref: '../../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../../components/index.yml#/responses/404'

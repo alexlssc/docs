@@ -1,0 +1,42 @@
+summary: Set Google attributes for your business
+description: >
+  This endpoint allows you to set **Google attributes** for your business.
+
+operationId: postBusinessAttributes
+
+tags:
+  - Businesses
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/index.yml#/schemas/BusinessPostAttributesBody'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  400:
+    description: Wrong request Body
+    content:
+      application/json:
+        schema:
+          anyOf:
+            - $ref: '../../components/index.yml#/schemas/BusinessPostWrongAttributesValuesError'
+            - $ref: '../../components/index.yml#/schemas/BusinessPostUnknownAttributesError'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

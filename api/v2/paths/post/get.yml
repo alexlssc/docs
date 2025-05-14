@@ -1,0 +1,24 @@
+summary: Specific post
+description: >
+  This endpoint returns all information on a specific post.
+operationId: getPost
+tags:
+  - Posts
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_post_id'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/GooglePost'
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

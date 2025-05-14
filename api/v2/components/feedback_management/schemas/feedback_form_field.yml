@@ -1,0 +1,36 @@
+type: object
+properties:
+  id:
+    type: string
+    description: |
+      Unique identifier of the field
+    example: 674d7aaa13e599deae0001b2
+  field_type:
+    type: string
+    enum: ["NPS", "FREE_FORM", "CSAT", "MULTIPLE_CHOICE"]
+    example: CSAT
+  field_label:
+    type: string
+    description: |
+      The label of the field (i.e. the question that was answered)
+    example: How would you rate our service?
+  field_choices:
+    type:
+      - array
+      - "null"
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        isOtherOption:
+          type: boolean
+          description: Whether this is the "Other" option
+          example: false
+    description: |
+      All choices that were ever available for this field
+
+      Only set for MULTIPLE_CHOICE fields
+    example: null

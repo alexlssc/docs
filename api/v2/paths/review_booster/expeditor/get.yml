@@ -1,0 +1,39 @@
+tags:
+  - Review Booster
+summary: The expeditor name of a business
+operationId: getExpeditorName
+description: >
+  This endpoint lets you get the expeditor name of a business. 
+  <p>An expeditor name is the name of the sender used to send the message.
+  It will be seen instead of the phone number on the destination phone.
+  
+  
+  <p>Your business must be subscribed to Review Booster product.
+parameters:
+  - in: query
+    name: business_id
+    required: true
+    schema:
+      $ref: '../../../components/index.yml#/schemas/BusinessId'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            expeditor_name:
+              description: the expeditor name used to send message
+              type: string
+              example: "Partoo"
+            status:
+              $ref: '../../../components/index.yml#/schemas/RequestStatus'
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../../components/index.yml#/responses/404'

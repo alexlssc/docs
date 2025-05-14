@@ -1,0 +1,47 @@
+summary: Search for reviews
+description: |
+  This endpoint lets you search for the reviews of your businesses.
+
+  To access the reviews of a business you need to have `READ` access on it.
+  The response is paginated (30 results per page).
+operationId: searchReviews
+tags:
+  - Reviews
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_business__in'
+  - $ref: '../../components/index.yml#/parameters/query_business__notin'
+  - $ref: '../../components/reviews/parameters.yml#/query_content__isnull'
+  - $ref: '../../components/reviews/parameters.yml#/query_partner__in'
+  - $ref: '../../components/reviews/parameters.yml#/query_gmb_rating__in'
+  - $ref: '../../components/reviews/parameters.yml#/query_tripadvisor_rating__in'
+  - $ref: '../../components/reviews/parameters.yml#/query_recommended__in'
+  - $ref: '../../components/reviews/parameters.yml#/query_review_update_date__gte'
+  - $ref: '../../components/reviews/parameters.yml#/query_review_update_date__lte'
+  - $ref: '../../components/reviews/parameters.yml#/query_review_state'
+  - $ref: '../../components/reviews/parameters.yml#/query_tag_label_in'
+  - $ref: '../../components/reviews/parameters.yml#/query_review_without_tag'
+  - $ref: '../../components/reviews/parameters.yml#/query_keywords'
+  - $ref: '../../components/index.yml#/parameters/query_page_up_to_100'
+  - $ref: '../../components/index.yml#/parameters/query_per_page_1_100'
+  - $ref: '../../components/reviews/parameters.yml#/query_order_by'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                reviews:
+                  description: Filtered reviews
+                  type: array
+                  items:
+                    $ref: '../../components/index.yml#/schemas/Review'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

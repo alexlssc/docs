@@ -1,0 +1,164 @@
+ReviewMetricsResponse:
+  type: object
+  required:
+    - dimension
+    - metrics
+  properties:
+    dimension:
+      oneOf:
+        - type: string
+        - type: number
+        - type: 'null'
+      description: |
+        Unique identifier of the dimension:
+        - <small>string</small> when `dimensions` is `business`, `user`, `day`, `week`, `month`, `year`.
+        - <small>number</small> when `dimensions` is `group` or `tag`.
+        - <small>null</small> when `dimensions` is not set.
+
+        When `dimensions` is `day` or `week`, the format is `YYYY-MM-DD`<br>
+        When `dimensions` is `month`, the format is `YYYY-MM`<br>
+        When `dimensions` is `year`, the format is `YYYY`
+      example: "59b2645db12ff60643ef832c"
+
+    metrics:
+      type: object
+      properties:
+        average_rating:
+          type: number
+          format: float
+          description: Average rating.
+
+        average_rating_distribution:
+          type: object
+          description: |
+            Number of businesses within each pre-defined ratings.
+          properties:
+            "NULL":
+              type: number
+              format: integer
+              description: Number of businesses without any average rating.
+            "0-3":
+              type: number
+              format: integer
+              description: Number of businesses whose rating is between 0 and 3 (excluded).
+            "3-3.8":
+              type: number
+              format: integer
+              description: Number of businesses whose rating is between 3 (included) and 3.8 (excluded).
+            "3.8-4.3":
+              type: number
+              format: integer
+              description: Number of businesses whose rating is between 3.8 (included) and 4.3 (excluded).
+            "4.3-5":
+              type: number
+              format: integer
+              description: Number of businesses whose rating is between 4.3 (included) and 5.
+
+        rank:
+          type: number
+          format: integer
+          description: |
+            Rank of the dimension compared to the others, based on the specified `order_by` parameter.
+
+            **Note:** Two results with the same metrics value will have the same rank.
+
+        rating_distribution:
+          type: object
+          properties:
+            "1":
+              type: number
+              format: integer
+              description: Number of 1 star reviews.
+            "2":
+              type: number
+              format: integer
+              description: Number of 2 star reviews.
+            "3":
+              type: number
+              format: integer
+              description: Number of 3 star reviews.
+            "4":
+              type: number
+              format: integer
+              description: Number of 4 star reviews.
+            "5":
+              type: number
+              format: integer
+              description: Number of 5 star reviews.
+
+        reply_means:
+          type: object
+          properties:
+            ai_suggestion:
+              type: number
+              format: integer
+              description: Number of reviews replied using an AI suggestion.
+            auto_reply:
+              type: number
+              format: integer
+              description: Number of reviews replied using the auto reply.
+            manual:
+              type: number
+              format: integer
+              description: Number of reviews replied manually (without an AI suggestion nor a reply template).
+            reply_template:
+              type: number
+              format: integer
+              description: Number of reviews replied using a reply template (excluding auto replies).
+            total:
+              type: number
+              format: integer
+              description: Total (ai_suggestion + auto_reply + manual + reply_template).
+
+        reply_time:
+          type: object
+          properties:
+            fast:
+              type: number
+              format: integer
+              description: Number of reviews replied in less than 2 days
+            slow:
+              type: number
+              format: integer
+              description: Number of reviews replied in more than 2 days
+            not_replied:
+              type: number
+              format: integer
+              description: Number of reviews not replied
+            total:
+              type: number
+              format: integer
+              description: Total (fast + slow + not_replied)
+
+        reviews_count:
+          type: number
+          format: integer
+          description: Number of reviews
+
+    dimension_name:
+      type: string
+      description: |
+        Name of the dimension:
+        - Business name when `dimensions` is `business`
+        - Group name when `dimensions` is `group`
+        - Tag name when `dimensions` is `tag`
+        - User full name when `dimensions` is `user`
+        - Not present in the response otherwise
+
+    dimension_info:
+      type: object
+      description: |
+        Additional info about the dimension.
+
+        Only returned when `dimensions` is `business`.
+      properties:
+        address_full:
+          $ref: '../../components/index.yml#/schemas/AddressFull'
+        city:
+          $ref: '../../components/index.yml#/schemas/BusinessCity'
+        code:
+          $ref: '../../components/index.yml#/schemas/BusinessCode'
+        zipcode:
+          $ref: '../../components/index.yml#/schemas/BusinessZipcode'
+
+

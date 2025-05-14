@@ -1,0 +1,63 @@
+BusinessImpressionsDesktopMaps:
+  type: integer
+  description: >
+    Business impressions on Google Maps on Desktop devices.
+     Multiple impressions by a unique user within a single day are
+     counted as a single impression.
+  example: 123
+
+BusinessImpressionsMobileMaps:
+  type: integer
+  description: >
+    Business impressions on Google Maps on Mobile devices.
+     Multiple impressions by a unique user within a single
+      day are counted as a single impression.
+  example: 123
+
+BusinessImpressionsDesktopSearch:
+  type: integer
+  description: >
+    Business impressions on Google Search on Desktop devices.
+     Multiple impressions by a unique user within a single day
+     are counted as a single impression.
+  example: 123
+
+BusinessImpressionsMobileSearch:
+  type: integer
+  description: >
+    Business impressions on Google Search on Mobile devices.
+     Multiple impressions by a unique user within a single day
+     are counted as a single impression.
+  example: 123
+
+BusinessDirectionRequests:
+  type: integer
+  description: >
+    The number of times a direction request was requested to the
+     business location.
+  example: 123
+
+ActionsPhone:
+  type: integer
+  description: Customers who call your business
+  example: 123
+
+ActionsWebsite:
+  type: integer
+  description: Customers who click on your website link
+  example: 123
+
+AnalyticsDate:
+  type: string
+  description: First day of the aggregation
+  example: "2019-11-05"
+
+AnalyticsBucket:
+  type: string
+  description: Time aggregation requested
+  example: "day"
+
+BusinessID:
+  description: Business id
+  type: string
+  example: 5409c35a97bbc544d8e26737

@@ -1,0 +1,74 @@
+types:
+  id:
+    type: integer
+    example: 3245
+  label:
+    type: string
+    example: "API key name"
+    description: "Name given to recognize the Api key"
+  expiration_date:
+    type: string
+    pattern: "yyyy-mm-dd"
+    example: "2022-06-05"
+    description: "Must be at least the day after today. If you want it to expire today you must revoke it. You can set it to null."
+  ip_whitelist:
+        description: |
+          List of IP or CIDR network notations to which API Key calls are restricted.
+
+          Empty list means no restriction.
+        type: array
+        items:
+          type: string
+        example: ["172.16.0.0/12", "127.0.0.1"]
+
+schemas:
+  ApiKey:
+    type: object
+    properties:
+      id:
+        $ref: '#/types/id'
+      label:
+        $ref: '#/types/label'
+      user_id:
+        $ref: '../index.yml#/schemas/UserId'
+      user_name:
+        $ref: '../index.yml#/schemas/UserName'
+      user_role:
+        $ref: '../index.yml#/schemas/Role'
+      disabled:
+        type: boolean
+        example: false
+        description: "Is true if someone revoked the key."
+      expiration_date:
+        $ref: '#/types/expiration_date'
+      last_used_at:
+        type: string
+        pattern: date
+        example: "2019-08-22 11:46:38.914467+00"
+      created_by:
+        $ref: '../index.yml#/schemas/UserId'
+      created_by_name:
+        description: "First name and last name concatenated of the user that created the key"
+        type: string
+        example: "John Smith"
+      created_at:
+        type: string
+        pattern: date
+        example: "2018-03-12 11:49:03.399475+00"
+      revoked_by:
+        $ref: '../index.yml#/schemas/UserId'
+      revoked_by_name:
+        description: "First name and last name concatenated of the user that revoked the key"
+        type: string
+        example: "John Smith"
+      revoked_at:
+        type: string
+        pattern: date
+        example: "2020-10-20 11:46:38.914467+00"
+      ip_whitelist:
+        $ref: "#/types/ip_whitelist"
+  Status:
+    type: string
+    example: 'active'
+    description: Filter api_keys by status. A key is inactive when expired or disabled.
+    enum: ['active', 'inactive', 'disabled', 'expired']

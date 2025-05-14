@@ -1,0 +1,36 @@
+tags:
+  - Businesses
+operationId: getBusinessConnectionsStats
+summary: Statistics for your connected businesses
+description: >
+  This endpoint lets you access the number of businesses connected to different platforms.
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: >
+                Total number of businesses.
+            linked_to_gmb_count:
+              type: integer
+              description: >
+                Number of businesses linked to Google.
+            linked_to_facebook_count:
+              type: integer
+              description: >
+                Number of businesses linked to Facebook.
+            linked_to_tripadvisor_count:
+              type: integer
+              description: >
+                Number of businesses linked to Tripadvisor.
+            linked_to_instagram_count:
+              type: integer
+              description: >
+                Number of businesses linked to Instagram.
+  401:
+    $ref: '../../components/index.yml#/responses/401'

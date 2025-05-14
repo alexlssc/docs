@@ -1,0 +1,21 @@
+operationId: listMessageTemplates
+tags:
+  - Message Reply Templates
+summary: List message templates
+description: >
+  This endpoint retrieves the list of message templates for the current user's organization.
+
+responses:
+  200:
+    description: A list of message templates
+    content:
+      application/json:
+        schema:
+          type: array
+          description: The list of message reply templates.
+          items:
+            $ref: '../../components/messaging/message_reply_template/types.yml#/MessageReplyTemplate'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

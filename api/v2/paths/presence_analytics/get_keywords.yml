@@ -1,0 +1,58 @@
+summary: Profile keywords for your business
+description: |
+  This endpoint lets you view the monthly **Google Business Profile** search keywords for all your businesses subscribed to Presence Management.
+
+  To access the analytics of a business, you need to:
+  - have `READ` access on it
+  - have subscribed to **Presence Management** for this business.
+  - You can access the search keywords from **Google Business Profile**.
+
+  The analytics on search keywords are made available by Google Business Profile on a monthly basis.
+
+  You will receive the following metrics:
+
+  - count: The sum of the number of unique users that used the keyword in a month
+  - threshold: A threshold value indicating that the actual value is less than the threshold. Google Business Profile typically displays for search keywords that were used less than 15 times in a month.
+
+  You can use the following filters:
+
+  - by businesses (businesses id in list, and restricted to one business when using the keyword dimension.)
+  - by date (analytics before and/or after a date)
+
+  The response can be aggregated by:
+  - business id
+  - by date: month or year
+  - both business id and date
+
+  The response can be ordered by:
+
+  - business id
+  - by date: month, or year
+
+  The response can be ordered in ascending or descending order by any of the selected dimensions or metrics.
+
+operationId: getPresenceAnalyticsKeywords
+tags:
+  - Presence analytics
+deprecated: false
+
+parameters:
+  - $ref: "../../components/presence_analytics/keywords/parameters.yml#/query_metrics"
+  - $ref: "../../components/presence_analytics/keywords/parameters.yml#/query_dimensions"
+  - $ref: "../../components/presence_analytics/keywords/parameters.yml#/query_order_by"
+  - $ref: "../../components/presence_analytics/keywords/parameters.yml#/query_business__in"
+  - $ref: "../../components/presence_analytics/keywords/parameters.yml#/query_filter_date__gte"
+  - $ref: "../../components/presence_analytics/keywords/parameters.yml#/query_filter_date__lte"
+  - $ref: "../../components/presence_analytics/pagination/parameters.yml#/query_page"
+  - $ref: "../../components/presence_analytics/pagination/parameters.yml#/query_per_page"
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/presence_analytics/keywords/responses.yml#/PresenceAnalyticsKeywordsResponse"
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

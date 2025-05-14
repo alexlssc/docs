@@ -1,0 +1,30 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: Unique identifier of the reply
+    example: 1
+  created:
+    type: string
+    format: datetime
+    description: Date the reply was created
+    example: 2024-11-15T10:00:15+00:00
+  author_name:
+    type: string
+    description: Author of the reply
+    example: Jane Doe
+  content:
+    type: string
+    description: Content of the reply
+    example: Thank you for your feedback
+  feedback_result_id:
+    type: integer
+    description: Identifier of the feedback result
+    example: 1
+  user_id:
+    allOf:
+      - $ref: '../../index.yml#/schemas/UserId'
+  is_reply_suggestion:
+    type: boolean
+    description: Whether the reply was created using an AI suggestion
+    example: false

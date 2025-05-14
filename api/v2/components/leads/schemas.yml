@@ -1,0 +1,65 @@
+LeadFieldType:
+  type: string
+  description: The lead field type. `OPT-IN` type is a `BOOLEAN` type
+  enum:
+    - "TEXT"
+    - "NUMBER"
+    - "EMAIL"
+    - "PHONE_NUMBER"
+    - "BOOLEAN"
+    - "OPT_IN"
+  example: "TEXT"
+
+LeadItem:
+  type: object
+  properties:
+    id:
+      type: integer
+      example: 1
+    type:
+      $ref: "#/LeadFieldType"
+    name:
+      type: string
+      description: name of the field collected
+      example: "Your firstname"
+    value:
+      type: string
+      description: value of the field corresponding to the lead
+      example: "John"
+
+
+LeadWebhook:
+  type: object
+  properties:
+    id:
+      type: integer
+      description: The identifier for the webhook configuration.
+      example: 1
+    source:
+      type: string
+      description: The source of the lead, how we retrieved it.
+      example: "chatbot"
+    created_at:
+      type: string
+      description: An ISO 8601 date-time string representing the webhook creation date.
+      example: "2024-11-27T16:10:44.929678Z"
+    chatbot_id:
+      type: integer
+      description: The identifier of the chatbot that collected the lead
+      example: 1
+    chatbot_name:
+      type: string
+      description: Name of the chatbot that collected the lead
+      example: "Jim"
+    business_name:
+      type: string
+      description: Name of the business related to the lead
+      example: "Partoo"
+    store_code:
+      type: string
+      description: Store code of the business related to the lead
+      example: "Partoo123"
+    values:
+      type: array
+      items:
+        $ref: "#/LeadItem"

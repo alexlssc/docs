@@ -1,0 +1,47 @@
+summary: Update a review
+description: |
+  Update the state of a review to treated/not_treated
+operationId: updateReview
+tags:
+  - Reviews
+parameters:
+  - in: path
+    name: review_id
+    required: true
+    schema:
+      $ref: '../../components/index.yml#/schemas/ReviewId'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to post a reply
+        type: object
+        required:
+          - review_id
+          - state
+        properties:
+            state:
+              description: Reply state
+              type: string
+              enum:
+                - treated
+                - not_treated
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/Review'
+            - properties:
+                state:
+                   example: treated
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

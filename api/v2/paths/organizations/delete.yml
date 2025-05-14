@@ -1,0 +1,34 @@
+tags:
+  - Organizations
+summary: Delete organization
+operationId: deleteOrganization
+description: >
+  This endpoint lets you delete an organization.
+  You need to have `WRITE` access on your provider.
+  When an organization gets deleted all the resources linked to it are deleted (users and businesses).
+  If the organization still has businesses or users,
+  it would raise an error if you do not indicate `force="True"` in the JSON body.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_org_id'
+  - $ref: '../../components/index.yml#/parameters/organization_force_delete'
+responses:
+  200:
+    description: OK
+    content:
+        application/json:
+          schema:
+            type: object
+            description: Response object
+            properties:
+              status:
+                $ref: '../../components/index.yml#/schemas/RequestStatus'
+              org_id:
+                $ref: '../../components/index.yml#/schemas/OrgId'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

@@ -1,0 +1,77 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 1
+
+  business_id:
+    allOf:
+      - $ref: '../../index.yml#/schemas/BusinessId'
+
+  firstname:
+    type: string
+    description: Firstname of the respondent
+    example: John
+
+  lastname:
+    type: string
+    description: Lastname of the respondent
+    example: Doe
+
+  nps:
+    allOf:
+      - $ref: '../types.yml#/feedback_result/nps'
+
+  content:
+    type: string
+    description: Content of the FREE_FORM field
+    example:
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Suspendisse vulputate efficitur augue, ac auctor nibh scelerisque at.
+      Nulla facilisi. Maecenas luctus efficitur sem sit amet ullamcorper.
+      Donec tempor augue lorem, vitae convallis sapien aliquam id.
+      Maecenas eu odio non est pretium eleifend. Nullam at odio eu ligula ultrices tincidunt.
+      Nulla euismod aliquet ex eget efficitur.
+
+  state:
+    allOf:
+      - $ref: '../types.yml#/feedback_result/state'
+
+  optin:
+    type: boolean
+    description: Whether the respondent accepts to be contacted
+    enum: [ true, false ]
+
+  created:
+    type: string
+    format: datetime
+    description: Date the feedback result was created on
+    example: "2024-10-25T15:12:11+00:00"
+
+  feedback_form:
+    type: object
+    properties:
+      id:
+        allOf:
+          - $ref: './feedback_form.yml#/properties/id'
+      display_name:
+        allOf:
+          - $ref: './feedback_form.yml#/properties/display_name'
+    description: Information about the corresponding feedback form
+
+  feedback_result_fields:
+    type: array
+    items:
+      $ref: './feedback_result_field.yml'
+    description: The various fields of the feedback result
+
+  comments:
+    type: array
+    items:
+      $ref: './feedback_result_reply.yml'
+    description: The replies of the feedback result
+
+  extra:
+    type: object
+    description: The additional hidden fields (other than `firstname`, `lastname`, `store_code`, `email` and `date`)
+    example: {"extra_field": "value", "extra_field_2": "value_2"}

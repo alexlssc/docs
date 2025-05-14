@@ -1,0 +1,117 @@
+summary: PublisherErrors
+description: |
+  This method retrieve a list of known errors associated with a publisher for a business, including detailed descriptions. 
+  
+  The request body is mandatory. 
+  
+  Providing an empty request body will return errors based on the business information stored in the database.
+  
+  Providing a populated request body will return errors related to the specified fields and their values only.
+
+operationId: postPublisherErrors
+tags:
+  - Presence
+parameters:
+  $ref: '../../components/presence/parameters.yml#/postPublisherErrorsParams'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request object
+        type: object
+        properties:
+          name:
+            $ref: '../../components/index.yml#/schemas/BusinessName'
+          org_id:
+            $ref: '../../components/index.yml#/schemas/BusinessOrgId'
+          country:
+            $ref: '../../components/index.yml#/schemas/BusinessCountry'
+          zipcode:
+            $ref: '../../components/index.yml#/schemas/BusinessZipcode'
+          city:
+            $ref: '../../components/index.yml#/schemas/BusinessCity'
+          region:
+            $ref: '../../components/index.yml#/schemas/BusinessRegion'
+          categories:
+            $ref: '../../components/index.yml#/schemas/BusinessCategories'
+          code:
+            $ref: '../../components/index.yml#/schemas/BusinessCode'
+          status:
+            $ref: '../../components/index.yml#/schemas/BusinessStatus'
+          address_full:
+            $ref: '../../components/index.yml#/schemas/AddressFull'
+          address2:
+            $ref: '../../components/index.yml#/schemas/Address2'
+          manual_lat:
+            $ref: '../../components/index.yml#/schemas/BusinessLatitude'
+          manual_long:
+            $ref: '../../components/index.yml#/schemas/BusinessLongitude'
+          lat:
+            $ref: '../../components/index.yml#/schemas/BusinessLatitude'
+          long:
+            $ref: '../../components/index.yml#/schemas/BusinessLongitude'
+          website_url:
+            $ref: '../../components/index.yml#/schemas/BusinessWebsite'
+          facebook_url:
+            $ref: '../../components/index.yml#/schemas/BusinessFacebookPage'
+          twitter_url:
+            $ref: '../../components/index.yml#/schemas/BusinessTwitter'
+          description_short:
+            $ref: '../../components/index.yml#/schemas/BusinessShortDescription'
+          description_long:
+            $ref: '../../components/index.yml#/schemas/BusinessLongDescription'
+          open_hours:
+            $ref: '../../components/index.yml#/schemas/OpenHours'
+          specific_hours:
+            $ref: '../../components/index.yml#/schemas/SpecificHours'
+          contacts:
+            $ref: '../../components/index.yml#/schemas/BusinessContactsCreate'
+          photos:
+            $ref: '../../components/index.yml#/schemas/Photos'
+          national_identification_number:
+            $ref: '../../components/index.yml#/schemas/BusinessNationalIdentificationNumber'
+      examples:
+        empty request body:
+          description: Providing an empty request body will return errors based on the business information stored in the database.
+          value: {}
+        filled request body:
+          description: Providing a populated request body will return errors related to the specified fields and their values only.
+          value:
+            name: "Corner Shop"
+            country: "US"
+            zipcode: "90210"
+            city: "Beverly Hills"
+            region: "CA"
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/presence/schemas.yml#/postPublisherErrorsResponse'
+        examples:
+          without errors:
+            value:
+              {}
+          with errors:
+            value:
+              hours:
+                open_hours:
+                  le118000: "118000_supports_only_three_time_window_per_day"
+                  facebook: "facebook_supports_only_two_time_window_per_day"
+                  apple_business_connect: "open_hours_less_than_15_min_interval_apple_business_connect"
+              description:
+                description_short:
+                  facebook: "facebook_new_pages_description_short_too_long"
+              contact:
+                phone_number:
+                  google_my_business: "invalid_field"
+                  snapchat: "invalid_field"
+                  le118000: "invalid_field"
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

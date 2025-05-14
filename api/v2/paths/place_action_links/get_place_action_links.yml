@@ -1,0 +1,26 @@
+tags:
+  - Place Action Links
+
+summary: Get Place Action Links
+
+description: >
+  Retrieve a list of available place action links. 
+
+operationId: getAvailablePlaceActionLinks
+
+parameters:
+    - $ref: '../../components/index.yml#/parameters/query_place_action_link_lang'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/GetPlaceActionLinksResponse'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

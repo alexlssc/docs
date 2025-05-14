@@ -1,0 +1,212 @@
+tags:
+  - Review analytics
+summary: Get Review metrics
+operationId: getReviewAnalyticsMetrics
+description: |
+ This endpoint lets you view the statistics related to reviews made to your businesses subscribed to
+  **Review Management**.
+
+  A request is composed of:
+  - One or more `metrics` which is the data you want to return
+  - An optional `dimensions` which defines how the data is grouped by
+    - If it is omitted, the request will return the metrics over all the data, based on your filters
+  - An optional `order_by` to define how the data is sorted
+  - Filters, the data can be filtered by:
+    - Businesses
+    - Groups
+    - Tags
+    - Review update date
+
+  Here is the list of all **metrics** available:
+  - `average_rating`: Average rating
+  - `rating_distribution`: Breakdown of the ratings (Number of 1-star reviews, 2-star reviews, 3-star reviews, etc...)
+  - `reviews_count`: Number of reviews received
+  - `reply_time`: Breakdown of the reviews based on how fast (less or more than 48 hours) they have been replied to (or not replied)
+  - `reply_means`: Breakdown of the review replies based on the reply method used (manual reply, reply template, auto reply or AI suggestion)
+  - `average_rating_distribution`: Breakdown of your businesses based on their average rating
+  - `rank`: Allows you to rank the users, businesses or groups based on their performance on a metric (an order_by is required)
+
+  Here is the list of all **dimensions** available, and for each of them, the list of metrics and sort order available:
+  - No dimension
+    - This allows you to get global stats across all your businesses
+    - Available metrics: `average_rating`, `rating_distribution`, `reviews_count`, `reply_time`, `reply_means`, `average_rating_distribution`
+  - Date dimensions: `day`, `week`, `month`, `year`
+    - This allows you to get the evolution of your metrics over time
+    - Available metrics: `average_rating`, `rating_distribution`, `reviews_count`, `reply_time`, `reply_means`
+  - Business and business group dimensions: `business`, `group`
+    - This allows you to see the metrics business by business or group by group (Requires group filter)
+    - Available metrics: `average_rating`, `rating_distribution`, `reviews_count`, `reply_time`, `reply_means`, `rank`
+  - `user`
+    - This allows you to see the metrics user by user
+    - Available metrics: `reply_time`, `reply_means`, `rank`
+  - `tag`
+    - This allows you to see the metrics tag by tag
+    - Available metrics: `average_rating`, `rating_distribution`, `reviews_count`
+
+  Here is the list of all **order_by** available (Add a minus `-` sign before to order by decreasing order):
+  - `average_rating`: Sort by average rating
+  - `reviews_count`: Sort by review_count
+  - `reply_time__total`: Sort by number of reviews received
+  - `reply_means__total`: Sort by number of reviews that have been replied
+  - `ratio__rating_distribution__5`: Sort by the ratio of 5 star reviews
+  - `ratio__rating_distribution__negative`: Sort by the ratio of negative reviews
+  - `ratio__reply_time__fast`: Sort by the ratio of reviews replied in less than 2 days
+  - `ratio__reply_time__slow`: Sort by the ratio of reviews replied in more than 2 days
+  - `ratio__reply_time__not_replied`: Sort by the ratio of reviews not replied
+  - `ratio__reply_means__manual`: Sort by the ratio reviews replied manually
+  - `ratio__reply_means__ai_suggestion`: Sort by the ratio reviews replied using AI suggestion
+  - `ratio__reply_means__reply_template`: Sort by the ratio reviews replied using reply template
+  - `ratio__reply_means__auto_reply`: Sort by the ratio reviews replied using auto reply
+
+  To use an **order_by** parameter, its corresponding metric must be included in the request.
+  (i.e.
+  to order by `average_rating`, you must include the `average_rating` metric in the `metrics` parameter,
+  to order by `ratio__rating_distribution__5`, you must include the `rating_distribution` metric in the `metrics` parameter,
+  and so on...)
+
+parameters:
+  - $ref: "../../components/review_analytics/parameters.yml#/query_metrics"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_dimensions"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_order_by"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_business__in"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_business__notin"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_groups"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_tags"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_update_date__gte"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_update_date__lte"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_page"
+  - $ref: "../../components/review_analytics/parameters.yml#/query_per_page"
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../../components/review_analytics/schemas.yml#/ReviewMetricsResponse'
+        examples:
+          ?metrics=average_rating&dimensions=business:
+            value:
+              page: 1
+              count: 2
+              max_page: 1
+              data:
+                - dimension: 59b2645db12ff60643ef832c
+                  dimension_name: Business 1
+                  dimension_info:
+                    address_full: 190 rue Championnet
+                    city: Paris
+                    zipcode: "75018"
+                    code: PTOCODE1
+                  metrics:
+                    average_rating: 2.31
+                - dimension: 60b2645fb12ff60643ef8344
+                  dimension_name: Business 2
+                  dimension_info:
+                    address_full: 190 rue Championnet
+                    city: Paris
+                    zipcode: "75018"
+                    code: PTOCODE2
+                  metrics:
+                    average_rating: 4.31
+          ?metrics=average_rating_distribution:
+            value:
+              page: 1
+              count: 1
+              max_page: 1
+              data:
+                - dimension: null
+                  metrics:
+                    average_rating_distribution:
+                      4.3-5: 274
+                      3.8-4.3: 124
+                      3-3.8: 62
+                      0-3: 5
+                      "NULL": 4
+          ?metrics=average_rating,reviews_count&dimensions=day&filter_date__lte=2024-02-13&filter_date__gte=2024-02-11:
+            value:
+              page: 1
+              count: 3
+              max_page: 1
+              data:
+                - dimension: '2024-02-11'
+                  metrics:
+                    average_rating: 3.31
+                    reviews_count: 123
+                - dimension: '2024-02-12'
+                  metrics:
+                    average_rating: 3.34
+                    reviews_count: 123
+                - dimension: '2024-02-13'
+                  metrics:
+                    average_rating: 3.77
+                    reviews_count: 123
+          ?metrics=reply_time,reply_means&dimensions=user:
+            value:
+              page: 1
+              count: 1
+              max_page: 1
+              data:
+                - dimension: 64477ae0264810a01c0a4edf
+                  dimension_name: User 1
+                  metrics:
+                    reply_time:
+                      fast: 11
+                      slow: 32
+                      not_replied: 0
+                      total: 43
+                    reply_means:
+                      ai_suggestion: 20
+                      manual: 3
+                      auto_reply: 0
+                      reply_template: 20
+                      total: 43
+          ?metrics=rank,rating_distribution&dimensions=group&order_by=-ratio__rating_distribution__5&groups=1244,1245,1246:
+            value:
+              page: 1
+              count: 3
+              max_page: 1
+              data:
+                - dimension: 1244
+                  dimension_name: Group 1244
+                  metrics:
+                    rank: 1
+                    rating_distribution:
+                      1: 0
+                      2: 0
+                      3: 0
+                      4: 0
+                      5: 65
+                - dimension: 1245
+                  dimension_name: Group 1245
+                  metrics:
+                    rank: 1
+                    rating_distribution:
+                      1: 0
+                      2: 0
+                      3: 11
+                      4: 32
+                      5: 65
+                - dimension: 60b2645fb12ff60643ef8344
+                  dimension_name: Group 1246
+                  metrics:
+                    rank: 3
+                    rating_distribution:
+                      1: 19
+                      2: 0
+                      3: 0
+                      4: 0
+                      5: 0
+  400:
+    $ref: "../../components/index.yml#/responses/400"
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

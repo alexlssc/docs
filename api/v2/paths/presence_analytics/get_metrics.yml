@@ -1,0 +1,135 @@
+summary: Profile metrics for your business
+description: |
+  This endpoint lets you view the **Google Business Profile** analytics for all your businesses subscribed to
+  **Presence Management**.
+  The API allows you to select what data you're interested in, and how you want it aggregated (daily, monthly,
+  by business, etc). You can also filter the results to limit it to a certain date range, and to certain business.
+
+  Google Business Profile doesn't provide reliable data for the most recent 5 days.
+
+  You can choose the analytics you want to get among:
+  - impressions: desktop maps impressions, mobile maps impressions, desktop search impressions, and mobile search impressions
+  - actions: website link clicks, phone calls, and driving directions
+
+  You can use the following filters:
+  - by businesses (businesses id in list or not in list)
+  - by date (analytics before and/or after a date)
+  - by business query. Will return matches for the business name, zipcode or city
+  - by business city.
+
+  The response can be aggregated by:
+  - business id
+  - by date: either by day, week, month or year
+  - by both business id and date
+
+  The response can be ordered in ascending or descending order by any of the selected dimensions or metrics.
+  See examples for more details.
+
+operationId: getPresenceAnalyticsMetrics
+tags:
+  - Presence analytics
+deprecated: false
+
+parameters:
+  - $ref: "../../components/presence_analytics/metrics/parameters.yml#/query_metrics"
+  - $ref: "../../components/presence_analytics/metrics/parameters.yml#/query_dimensions"
+  - $ref: "../../components/presence_analytics/metrics/parameters.yml#/query_order_by"
+  - $ref: "../../components/presence_analytics/metrics/parameters.yml#/query_business__in"
+  - $ref: "../../components/presence_analytics/metrics/parameters.yml#/query_business__notin"
+  - $ref: "../../components/presence_analytics/metrics/parameters.yml#/query_city"
+  - $ref: "../../components/presence_analytics/metrics/parameters.yml#/query_query"
+  - $ref: "../../components/presence_analytics/metrics/parameters.yml#/query_filter_date__gte"
+  - $ref: "../../components/presence_analytics/metrics/parameters.yml#/query_filter_date__lte"
+  - $ref: "../../components/presence_analytics/pagination/parameters.yml#/query_page"
+  - $ref: "../../components/presence_analytics/pagination/parameters.yml#/query_per_page"
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: "../../components/presence_analytics/metrics/responses.yml#/PresenceAnalyticsMetricsResponse"
+        examples:
+          metrics=business_impressions_desktop_maps,business_impressions_desktop_search,business_impressions_mobile_maps,business_impressions_mobile_search,business_direction_requests,call_clicks,website_clicks:
+            value:
+              page: 1
+              count: 1
+              max_page: 1
+              metrics:
+                - business_impressions_desktop_maps: 123
+                  business_impressions_desktop_search: 123
+                  business_impressions_mobile_maps: 123
+                  business_impressions_mobile_search: 123
+                  business_direction_requests: 123
+                  call_clicks: 123
+                  website_clicks: 123
+          dimensions=business & metrics=call_clicks:
+            value:
+              page: 1
+              count: 3
+              max_page: 1
+              metrics:
+                - call_clicks: 103
+                  business_id: 59b2645db12ff60643ef832c
+                - call_clicks: 165
+                  business_id: 60b2645fb12ff60643ef8344
+                - call_clicks: 28
+                  business_id: 70b2645eb12ff60643ef833c
+          dimensions=month & metrics=website_clicks & order_by=website_clicks:
+            value:
+              page: 1
+              count: 2
+              max_page: 1
+              metrics:
+                - website_clicks: 57
+                  date: "2019-08-01"
+                  bucket: month
+                - website_clicks: 79
+                  date: "2019-09-01"
+                  bucket: month
+          dimensions=day,business & metrics=call_clicks & order_by=-day:
+            value:
+              page: 1
+              count: 6
+              max_page: 1
+              metrics:
+                - call_clicks: 48
+                  business_id: 59b2645db12ff60643ef832c
+                  date: "2019-09-30"
+                  bucket: day
+                - call_clicks: 6
+                  business_id: 59b2645fb12ff60643ef8344
+                  date: "2019-09-30"
+                  bucket: day
+                - call_clicks: 11
+                  business_id: 59b2645db12ff60643ef832c
+                  date: "2019-09-29"
+                  bucket: day
+                - call_clicks: 0
+                  business_id: 59b2645fb12ff60643ef8344
+                  date: "2019-09-29"
+                  bucket: day
+                - call_clicks: 2
+                  business_id: 59b2645db12ff60643ef832c
+                  date: "2019-09-28"
+                  bucket: day
+                - call_clicks: 66
+                  business_id: 59b2645fb12ff60643ef8344
+                  date: "2019-09-28"
+                  bucket: day
+          dimensions=week & metrics=website_clicks & filter_date__gte=2019-09-15 & filter_date__lte=2019-09-16:
+            value:
+              page: 1
+              count: 2
+              max_page: 1
+              metrics:
+                - website_clicks: 32
+                  date: "2019-09-09"
+                  bucket: week
+                - website_clicks: 164
+                  date: "2019-09-16"
+                  bucket: week
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

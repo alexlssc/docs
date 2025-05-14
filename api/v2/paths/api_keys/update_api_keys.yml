@@ -1,0 +1,40 @@
+summary: Update API keys
+deprecated: false
+description: This endpoint lets you update API keys you have access to.
+operationId: updateApiKeys
+tags:
+  - ApiKeys
+parameters:
+  - in: path
+    name: api_key_id
+    required: true
+    schema:
+      $ref: '../../components/api_keys/types.yml#/types/id'
+    description: Key ID
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          label:
+            $ref: '../../components/api_keys/types.yml#/types/label'
+          expiration_date:
+            $ref: '../../components/api_keys/types.yml#/types/expiration_date'
+          ip_whitelist:
+            $ref: '../../components/api_keys/types.yml#/types/ip_whitelist'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/api_keys/types.yml#/schemas/ApiKey'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

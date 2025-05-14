@@ -1,0 +1,31 @@
+summary: Delete a post
+description: |
+  This endpoint lets you delete a post.
+
+  The deletion will not happen in real time and might take a few minutes.
+  
+  ⚠️ Due to Instagram API limitations, **this operation has no effect on Instagram posts.**
+operationId: deletePost
+tags:
+  - Posts
+
+parameters:
+      - $ref: '../../components/index.yml#/parameters/path_post_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          description: Response object
+          type: object
+          properties:
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

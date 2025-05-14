@@ -1,0 +1,28 @@
+tags:
+  - Businesses
+
+summary: Get Place Action Links
+
+description: >
+  Retrieve a list of place action links for a given business_id. 
+  Only the available gmb_id links for the business are returned in the GET request. 
+  Additionally, the business must be connected to a Google location. 
+  For more details, refer to the <a href="https://app.partoo.co/settings/platforms/connection">Partner Connection</a> page.
+
+operationId: getPlaceActionLinks
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/PlaceActionLinksResponse'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

@@ -1,0 +1,49 @@
+tags:
+  - Organizations
+summary: Search for organizations
+operationId: searchOrganizations
+description: >
+  This endpoint lets you search for organizations using filters.
+  The response is paginated (30 results per page).
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_org_id'
+  - in: query
+    name: query
+    schema:
+      type: string
+    required: false
+    description: Parameter to fuzzy search organizations on name or id
+  - name: alias
+    in: query
+    schema:
+      type: string
+    required: false
+    description: Parameter to search an organization by its alias
+  - $ref: '../../components/index.yml#/parameters/query_page'
+  - $ref: '../../components/index.yml#/parameters/query_per_page_1_100'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          description: Result object return by the API
+          properties:
+            page:
+              $ref: '../../components/index.yml#/schemas/current_page'
+            max_page:
+              $ref: '../../components/index.yml#/schemas/max_page'
+            count:
+              $ref: '../../components/index.yml#/schemas/count'
+            orgs:
+              type: array
+              description: The organizations complying with filter (30 max per page)
+              items:
+                $ref: '../../components/index.yml#/schemas/Org'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

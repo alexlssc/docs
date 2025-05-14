@@ -1,0 +1,96 @@
+operationId: searchBusinesses
+tags:
+  - Businesses
+summary: Search for businesses
+description: >
+  This lets you search among the businesses you have `READ` access to. You can use several filters.
+  The response is paginated (30 results per page).
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_fuzzy_query_on_business'
+  - $ref: '../../components/index.yml#/parameters/query_business__in'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_org_id'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_groups'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_country'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_name'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_status'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_zipcode'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_city'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_code'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_modification_timestamp'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_features__in'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_features__notin'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_subscription_to_review_management'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_subscription_to_presence_management'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_subscription_to_review_booster'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_subscription_to_messages'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_completion_rate__gte'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_completion_rate__lte'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_completion_rate'
+  - $ref: '../../components/index.yml#/parameters/query_filter_by_business_promo'
+  - in: query
+    name: connected_to_gmb_location
+    schema:
+      type: string
+      enum:
+        - "True"
+        - "False"
+    required: false
+    description: Filter by current link to a Google location
+  - in: query
+    name: connected_to_facebook_location
+    schema:
+      type: string
+      enum:
+        - "True"
+        - "False"
+    required: false
+    description: Filter by current link to a Facebook location
+  - $ref: '../../components/index.yml#/parameters/query_page_up_to_100'
+  - $ref: '../../components/index.yml#/parameters/query_per_page_1_100'
+  - in: query
+    name: order_by
+    schema:
+      type: string
+      enum:
+        - "id"
+        - "name"
+        - "code"
+        - "created"
+        - "modified"
+        - "country"
+        - "city"
+        - "zipcode"
+        - "completion_rate"
+        - "-id"
+        - "-name"
+        - "-code"
+        - "-created"
+        - "-modified"
+        - "-country"
+        - "-city"
+        - "-zipcode"
+        - "-completion_rate"
+      default: "id"  
+    required: false
+    description: |
+      Order result by given attribute.
+      Reverse order can as well be obtained by using a `-` (minus sign) before the attribute name, e.g. `order_by=-name`
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: '../../components/index.yml#/schemas/ListResult'
+            - type: object
+              properties:
+                businesses:
+                  type: array
+                  description: List of Businesses
+                  items:
+                    $ref: '../../components/index.yml#/schemas/BusinessWithCustomFields'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'

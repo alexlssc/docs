@@ -1,0 +1,32 @@
+tags:
+  - Custom Fields
+summary: Delete custom field
+description: >
+  This endpoint enables an ORG_ADMIN to delete a specific custom field of his organization by specifying its id.
+operationId: deleteCustomFields
+parameters:
+  - $ref: '../../components/index.yml#/parameters/custom_field_id'
+  - $ref: '../../components/index.yml#/parameters/custom_field_force_update'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+  400:
+    description: Custom field value is defined for a business
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/CustomFieldDeleteError'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

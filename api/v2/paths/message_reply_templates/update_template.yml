@@ -1,0 +1,29 @@
+operationId: updateTemplate
+tags:
+  - Message Reply Templates
+summary: Update message template
+description: >
+  This endpoint allows updating an existing message template by its ID.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_template_id'
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/messaging/message_reply_template/schemas.yml#/MessageTemplateUpdateRequest'
+
+responses:
+  200:
+    description: The message template created
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/messaging/message_reply_template/types.yml#/MessageReplyTemplate'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

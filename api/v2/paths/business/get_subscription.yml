@@ -1,0 +1,32 @@
+tags:
+  - Businesses
+operationId: getBusinessSubscriptions
+summary: Subscriptions for your business
+description: >
+  This endpoint lets you access the subscription of a business.
+  You need to have `READ` access on this business.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          description: Business subscriptions
+          properties:
+            presence_management:
+              $ref: '../../components/index.yml#/schemas/SubscriptionDetails'
+            review_management:
+              $ref: '../../components/index.yml#/schemas/SubscriptionDetails'
+            review_booster:
+              $ref: '../../components/index.yml#/schemas/SubscriptionDetails'
+            messages:
+              $ref: '../../components/index.yml#/schemas/SubscriptionDetails'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

@@ -1,0 +1,56 @@
+  type: object
+  properties:
+    id:
+      type: string
+      description: Unique identifier of the form
+      example: "674d791c13c9d976e20001b1"
+    org_id:
+      type: integer
+      description: The organization ID that the form is for
+      example: 42
+    email_reply_source:
+      type:
+        - string
+        - "null"
+      description: The source email to use when replying to a feedback
+      example: noreply@example.com
+    email_reply_subject:
+      type:
+        - string
+        - "null"
+      description: The subject of the email used when replying to a feedback
+      example: About your feedback
+    email_reply_to_business:
+      type: boolean
+      default: false
+      description: |
+        Whether to use the business email address when the feedback
+        respondent wants to reply to your reply
+
+        Defaults to false, which means the respondent reply will be sent to the email_reply_source
+    email_reply_expeditor_name:
+      type:
+        - string
+        - "null"
+      description: |
+        Name to use as the expeditor when replying to a feedback
+
+        This is the name the user sees in his email inbox (which is by default the email_reply_source)
+      example: MyCompany
+    expiration_interval_seconds:
+      type: integer
+      default: 1209600
+      description: |
+        When a date parameter is set on the link sent to the customer,
+        this will be used to disable answers to the feedback form after that many seconds
+
+        Does nothing when the date parameter is not used on the link sent to the customer
+
+        Defaults to 2 weeks
+
+        Example: In the link you sent the customer, you set the date parameter to 2025-01-01T00:00:00Z.
+        By default, the customer will no longer be able to answer the survey after 2025-01-15T00:00:00Z.
+    display_name:
+      type: string
+      description: Name of your form
+      example: Global Satisfaction

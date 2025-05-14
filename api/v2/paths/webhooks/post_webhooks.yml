@@ -1,0 +1,43 @@
+tags:
+  - Webhooks
+operationId: Webhook
+summary: Create webhook configurations
+description: >
+  This endpoint create webhook configurations.
+
+x-badges:
+  - name: 'Beta'
+    position: after
+
+parameters:
+  - $ref: '../../components/webhooks/parameters.yml#/org_id'
+
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/webhooks/parameters.yml#/CreateWebhooksPayload'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          allOf:
+            - type: object
+              properties:
+                items:
+                  type: array
+                  description: List of created webhook configurations
+                  items:
+                    $ref: '../../components/webhooks/schemas.yml#/WebhookItem'
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

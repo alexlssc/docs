@@ -1,0 +1,107 @@
+WebhookDeleteSuccess:
+  type: object
+  required:
+      - status
+  properties:
+    status:
+      type: string
+      description: The status of the webhook deletion.
+      example: success
+
+WebhookItem:
+  type: object
+  required:
+      - id
+      - url
+      - event_type
+      - created_at
+      - updated_at
+      - org_id
+  properties:
+    id:
+      type: integer
+      description: The identifier for the webhook configuration.
+      example: 1
+    url:
+      $ref: '#/url'
+    event_type:
+      $ref: '#/event_type'
+    created_at:
+      type: string
+      description: An ISO 8601 date-time string representing the webhook creation date.
+      example: "2024-11-27T16:10:44.929678Z"
+    updated_at:
+      type: string
+      description: An ISO 8601 date-time string representing the webhook last update date.
+      example: "2024-11-27T16:10:44.929678Z"
+    org_id:
+      type: integer
+      description: The organization identifier for the webhook configuration.
+      example: 1
+
+
+CreatedWebhookPayload:
+  type: object
+  required:
+      - items
+  properties:
+    items:
+      type: array
+      items:
+        $ref: '#/WebhookItem'
+      description: The list of created webhook configurations.
+
+
+WebhookEventTypes:
+  type: array
+  items:
+    $ref: '#/event_type'
+
+  example:
+    - "business_created"
+    - "business_updated"
+    - "business_deleted"
+    - "message_updated"
+    - "message_created"
+    - "lead_received"
+
+
+WebhookTryoutResult:
+  type: object
+  properties:
+    payload:
+      type: object
+      description: The webhook sent payload. Varies depending on the event type.
+    event_type:
+      $ref: '#/event_type'
+    url:
+      $ref: '#/url'
+    status:
+      $ref: '#/tryout_result_status'
+
+
+event_type:
+  type: string
+  description: The webhook event type.
+  enum:
+    - "business_created"
+    - "business_updated"
+    - "business_deleted"
+    - "message_updated"
+    - "message_created"
+    - "lead_received"
+  example: business_created
+
+
+tryout_result_status:
+  type: string
+  description: Result status of the webhook tryout.
+  enum:
+    - "success"
+    - "error"
+  example: "success"
+
+url:
+  type: string
+  description: The URL receiving the webhook's data.
+  example: https://example.com/webhook

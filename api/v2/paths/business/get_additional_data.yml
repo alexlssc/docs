@@ -1,0 +1,30 @@
+tags:
+  - Businesses
+operationId: getBusinessAdditionalData
+summary: Additional data for your business
+description: >
+  This endpoint lets you access to the additional data of business.
+  You need to have `READ`access on this business.
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          description: Business additional data
+          properties:
+            additionnal_data_1:
+              type: string
+              example: "Some data"
+            additionnal_data_2:
+              type: number
+              example: 3.1415
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

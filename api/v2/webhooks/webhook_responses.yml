@@ -1,0 +1,8 @@
+'200':
+    description: |
+      Return a 200 status to indicate that the event was properly received
+'500':
+    description: |
+      An error in range 500-599 will trigger a retry from webhook delivery system, up to 5 times, with an exponential backout.
+
+      > ⚠️ You may have to deal with events not received in order

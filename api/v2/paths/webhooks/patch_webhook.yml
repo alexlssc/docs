@@ -1,0 +1,39 @@
+tags:
+  - Webhooks
+operationId: patchWebhook
+summary: Update a webhook configuration
+description: >
+  This endpoint updates a webhook configuration.
+
+x-badges:
+  - name: 'Beta'
+    position: after
+
+parameters:
+  - $ref: '../../components/webhooks/parameters.yml#/webhook_id'
+  - $ref: '../../components/webhooks/parameters.yml#/org_id'
+
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/webhooks/parameters.yml#/UpdateWebhookPayload'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+          schema:
+            $ref: '../../components/webhooks/schemas.yml#/WebhookItem'
+
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

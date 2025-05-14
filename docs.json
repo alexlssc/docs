@@ -51,7 +51,7 @@
       },
       {
         "tab": "API Reference",
-        "openapi" : "partoo_open_ai.json"
+        "openapi" : "openapi-bundled.yml"
       },
       {
         "tab": "Changelog",

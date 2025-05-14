@@ -1,0 +1,46 @@
+summary: Update a feedback form
+description: |
+  This endpoint lets you modify the properties of your feedback forms.
+operationId: updateFeedbackForm
+tags:
+  - Feedback Management
+
+x-badges:
+  - name: 'Beta'
+    position: after
+
+parameters:
+  - in: path
+    name: feedback_form_id
+    required: true
+    schema:
+      type: string
+
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        description: Request body to post a reply
+        type: object
+        required:
+          - content
+        properties:
+            display_name:
+              allOf:
+                - $ref: '../../../components/feedback_management/schemas/feedback_form.yml#/properties/display_name'
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/feedback_management/schemas/feedback_form.yml'
+
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'

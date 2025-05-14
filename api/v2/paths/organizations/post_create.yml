@@ -1,0 +1,46 @@
+tags:
+  - Organizations
+summary: Create organization
+operationId: createOrganization
+description: >
+  This endpoint lets you create an organization.
+  You have `WRITE` access on your provider (ie. only possible if you have `PROVIDER` role).
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        description: JSON to create an organization
+        required:
+          - name
+        properties:
+          name:
+            $ref: '../../components/index.yml#/schemas/OrgName'
+          alias:
+            $ref: '../../components/index.yml#/schemas/OrgAlias'
+          max_businesses:
+            $ref: '../../components/index.yml#/schemas/OrgMaxBusinesses'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          type: object
+          description: Result object
+          properties:
+            status:
+              $ref: '../../components/index.yml#/schemas/RequestStatus'
+            org_id:
+              $ref: '../../components/index.yml#/schemas/OrgId'
+            alias:
+              $ref: '../../components/index.yml#/schemas/OrgAlias'
+            max_businesses:
+              $ref: '../../components/index.yml#/schemas/OrgMaxBusinesses'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'

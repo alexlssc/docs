@@ -1,0 +1,41 @@
+tags:
+  - Messages
+summary: List messages
+operationId: listMessages
+description:  |
+  This endpoint lets you retrieve the messages for a specific conversation.
+
+  ⚠️ This endpoint is paginated using cursor pagination. This means that in
+  order to get the next page of results, you need to provide the cursor
+  returned in the previous call.
+parameters:
+  - name: conversation_id
+    in: query
+    schema:
+      type: integer
+      description: The id of the conversation
+    required: true
+  - $ref: '../../components/messaging/parameters.yml#/PerPage'
+  - $ref: '../../components/messaging/parameters.yml#/Cursor'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          description: Response object
+          type: object
+          properties:
+            messages:
+              type: array
+              description: The list of messages for a specific conversation, paginated.
+              items:
+                $ref: '../../components/messaging/types.yml#/Message'
+            count:
+              $ref: '../../components/messaging/pagination.yml#/Count'
+            next_cursor:
+              $ref: '../../components/messaging/pagination.yml#/NextCursor'
+  401:
+    $ref: "../../components/index.yml#/responses/401"
+  403:
+    $ref: "../../components/index.yml#/responses/403"

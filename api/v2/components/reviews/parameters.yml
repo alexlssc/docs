@@ -1,0 +1,164 @@
+query_order_by:
+  in: query
+  name: order_by
+  schema:
+    type: string
+    enum: [update_date, -update_date]
+    example: update_date
+  description: |
+    A `-` sign in front of the value indicates a descending order.
+
+query_review_without_tag:
+  in: query
+  name: without_tag
+  description: |
+    Filter only reviews without tags
+  schema:
+    type: boolean
+    example: true
+
+query_tag_label_in:
+  in: query
+  name: tag_label__in
+  description: |
+    Filter by Tag label
+
+    Will partially match given labels (ie `foo` will match reviews with tag `food`)
+  schema:
+    type: array
+    items:
+      $ref: '../index.yml#/schemas/TagLabel'
+    example: food,drink
+
+query_review_state:
+  in: query
+  name: state__in
+  description: Filter by state
+  schema:
+    type: array
+    items:
+      $ref: '../index.yml#/schemas/ReviewState'
+    example: treated,not_treated
+
+query_recommended__in:
+  in: query
+  name: recommended__in
+  description: >
+    Filter only by Facebook recommendation
+  schema:
+    type: array
+    items:
+      type: boolean
+      enum: [ true, false ]
+    example: false
+
+query_tripadvisor_rating__in:
+  in: query
+  name: tripadvisor_rating__in
+  description: >
+    Filter only by Tripadvisor ratings
+  schema:
+    type: array
+    items:
+      type: number
+      enum: [ 1, 2, 3, 4, 5 ]
+    example: 1,2
+
+query_gmb_rating__in:
+  in: query
+  name: gmb_rating__in
+  description: |
+    Filter only by Google ratings
+
+  schema:
+    type: array
+    items:
+      type: number
+      enum: [ 1, 2, 3, 4, 5 ]
+    example: 4,5
+
+query_partner__in:
+  in: query
+  name: partner__in
+  description: Filter by publisher
+  schema:
+    type: array
+    items:
+      $ref: '../index.yml#/schemas/ReviewPublisherLabel'
+    example: google_my_business,facebook
+
+query_content__isnull:
+  in: query
+  name: content__isnull
+  description: |
+    Filter by review's content
+
+    If set to `true`, the endpoint will return all the reviews without content.
+
+    **Note:** This is the content of the review and not the content of the reply.
+  schema:
+    type: string
+    enum: ["true", "false"]
+    example: false
+
+query_review_update_date__gte:
+  in: query
+  name: update_date__gte
+  description: |
+    Filter by `update_date`
+
+    Return all the reviews whose `update_date` >= `given_date`.
+
+    For example : `update_date__gte=2019-01-01T00:00:00` will return all reviews from the first January of 2019
+    until today.
+
+    **Note** : The update dates are stored in UTC.
+  schema:
+    type: string
+    format: datetime
+    example: "2017-08-01T00:00:00"
+
+query_review_update_date__lte:
+  in: query
+  name: update_date__lte
+  description: |
+    Filter by `update_date`
+
+    Return all the reviews whose `update_date` <= `given_date`.
+
+    For example : `update_date__lte=2020-01-01T00:00:00` will return all reviews from the date of the first review
+    until the first january of 2020.
+
+    **Note** : The update dates are stored in UTC.
+  schema:
+    type: string
+    format: datetime
+    example: "2017-08-02T00:00:00"
+
+query_keywords:
+  in: query
+  name: keywords
+  description: |
+    Filter by keywords
+
+    Return all the reviews with not-nullable content, that contain the provided list of keywords.
+
+    **Note:** This is the content of the review and not the content of the reply.
+
+    The filter accepts both simple and composed words.
+    To indicate it's a composed keyword, add the `+` as separator.
+    For example:
+
+     `keywords=bonjour` returns all reviews containing the keyword `bonjour`
+
+     `keywords=good+service` returns all reviews containing the
+     combined keyword **good service**, without splitting the keyword.
+     No reviews containing just **good** or just **service** will be returned.
+
+     `keywords=bonjour,good+service`: returns all reviews that contain either just **bonjour**,
+     either just **good service** or both keywords at the same time.
+  schema:
+    type: array
+    items:
+      type: string
+    example: bonjour,good+service

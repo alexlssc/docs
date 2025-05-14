@@ -1,0 +1,34 @@
+summary: List Google Services
+description:  >
+  <p>Get all Google Services available for your business categories. </p>
+  <p>⚠️ <b>What are Google Services ?</b>
+  <p>Google Services are highly visible statements about your business that appear on your Google listing.
+  <p>They indicate the different services available for your business, to which you can also add a price and a description.
+  <p>For example, the category gcid:bakery has several suggested services available, such as catering or delivery.
+  <p>Not satisfy with those ? You can add your very own custom services and link them to the category of your business of your choice !
+  <p>To recover services values set for a business, <a href="#operation/getBusinessServices">see get services business endpoints</a>.
+  <p>To handle services values for businesses, <a href="#operation/postBusinessStructuredServices">see set structured services business endpoints</a>.
+  <p>To handle custom services values for businesses, <a href="#operation/postBusinessFreeFormServices">see set free form services business endpoints</a>.
+  <p>This endpoint allows you to view the Google Services available for your business.
+  <p>The services available depends on the categories of the business not only the main one.
+
+operationId: getServicesSuggestions
+tags:
+  - Google
+parameters:
+  - $ref: '../../components/index.yml#/parameters/query_business__in'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/ServicesSuggestionResponse'
+  400:
+    $ref: '../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

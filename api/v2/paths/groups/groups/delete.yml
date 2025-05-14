@@ -1,0 +1,24 @@
+tags:
+  - Groups and Sections
+operationId: deleteGroup
+summary: Delete Group
+description: >
+  Delete a group.<br>
+  This endpoint endpoint let's you delete an existing group. Only Group Managers and above can use this endpoint. Business Managers are restricted from accessing this endpoint.
+  For more information about the group system, see <a href="#tag/Groups-and-Sections">the Groups and Sections description</a>.
+parameters:
+  - $ref: '../../../components/index.yml#/parameters/path_section_id'
+  - $ref: '../../../components/index.yml#/parameters/path_group_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../../components/index.yml#/schemas/GroupDeleteSuccessResponse'
+  400:
+    $ref: '../../../components/index.yml#/responses/400'
+  401:
+    $ref: '../../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../../components/index.yml#/responses/403'

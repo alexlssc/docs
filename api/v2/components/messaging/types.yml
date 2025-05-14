@@ -1,0 +1,619 @@
+MessageContentType:
+  type: string
+  enum:
+    - Text
+    - Image
+    - Video
+    - Audio
+    - Document
+    - IgStoryReply
+    - IgStoryMention
+    - Unsupported
+    # TODO to document when Jaguar releases the archived conversations
+    # - Solving
+    # - Reopening
+  description: |
+    The type of the message:
+    - "Text" describes a simple text message.
+    - "Image" describes a message that only contains an image.
+    - "IgStoryReply" (for "Instagram" conversations) describes a notification
+    of reply to an Instagram story.
+    - "IgStoryMention" (for "Instagram" conversations) describes a notification
+    of a mention in an Instagram story.
+    - "Unsupported" describes a message whose content is not supported.
+
+    ⚠️ New values may be added to this enum without prior notice and
+    without following the classic depreciation cycle.
+    It is up to you to gracefully handle the case where new values
+    are added. We recommend showing a "Unhandled content" placeholder to the
+    user in place of the message ⚠️
+
+SenderType:
+  type: string
+  enum:
+    - User
+    - Consumer
+    - Metadata
+  description: |
+    Describes the person that sent the Message:
+    - "User" indicates that the message was sent as the Business.
+    Such messages can be sent by a Partoo user, via API, or directly on the
+    messaging platform.
+    - "Consumer" indicates that the message was sent by a consumer, a client
+    that wants to get in touch with the business.
+    - "Metadata" is reserved for special messages that appear in the
+    Partoo inbox. They only give contextual information about the conversation,
+    and are not shown to the consumer.
+
+    ⚠️ New values may be added to this enum without prior notice and
+    without following the classic depreciation cycle.
+    It is up to you to gracefully handle the case where new values
+    are added. We recommend ignoring messages with unhandled sender_type ⚠️
+
+MessageStatus:
+  type: string
+  enum:
+    - Sending
+    - Success
+    - Failed
+  description: |
+    The delivery status of the message.
+    Messages send via Partoo are created with the status "Sending", and
+    propagated to the messaging channel.
+    If the message is sent successfully, the status is changed to "Success".
+    If the messaging channel fails to send the message, the status changed to
+    "Failed". A failed message can be retried using the [/retry endpoint](#operation/retrySendMessage).
+
+TextMessageContent:
+  title: Text
+  type: string
+  description: The text of the message.
+
+ImageMessageContent:
+  title: Image
+  type: string
+  format: url
+  description: The url of the image.
+
+VideoMessageContent:
+  type: object
+  title: Video
+  properties:
+    url:
+      type: string
+      format: url
+      description: The url of the video.
+    file_name:
+      type:
+        - string
+        - "null"
+      description: Name of the video file.
+
+AudioMessageContent:
+  type: object
+  title: Audio
+  properties:
+    url:
+      type: string
+      format: url
+      description: The url of the audio.
+    file_name:
+      type:
+        - string
+        - "null"
+      description: Name of the audio file.
+
+DocumentMessageContent:
+  type: object
+  title: Document
+  properties:
+    url:
+      type: string
+      format: url
+      description: The url of the document.
+    file_name:
+      type:
+        - string
+        - "null"
+      description: Name of the document file.
+
+IgStoryReplyMessageContent:
+  type: object
+  title: IgStoryReply
+  properties:
+    url:
+      type: string
+      format: url
+      description: The url of the story that received the reply.
+    content:
+      type: string
+      description: Text of the reply, or url of the image.
+    content_type:
+      type: string
+      enum:
+        - Image
+        - Text
+      description: The type of content of ther reply.
+    id:
+      type: string
+      description: The Instagram ID of the story.
+
+SolvingMessageContent:
+  type: string
+  enum:
+    - Solving
+  title: Solving (Metadata)
+
+ReopeningMessageContent:
+  type: string
+  enum:
+    - Reopening
+  title: Reopening (Metadata)
+
+IgStoryMentionMessageContent:
+  type: string
+  title: IgStoryMention
+  format: url
+  description: The url of the story mentionned.
+
+UnsupportedMessageContent:
+  type: object
+  title: Unsupported
+  properties:
+    type:
+      type: string
+      enum:
+        - video
+        - audio
+        - unknown
+
+Message:
+  type: object
+  title: Message
+  properties:
+    id:
+      type: integer
+      description: The id of the message.
+    conversation_id:
+      type: integer
+      description: The id of the parent conversation.
+    date:
+      type: string
+      description: |
+        The date at which the message was sent or received, in the ISO 8601
+        format (ex: "2023-01-31 16:22:17.327878+00:00").
+      example: '2023-01-31 16:22:17.327878+00:00'
+    content_type:
+      $ref: '#/MessageContentType'
+    sender_type:
+      $ref: '#/SenderType'
+    sender_label:
+      type:
+        - string
+        - "null"
+      description: Name of the person sending the message
+      example: 'Jane Doe'
+    status:
+      $ref: '#/MessageStatus'
+    is_deleted:
+      type: boolean
+      description: |
+        If the message has been deleted by the consumer on the messaging
+        channel (for now, only "Instagram" messages can be deleted).
+      example: false
+    content:
+      oneOf:
+        - $ref: "#/TextMessageContent"
+        - $ref: "#/ImageMessageContent"
+        - $ref: "#/VideoMessageContent"
+        - $ref: "#/AudioMessageContent"
+        - $ref: "#/DocumentMessageContent"
+        - $ref: "#/IgStoryReplyMessageContent"
+        - $ref: "#/IgStoryMentionMessageContent"
+        - $ref: "#/UnsupportedMessageContent"
+        # TODO to document when Jaguar releases the archived conversations
+        # - $ref: '#/SolvingMessageContent'
+        # - $ref: '#/ReopeningMessageContent'
+    user_id:
+      type:
+        - string
+        - "null"
+      description: |
+        For "User" messages sent via the Partoo application, the id of the
+        user that sent the message.
+
+MessageReceivedEvent:
+  allOf:
+    - $ref: '#/Message'
+    - type: object
+      properties:
+        message_id:
+          type: integer
+          deprecated: true
+          description: |
+            The id of the message.
+
+            Deprecated, use `id` instead.
+        org_id:
+          type: integer
+          description: The id of the organization
+        business_id:
+          type: string
+          description: The id of the business
+        received_at:
+          deprecated: true
+          type: string
+          description: |
+            The date at which the message was received
+            format (ex: "2023-01-31T16:22:17.327878+00:00").
+
+            Deprecated, use `date` instead.
+          example: '2023-01-31T16:22:17.327878+00:00'
+        consumer_img:
+          type:
+            - string
+            - "null"
+          format: url
+          description: The url of the consumer's profile picture
+          example: "https://www.example.com/profile-picture.jpg"
+        consumer_name:
+          type:
+            - string
+            - "null"
+          description: |
+            The name of the consumer, can be empty. The format may differ depending
+            on the platform of contact (ex: "John Doe", "John Doe (@johndoe)",
+            "@johndoe", "", ...).
+          example: John Doe
+        messaging_partner:
+          $ref: '#/MessagingPartner'
+        event_type:
+          type: string
+          enum:
+            - message_received
+
+MessageCreatedEvent:
+  properties:
+    message:
+      allOf:
+        - $ref: '#/Message'
+        - type: object
+    conversation:
+      allOf:
+        - $ref: '#/WebhookConversation'
+        - type: object
+    org_id:
+      type: integer
+      description: The id of the organization
+
+MessagingPartner:
+  description: |
+    The channel that the message is being sent to/from.
+
+    ⚠️ New values may be added to this enum without prior notice and
+    without following the classic depreciation cycle.
+    It is up to you to gracefully handle the case where new values
+    are added. ⚠️
+  type: string
+  enum:
+    - Google
+    - Facebook
+    - Instagram
+    - SMS
+    - Whatsapp
+  example: Facebook
+
+
+ConversationIssue:
+  type: string
+  enum:
+    - facebook_no_page_linked
+    - facebook_partner_co_undone
+    - facebook_invalid_status
+    - facebook_missing_webhook_subs
+    - instagram_no_account_linked
+    - sms_no_phone_number
+
+ConversationStatus:
+  type: string
+  enum:
+    - Open
+    - Closed
+
+ConversationBusiness:
+  type: object
+  title: BusinessInfo
+  properties:
+    id:
+      type: string
+    name:
+      type:
+        - string
+        - "null"
+    city:
+      type:
+        - string
+        - "null"
+    zipcode:
+      type:
+        - string
+        - "null"
+    country:
+      type:
+        - string
+        - "null"
+    formatted_address:
+      type:
+        - string
+        - "null"
+
+WebhookConversation:
+  type: object
+  title: Conversation
+  properties:
+    id:
+      type: integer
+    consumer_img:
+      type:
+        - string
+        - "null"
+      format: url
+      description: The url of the consumer's profile picture
+      example: "https://www.example.com/profile-picture.jpg"
+    consumer_name:
+      type:
+        - string
+        - "null"
+      description: |
+        The name of the consumer, can be empty. The format may differ depending
+        on the platform of contact (ex: "John Doe", "John Doe (@johndoe)",
+        "@johndoe", "", ...).
+      example: John Doe
+    business:
+      type: object
+      properties:
+        id:
+          description: The id of the business
+          type: integer
+    messaging_partner:
+      $ref: '#/MessagingPartner'
+
+
+Conversation:
+  type: object
+  title: Conversation
+  properties:
+    id:
+      type: integer
+    consumer_img:
+      type:
+        - string
+        - "null"
+      format: url
+      description: The url of the consumer's profile picture
+      example: "https://www.example.com/profile-picture.jpg"
+    consumer_name:
+      type:
+        - string
+        - "null"
+      description: |
+        The name of the consumer, can be empty. The format may differ depending
+        on the platform of contact (ex: "John Doe", "John Doe (@johndoe)",
+        "@johndoe", "", ...).
+      example: John Doe
+    consumer_phone_number:
+      type:
+        - string
+        - "null"
+      description: |
+        The phone number of the consumer, formatted in E.164 international
+        format (ex: "+33612345678").
+      example: "+33612345678"
+    last_message:
+      oneOf:
+        - type: 'null'
+        - $ref: '#/Message'
+          description: The last message exchanged in the conversation.
+    is_read:
+      type: boolean
+      description: |
+        If the last message received was read. This property is scoped to the
+        user who performs the request. Multiple partoo users can have a
+        different is_read value for the same conversation.
+    status:
+      allOf:
+        - description: | # TODO check this
+            If Open, it is possible to send a message in the conversation, else not.
+            A conversation can be Closed if it is expired.
+        - $ref: '#/ConversationStatus'
+    created_at:
+      type: string
+      description: |
+        The date of creation of the conversation, in the ISO 8601 format
+        (ex: "2023-01-31 16:22:17.327878+00:00").
+      example: "2023-01-31 16:22:17.327878+00:00"
+    has_one_user_message:
+      type: boolean
+      description: |
+        If the conversation has at least one message sent by a Partoo user.
+    business:
+      allOf:
+        - description: |
+            Some basic information about the business that the conversation is
+            associated with.
+        - $ref: '#/ConversationBusiness'
+    messaging_partner:
+      $ref: '#/MessagingPartner'
+    issues:
+      type: array
+      items:
+        $ref: '#/ConversationIssue'
+      description: |
+        The list of issues that affect the conversation. The issues represent
+        setup problem that the business may have with a messaging channel. It is
+        not possible to send messages on a conversation that has issues.
+
+        ⚠️ New values may be added to this enum without prior notice and
+        without following the classic depreciation cycle.
+        It is up to you to gracefully handle the case where new values
+        are added. ⚠️
+      example: ["facebook_no_page_linked"]
+    first_message_date:
+      type: string
+      description: |
+        The date at which the first message of the conversation was received,
+        in the ISO 8601 format (ex: "2023-01-31 16:22:17.327878+00:00").
+    is_expired:
+      type: boolean
+      description: |
+        If the conversation has expired. A conversation expires if the consumer
+        has not contacted the business for a certain amount of time.
+        You cannot send messages to an expired conversation.
+      example: false
+    is_solved:
+      type: boolean
+      description: |
+        If the conversation has been solved. Conversations can be solved from our
+        app or by updating conversation status to "closed".
+      example: false
+    assigned_user_id:
+      type: string
+      description: |
+        The "user_id" of the user assigned to the conversation.
+      example: "62d80fae74e8b11d700302b8"
+
+ChatHours:
+  type:
+    - object
+    - "null"
+  description: |
+    The chat hours of the business (in its timezone).
+
+    Chat hours are specified per weekday. This is done by supplying an object
+    mapping weekdays ("monday", "tuesday", etc.) to a list of strings. These
+    strings in turn represent time slots during which the business is open.
+
+    For example, the following value would set the chat hours to between
+    08:00-15:00 in the afternoon and 18:00-23:00 in the evening on Mondays:
+
+    <code>{"monday": ["08:00-15:00", "18:00-23:00"]}</code>
+
+    To indicate that a business can be contacted for 24 hours, for a specific
+    weekday, use the value <code>["00:00-23:59"]</code>.
+
+    This field is not mandatory unless "uses_business_hours" is set to false.
+  required:
+    - monday
+    - tuesday
+    - wednesday
+    - thursday
+    - friday
+    - saturday
+    - sunday
+  properties:
+    monday:
+      $ref: '../index.yml#/schemas/Day'
+    tuesday:
+      $ref: '../index.yml#/schemas/Day'
+    wednesday:
+      $ref: '../index.yml#/schemas/Day'
+    thursday:
+      $ref: '../index.yml#/schemas/Day'
+    friday:
+      $ref: '../index.yml#/schemas/Day'
+    saturday:
+      $ref: '../index.yml#/schemas/Day'
+    sunday:
+      $ref: '../index.yml#/schemas/Day'
+
+MessagingSettingWelcomeMessage:
+  type:
+    - string
+    - "null"
+  description: |
+    When a consumer first contacts the business, an automated reply is
+    sent. The content of the reply depends on whether the consumer
+    contacted the business during it's chat hours. If it is, the
+    welcome_message is sent as a reply.
+
+    The welcome_message is mandatory, and can be customized. A default
+    will be set if none is specified.
+
+MessagingSettingOfflineMessage:
+  type:
+    - string
+    - "null"
+  description: |
+    When a consumer first contacts the business, an automated reply is
+    sent. The content of the reply depends on whether the consumer
+    contacted the business during it's chat hours. If it is not, the
+    offline_message is sent as a reply.
+
+    The offline_message is mandatory, and can be customized. A default
+    will be set if none is specified.
+
+MessagingSettingUsesBusinessHours:
+  type:
+    - boolean
+    - "null"
+  description: |
+    If set to true, the business' "open_hours" will be used as chat
+    hours. Otherwise, you need to specify "custom_chat_hours".
+
+MessagingSettingIsLaunched:
+  type:
+    - boolean
+    - "null"
+  description: |
+    Some messaging channels (Google and Facebook) can be temporarily
+    deactivated. This allows the business to close for a period of time
+    without having to answer consumer messages.
+
+    This is important because consumers will get frustrated if they are able
+    to contact a business and do not get an answer. It is also important to
+    note that for some messaging channels, not responding to messages may
+    lead to decreased visibility of the business, or suspension of the
+    messaging service.
+
+    The is_launched property indicates whether the business is reachable
+    for those messaging channels.
+
+    The value can be updated, and the changes will be propagated to the
+    messaging channels, effectively toggling the On or Off the ability for
+    consumers to reach the business. (The change to "is_launched" is made
+    asychronously, and the update will be effective when the messaging
+    channels have finished propagating the information)
+
+MessagingSetting:
+  type: object
+  properties:
+    id:
+      type: integer
+    business_id:
+      type: string
+      description: |
+        The ID of the business that the MessagingSetting is related to.
+    business_name:
+      type:
+        - string
+        - "null"
+      description: |
+        The Name of the business that the MessagingSetting is related to.
+    business_address:
+      type:
+        - string
+        - "null"
+      description: |
+        The Formatted address of the business that the MessagingSetting is
+        related to.
+      example: 1 Rue de la Paix, 75000 Paris
+    welcome_message:
+      $ref: '#/MessagingSettingWelcomeMessage'
+    offline_message:
+      $ref: '#/MessagingSettingOfflineMessage'
+    uses_business_hours:
+      $ref: '#/MessagingSettingUsesBusinessHours'
+    custom_chat_hours:
+      $ref: '#/ChatHours'
+    is_launched:
+      $ref: '#/MessagingSettingIsLaunched'

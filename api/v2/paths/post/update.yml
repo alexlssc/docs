@@ -1,0 +1,38 @@
+summary: Update a post
+description: |
+  This endpoint lets you update a post.
+  
+  When used by a BM or GM user, this endpoint also serves to validate and publish a draft post.  
+  
+  The update will not happen in real time and might take a few minutes
+  
+  ⚠️ Due to Instagram API limitations, **this operation has no effect on Instagram posts**.
+operationId: updatePost
+tags:
+  - Posts
+
+parameters:
+  - $ref: '../../components/index.yml#/parameters/path_post_id'
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '../../components/index.yml#/schemas/PostUpdateData'
+
+
+
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/Post'
+
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'

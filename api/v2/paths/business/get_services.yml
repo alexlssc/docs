@@ -1,0 +1,22 @@
+summary: Google Services for your business
+description: >
+  This endpoint allows you to view the Google Services set for your business.
+
+operationId: getBusinessServices
+tags:
+  - Businesses
+parameters:
+  - $ref: '../../components/index.yml#/parameters/business_id'
+responses:
+  200:
+    description: OK
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/index.yml#/schemas/BusinessServicesResponse'
+  401:
+    $ref: '../../components/index.yml#/responses/401'
+  403:
+    $ref: '../../components/index.yml#/responses/403'
+  404:
+    $ref: '../../components/index.yml#/responses/404'
